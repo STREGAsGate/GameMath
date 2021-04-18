@@ -14,13 +14,12 @@ let pos: Position3<Float> = Position3(0, 1, 0) * Size3(1, 1, 1)
 //Error: Size3 cannot be converted to Position3
 let pos: Position3<Float> = Size3(1, 1, 1) * Position3(0, 1, 0) 
 ```
-Most types are generic with their functionality being determined by the generic being used.
-Some types have restrictions on generics. Using `Size3<Int>` instead of `Size3<Float>` makes sense and could be used for any number of reasons.
+Most types work with <a href="https://docs.swift.org/swift-book/LanguageGuide/Generics.html#" target="_blank">Swift Generics</a>. Some types have restrictions on generics. Using `Size3<Int>` instead of `Size3<Float>` makes sense and could be used for any number of reasons.
 
-However a `Direction3<Int>` does not make sense because a normalized direction vector should have a length of 1. While `Direction3<Int>(0, 1, 0)` is valid it can represnt so few angles that it's usefulness is questionable, so FloatingPoint is a requirement for `Direction3<T: FloatingPoint>`.
+However a `Direction3<Int>` does not make sense because a normalized direction vector should have a length of 1, so `Int` cannot represent very many angles. While `Direction3<Int>(0, 1, 0)` is valid, it's usefulness is questionable so FloatingPoint is a requirement for `Direction3<T: FloatingPoint>`.
 
 ## Easy To Understand
-GameMath is intended to make doing math-wiz stuff easier for everyone. An example is interpolation.
+GameMath is intended to make doing gamming math easier for everyone. An example is interpolation.
 
 The functions `lerp()` and `slerp()` are commonly seen in game libraries for linear interpolation. Without advanced knowledge of these functions it's difficult to reason about them and know what they do.
 GameMath attempts to improve on this issue by introducing a common syntax for interpolation for all types across the package.
@@ -32,15 +31,15 @@ This syntax will be expanded with new interpolation methods like easeIn and ease
 ## Coordinate Space
 GameMath uses a *Y Up*, *-Z forward*, coordinate system for 3D and *Y Up*, *X Right* for 2D.
 
-Matrix types are assumed to always be *"left handed"*. Use the `transposedArray` and `transposedSIMD` properties when sending to Metal, Vulkan, OpenGL, and the `array` and `simd` properties when sending to DirectX.
+Matrix types are assumed to always be *"left handed"*. Use the `transposedArray` and `transposedSIMD` properties when sending data to Metal, Vulkan, OpenGL, and the `array` and `simd` properties when sending data to DirectX.
 
 # Cross Platform
 GameMath is tested to work on Windows 10, macOS, Ubuntu, iOS, and tvOS; all of which work with Swift's minimum deployment target for each platform.
 
-Any platform not listed above should also work in theory, with the only possible issues being located in `math.swift` where the availability of Float80 and Float16 could result in build errors on a platform not listed above.
+Other platforms should also work. Issues that may appear are likely to be loacted in `math.swift` where the availability of Float80 and Float16 could result in build errors on a platform not listed above.
 
 # Actively In Use
-Check out my [YouTube channel](https://www.youtube.com/STREGAsGate) for devlogs about the games I make using this package.
+Check out my [YouTube channel](https://www.youtube.com/STREGAsGate) for video devlogs about the games I make using this package.
 
 [![Strega's Gate: Espionage](https://i.ytimg.com/vi/c6XgXY5eM-Y/hqdefault.jpg?sqp=-oaymwEiCKgBEF5IWvKriqkDFQgBFQAAAAAYASUAAMhCPQCAokN4AQ==&rs=AOn4CLAy8Oua6SfAmSn2uwiv6mkFfii-ZQ)](https://www.youtube.com/STREGAsGate)
 [![Strega's Gate: Shifter](https://i.ytimg.com/vi/NhO0EPCIciU/hqdefault.jpg?sqp=-oaymwEiCKgBEF5IWvKriqkDFQgBFQAAAAAYASUAAMhCPQCAokN4AQ==&rs=AOn4CLB-DJuYCPzkHrGUuc1NgsFuSm21kA)](https://www.youtube.com/STREGAsGate)
@@ -50,7 +49,9 @@ Check out my [YouTube channel](https://www.youtube.com/STREGAsGate) for devlogs 
     A test suite is currently being implemented to ensure correctness of the API's before effort is put into making them faster.
 
 - **Performance Testing**  
-    GameMath is currently un-optimized. Once a unit tests have full code coverage a performance test suite needs to be set up that runs tests for common real world use cases, such as matrix multiplication 
+    GameMath is currently un-optimized. Once unit tests have full code coverage a performance test suite will be set up that runs tests for common real world use cases, such as matrix multiplication. 
+    
+    At this stage perfromance can be played with, and compiler hints like `@inlinable` will also be added to enhance optimized builds.
 
 - **2D**  
     GameMath has not been used to create a 2D game and may be missing some necessary functionality. 
@@ -59,17 +60,17 @@ Check out my [YouTube channel](https://www.youtube.com/STREGAsGate) for devlogs 
     Foundation is currently imported in a few places because of math functions like `sin`, `cos`, and `tan` which will be part of the standard library at some point. It is a goal for GameMath to not require any dependencies, so I'd like to remove Foundation as soon as the math proposal gets merged into Swift.
 
 # Usage Notes
-GameMath is under development and the API surface is not locked-in. 
+GameMath is under development and the API surface is not locked-in.
 
-As such please use an explicit commit when adding GameMath to your packages. You may do so like this while replacing the revision hash with the latests passing commit's.
+As such please use an explicit commit when adding GameMath to your packages. You may do so like this, while replacing the revision hash with the latests commit's.
 ```swift
-.package(url: "https://github.com/STREGAsGate/GameMath.git", .revision("f79af538542525514503ae26f5c34c86c56e2614"))
+.package(url: "https://github.com/STREGAsGate/GameMath.git", .revision("82d2817f2cf1eca44890d8173145d934bda55517"))
 ```
 Doing this will prevent changes made to GameMath from halting development of your own package. When you are ready to update, use a newer hash and fix any API changes. 
 
 API changes are mostly final so changes should not be too much of a hassle, however please be aware they can and will happen.
 
-A tag will created at some point to mark version 1.0 at which point the `main` branch will become the stable release branch. This will happen once unit tests and a first pass of optimization is done. ETA unknown.
+A tag will be created at some point to mark version 1.0, at which point the `main` branch will become the stable release branch. This will happen once unit tests and a first pass of optimization is done. ETA unknown.
 
 # Game Package Family
 This package works great by itself, but it's also included as part of higher level packages that I'm working on.
