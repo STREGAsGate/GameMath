@@ -1,0 +1,127 @@
+import XCTest
+@testable import GameMath
+
+final class Matrix3x3Tests: XCTestCase {
+    func testInit() {
+        do {
+            let matrix = Matrix3x3<Float>(1, 2, 3, 4, 5, 6, 7, 8, 9)
+            XCTAssertEqual(matrix.a, 1)
+            XCTAssertEqual(matrix.b, 2)
+            XCTAssertEqual(matrix.c, 3)
+            XCTAssertEqual(matrix.e, 4)
+            XCTAssertEqual(matrix.f, 5)
+            XCTAssertEqual(matrix.g, 6)
+            XCTAssertEqual(matrix.i, 7)
+            XCTAssertEqual(matrix.j, 8)
+            XCTAssertEqual(matrix.k, 9)
+        }
+        do {
+            let matrix = Matrix3x3<Float>(a: 1, b: 2, c: 3, e: 4, f: 5, g: 6, i: 7, j: 8, k: 9)
+            XCTAssertEqual(matrix.a, 1)
+            XCTAssertEqual(matrix.b, 2)
+            XCTAssertEqual(matrix.c, 3)
+            XCTAssertEqual(matrix.e, 4)
+            XCTAssertEqual(matrix.f, 5)
+            XCTAssertEqual(matrix.g, 6)
+            XCTAssertEqual(matrix.i, 7)
+            XCTAssertEqual(matrix.j, 8)
+            XCTAssertEqual(matrix.k, 9)
+        }
+        do {
+            let matrix = Matrix3x3<Float>()
+            XCTAssertEqual(matrix, Matrix3x3(0, 0, 0, 0, 0, 0, 0, 0, 0))
+        }
+        do {
+            let matrix = Matrix3x3(Matrix4x4<Float>(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16))
+            XCTAssertEqual(matrix, Matrix3x3(1, 2, 3, 5, 6, 7, 9, 10, 11))
+        }
+    }
+    
+    func testSubscript() {
+        do {
+            var matrix = Matrix3x3<Float>()
+            matrix[0] = 1
+            XCTAssertEqual(matrix[0], 1)
+            matrix[1] = 2
+            XCTAssertEqual(matrix[1], 2)
+            matrix[2] = 3
+            XCTAssertEqual(matrix[2], 3)
+            matrix[3] = 4
+            XCTAssertEqual(matrix[3], 4)
+            matrix[4] = 5
+            XCTAssertEqual(matrix[4], 5)
+            matrix[5] = 6
+            XCTAssertEqual(matrix[5], 6)
+            matrix[6] = 7
+            XCTAssertEqual(matrix[6], 7)
+            matrix[7] = 8
+            XCTAssertEqual(matrix[7], 8)
+            matrix[8] = 9
+            XCTAssertEqual(matrix[8], 9)
+        }
+        do {
+            var matrix = Matrix3x3<Float>()
+            matrix[0] = [1, 2, 3]
+            XCTAssertEqual(matrix[0], [1, 2, 3])
+            matrix[1] = [4, 5, 6]
+            XCTAssertEqual(matrix[1], [4, 5, 6])
+            matrix[2] = [7, 8, 9]
+            XCTAssertEqual(matrix[2], [7, 8, 9])
+        }
+    }
+    
+    func testInitDirectionUpRight() {
+        do {
+            let matrix = Matrix3x3<Float>(direction: .left, up: .up, right: .right)
+            let direction: Direction3<Float> = .left
+            XCTAssertEqual(direction * matrix, .forward)
+        }
+        do {
+            let matrix = Matrix3x3<Float>(direction: .up, up: .up, right: .right)
+            let direction: Direction3<Float> = .up
+            XCTAssertEqual(direction * matrix, .forward)
+        }
+    }
+
+    func testRotation() {
+        var matrix = Matrix3x3<Float>()
+        matrix.rotation = Quaternion(Degrees(720), axis: .right)
+        XCTAssertEqual(matrix.rotation.unitNormalized.x, Quaternion.zero.x, accuracy: 0.0001)
+        XCTAssertEqual(matrix.rotation.unitNormalized.y, Quaternion.zero.y, accuracy: 0.0001)
+        XCTAssertEqual(matrix.rotation.unitNormalized.z, Quaternion.zero.z, accuracy: 0.0001)
+        XCTAssertEqual(matrix.rotation.unitNormalized.w, Quaternion.zero.w, accuracy: 0.0001)
+        XCTAssertEqual(matrix.rotation.magnitude, 1)
+    }
+    
+    func testTransposedArray() {
+        let matrix = Matrix3x3<Float>(1, 2, 3, 4, 5, 6, 7, 8, 9)
+        XCTAssertEqual(matrix.transposedArray(), [1.0, 4.0, 7.0, 2.0, 5.0, 8.0, 3.0, 6.0, 9.0])
+    }
+    
+    func testArray() {
+        let matrix = Matrix3x3<Float>(1, 2, 3, 4, 5, 6, 7, 8, 9)
+        XCTAssertEqual(matrix.array(), [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0])
+    }
+    
+    func testCodableJSON() {
+        let matrix = Matrix3x3<Float>(1, 2, 3, 4, 5, 6, 7, 8, 9)
+        do {
+            let data = try JSONEncoder().encode(matrix)
+            let val = try JSONDecoder().decode(Matrix3x3<Float>.self, from: data)
+            XCTAssertEqual(matrix, val)
+
+        }catch{
+            XCTFail()
+        }
+    }
+    
+    static var allTests = [
+        ("testInit", testInit),
+        ("testSubscript", testSubscript),
+        ("testInitDirectionUpRight", testInitDirectionUpRight),
+        ("testRotation", testRotation),
+        ("testTransposedArray", testTransposedArray),
+        ("testArray", testArray),
+        ("testCodableJSON", testCodableJSON),
+    ]
+}
