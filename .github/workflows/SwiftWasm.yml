@@ -1,0 +1,22 @@
+name: WebAssembly
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-WASI:
+
+    runs-on: ubuntu-latest
+
+    container:
+      image: ghcr.io/swiftwasm/carton
+      
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build
+      run: carton build
+    - name: Test
+      run: carton test
