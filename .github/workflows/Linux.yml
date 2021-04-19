@@ -13,8 +13,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Install OpenGL
-      run: sudo apt-get install libglew2.1 libglew-dev
     - name: Build
       run: swift build
     - name: Test
