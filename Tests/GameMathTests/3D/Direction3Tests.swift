@@ -47,7 +47,7 @@ final class Direction3Tests: XCTestCase {
         let dst: Direction3<Float> = .right
         let value = src.angle(to: dst).rawValue
         let expected = Radians<Float>(Degrees(90)).rawValue
-        XCTAssertEqual(value, expected, accuracy: 0.0000001)
+        XCTAssertEqual(value, expected, accuracy: 0.000001)
     }
     
     func testAngleAroundX() {
