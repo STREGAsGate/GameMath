@@ -22,7 +22,7 @@ extension Vector3 {
     }
     
     public init(_ values: [T]) {
-        assert(values.isEmpty || values.count == 2, "values must be empty or have 3 elements. Use init(repeating:) to fill with a single value.")
+        assert(values.isEmpty || values.count == 3, "values must be empty or have 3 elements. Use init(repeating:) to fill with a single value.")
         if values.isEmpty {
             self.init(0, 0, 0)
         }else{
