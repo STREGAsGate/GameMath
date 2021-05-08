@@ -11,7 +11,7 @@ import Foundation
 public struct Quaternion<T: FloatingPoint> {
     public var w, x, y, z: T
     
-    init(w: T, x: T, y: T, z: T) {
+    public init(w: T, x: T, y: T, z: T) {
         self.w = w
         self.x = x
         self.y = y
