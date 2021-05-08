@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Quaternion<T: FloatingPoint> {
+public struct Quaternion<T: FloatingPoint & SIMDScalar> {
     public var w, x, y, z: T
     
     public init(w: T, x: T, y: T, z: T) {
@@ -235,6 +235,7 @@ public extension Quaternion where T: BinaryFloatingPoint {
 }
 
 public extension Quaternion {
+    @inlinable
     var direction: Direction3<T> {
         get {
             return Direction3<T>(x: x, y: y, z: z)
@@ -246,27 +247,34 @@ public extension Quaternion {
         }
     }
     
+    @inlinable
     var forward: Direction3<T> {
         return Direction3.forward.rotated(by: self)
     }
+    @inlinable
     var backward: Direction3<T> {
         return Direction3.backward.rotated(by: self)
     }
+    @inlinable
     var up: Direction3<T> {
         return Direction3.up.rotated(by: self)
     }
+    @inlinable
     var down: Direction3<T> {
         return Direction3.down.rotated(by: self)
     }
+    @inlinable
     var left: Direction3<T> {
         return Direction3.left.rotated(by: self)
     }
+    @inlinable
     var right: Direction3<T> {
         return Direction3.right.rotated(by: self)
     }
 }
 
 public extension Quaternion where T: BinaryFloatingPoint {
+    @inlinable
     static var zero: Self {
         return Self(Radians(0), axis: .forward)
     }
@@ -285,6 +293,7 @@ public extension Quaternion where T: BinaryFloatingPoint {
 }
 
 public extension Quaternion {
+    @inlinable
     var conjugate: Self {
         return Self(w: w, x: -x, y: -y, z: -z)
     }

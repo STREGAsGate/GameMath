@@ -9,7 +9,7 @@
 import Foundation
 
 /// Represents an angle in radians
-public struct Radians<RawValue: BinaryFloatingPoint>: RawRepresentable {
+public struct Radians<RawValue: BinaryFloatingPoint & SIMDScalar>: RawRepresentable {
     /// The radians as a scalar value
     public let rawValue: RawValue
     
@@ -144,7 +144,7 @@ extension Radians: Codable where RawValue: Codable {}
 
 //MARK: Degrees
 
-public struct Degrees<RawValue: BinaryFloatingPoint>: RawRepresentable {
+public struct Degrees<RawValue: BinaryFloatingPoint & SIMDScalar>: RawRepresentable {
     /// The degress scalar value
     public let rawValue: RawValue
     /// Creates a new angle in degrees

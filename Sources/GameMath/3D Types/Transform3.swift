@@ -6,7 +6,7 @@
  * Find me on https://www.YouTube.com/STREGAsGate, or social media @STREGAsGate
  */
 
-public struct Transform3<T: BinaryFloatingPoint> {
+public struct Transform3<T: BinaryFloatingPoint & SIMDScalar> {
     public var position: Position3<T> {
         didSet {
             assert(position.isFinite)

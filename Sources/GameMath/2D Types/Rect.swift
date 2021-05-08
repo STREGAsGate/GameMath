@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Rect<T: Numeric> {
+public struct Rect<T: Numeric & SIMDScalar> {
     public var position: Position2<T>
     public var size: Size2<T>
     

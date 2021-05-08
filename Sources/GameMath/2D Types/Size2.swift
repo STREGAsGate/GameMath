@@ -6,7 +6,7 @@
  * Find me on https://www.YouTube.com/STREGAsGate, or social media @STREGAsGate
  */
 
-public struct Size2<T: Numeric>: Vector2 {
+public struct Size2<T: Numeric & SIMDScalar>: Vector2 {
     public var width: T
     public var height: T
     

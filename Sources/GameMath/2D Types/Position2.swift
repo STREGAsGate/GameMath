@@ -6,7 +6,7 @@
  * Find me on https://www.YouTube.com/STREGAsGate, or social media @STREGAsGate
  */
 
-public struct Position2<T: Numeric>: Vector2 {
+public struct Position2<T: Numeric & SIMDScalar>: Vector2 {
     public var x: T
     public var y: T
     public init(x: T, y: T) {

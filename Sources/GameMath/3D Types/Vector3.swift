@@ -9,7 +9,7 @@
 import Foundation
 
 public protocol Vector3 {
-    associatedtype T: Numeric
+    associatedtype T: Numeric & SIMDScalar
     var x: T {get set}
     var y: T {get set}
     var z: T {get set}
@@ -160,7 +160,7 @@ public extension Vector3 where T: Comparable {
 }
 
 //MARK: - SIMD
-public extension Vector3 where T: SIMDScalar {
+public extension Vector3 {
     var simd: SIMD3<T> {
         return SIMD3<T>(x, y, z)
     }

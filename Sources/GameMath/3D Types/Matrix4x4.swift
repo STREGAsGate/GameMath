@@ -6,7 +6,7 @@
  * Find me on https://www.YouTube.com/STREGAsGate, or social media @STREGAsGate
  */
 
-public struct Matrix4x4<T: FloatingPoint> {
+public struct Matrix4x4<T: FloatingPoint & SIMDScalar> {
     public var a: T, b: T, c: T, d: T
     public var e: T, f: T, g: T, h: T
     public var i: T, j: T, k: T, l: T
@@ -532,7 +532,7 @@ public extension Matrix4x4 where T: BinaryFloatingPoint {
 }
 
 //MARK: - Graphics
-extension Matrix4x4 where T: SIMDScalar {
+extension Matrix4x4 {
     public var simd: SIMD16<T> {
         return SIMD16<T>(a, b, c, d,
                          e, f, g, h,
@@ -563,7 +563,7 @@ extension Matrix4x4 {
     }
     
     internal init(transposedArray value: [T]) {
-        precondition(value.count == 16, "Matrix4x4 must be initialized with exactly 16 elements.")
+        assert(value.count == 16, "Matrix4x4 must be initialized with exactly 16 elements.")
         self.init(a: value[0], b: value[4], c: value[8],  d: value[12],
                   e: value[1], f: value[5], g: value[9],  h: value[13],
                   i: value[2], j: value[6], k: value[10], l: value[14],

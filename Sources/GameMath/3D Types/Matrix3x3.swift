@@ -6,7 +6,7 @@
  * Find me on https://www.YouTube.com/STREGAsGate, or social media @STREGAsGate
  */
 
-public struct Matrix3x3<T: FloatingPoint> {
+public struct Matrix3x3<T: FloatingPoint & SIMDScalar> {
     public var a, b, c: T
     public var e, f, g: T
     public var i, j, k: T

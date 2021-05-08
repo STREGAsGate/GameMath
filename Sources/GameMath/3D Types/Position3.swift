@@ -7,7 +7,7 @@
  */
 
 /// Represents a location in 3D space
-public struct Position3<T: Numeric>: Vector3 {
+public struct Position3<T: Numeric & SIMDScalar>: Vector3 {
     public var x: T
     public var y: T
     public var z: T

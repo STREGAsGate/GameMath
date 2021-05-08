@@ -6,7 +6,7 @@
  * Find me on https://www.YouTube.com/STREGAsGate, or social media @STREGAsGate
  */
 
-public struct Circle<T: Numeric> {
+public struct Circle<T: Numeric & SIMDScalar> {
     public var center: Position2<T>
     public var radius: T
 

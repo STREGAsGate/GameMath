@@ -9,7 +9,7 @@
 import Foundation
 
 public protocol Vector2 {
-    associatedtype T: Numeric
+    associatedtype T: Numeric & SIMDScalar
     var x: T {get set}
     var y: T {get set}
     init(_ x: T, _ y: T)
@@ -144,7 +144,7 @@ public extension Vector2 where T: Comparable {
 }
 
 //MARK: - SIMD
-public extension Vector2 where T: SIMDScalar {
+public extension Vector2 {
     var simd: SIMD2<T> {
         return SIMD2<T>(x, y)
     }

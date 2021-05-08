@@ -6,7 +6,7 @@
  * Find me on https://www.YouTube.com/STREGAsGate, or social media @STREGAsGate
  */
 
-public struct Insets<T: Numeric>{
+public struct Insets<T: Numeric & SIMDScalar>{
     public var top: T
     public var leading: T
     public var bottom: T

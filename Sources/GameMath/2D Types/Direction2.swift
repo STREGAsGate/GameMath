@@ -6,7 +6,7 @@
  * Find me on https://www.YouTube.com/STREGAsGate, or social media @STREGAsGate
  */
 
-public struct Direction2<T: FloatingPoint>: Vector2 {
+public struct Direction2<T: FloatingPoint & SIMDScalar>: Vector2 {
     public var x: T
     public var y: T
     
