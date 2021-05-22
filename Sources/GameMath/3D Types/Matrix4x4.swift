@@ -562,7 +562,7 @@ extension Matrix4x4 {
                 m, n, o, p]
     }
     
-    internal init(transposedArray value: [T]) {
+    public init(transposedArray value: [T]) {
         precondition(value.count == 16, "Matrix4x4 must be initialized with exactly 16 elements.")
         self.init(a: value[0], b: value[4], c: value[8],  d: value[12],
                   e: value[1], f: value[5], g: value[9],  h: value[13],
