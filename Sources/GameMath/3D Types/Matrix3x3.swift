@@ -6,17 +6,12 @@
  * Find me on https://www.YouTube.com/STREGAsGate, or social media @STREGAsGate
  */
 
+#if GameMathUseSIMD
 public struct Matrix3x3<T: FloatingPoint & SIMDScalar> {
     public var a, b, c: T
     public var e, f, g: T
     public var i, j, k: T
-    
-    public init(a: T, b: T, c: T,
-                e: T, f: T, g: T,
-                i: T, j: T, k: T) {
-        self.init(a, b, c, e, f, g, i, j, k)
-    }
-    
+
     public init(_ a: T, _ b: T, _ c: T,
                 _ e: T, _ f: T, _ g: T,
                 _ i: T, _ j: T, _ k: T) {
@@ -24,21 +19,44 @@ public struct Matrix3x3<T: FloatingPoint & SIMDScalar> {
         self.e = e; self.f = f; self.g = g;
         self.i = i; self.j = j; self.k = k;
     }
+}
+#else
+public struct Matrix3x3<T: FloatingPoint> {
+    public var a, b, c: T
+    public var e, f, g: T
+    public var i, j, k: T
+
+    public init(_ a: T, _ b: T, _ c: T,
+                _ e: T, _ f: T, _ g: T,
+                _ i: T, _ j: T, _ k: T) {
+        self.a = a; self.b = b; self.c = c;
+        self.e = e; self.f = f; self.g = g;
+        self.i = i; self.j = j; self.k = k;
+    }
+}
+#endif
+ 
+public extension Matrix3x3 {
+    init(a: T, b: T, c: T,
+                e: T, f: T, g: T,
+                i: T, j: T, k: T) {
+        self.init(a, b, c, e, f, g, i, j, k)
+    }
     
-    public init(_ matrix4: Matrix4x4<T>) {
+    init(_ matrix4: Matrix4x4<T>) {
         self.a = matrix4.a; self.b = matrix4.b; self.c = matrix4.c;
         self.e = matrix4.e; self.f = matrix4.f; self.g = matrix4.g;
         self.i = matrix4.i; self.j = matrix4.j; self.k = matrix4.k;
     }
     
-    public init() {
+    init() {
         self.a = 0; self.b = 0; self.c = 0;
         self.e = 0; self.f = 0; self.g = 0;
         self.i = 0; self.j = 0; self.k = 0;
     }
     
     //MARK: Subscript
-    public subscript (_ index: Array<T>.Index) -> T {
+    subscript (_ index: Array<T>.Index) -> T {
         get{
             switch index {
             case 0: return a
@@ -72,7 +90,7 @@ public struct Matrix3x3<T: FloatingPoint & SIMDScalar> {
         }
     }
     
-    public subscript (_ column: Array<T>.Index) -> Array<T> {
+    subscript (_ column: Array<T>.Index) -> Array<T> {
         get {
             switch column {
             case 0: return [a, e, i]
@@ -102,7 +120,7 @@ public struct Matrix3x3<T: FloatingPoint & SIMDScalar> {
         }
     }
 
-    public subscript <V: Vector3>(_ index: Array<T>.Index) -> V where V.T == T {
+    subscript <V: Vector3>(_ index: Array<T>.Index) -> V where V.T == T {
         get {
             switch index {
             case 0: return V(a, b, c)

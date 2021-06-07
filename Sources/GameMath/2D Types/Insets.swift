@@ -6,6 +6,7 @@
  * Find me on https://www.YouTube.com/STREGAsGate, or social media @STREGAsGate
  */
 
+#if GameMathUseSIMD
 public struct Insets<T: Numeric & SIMDScalar>{
     public var top: T
     public var leading: T
@@ -19,6 +20,21 @@ public struct Insets<T: Numeric & SIMDScalar>{
         self.trailing = trailing
     }
 }
+#else
+public struct Insets<T: Numeric>{
+    public var top: T
+    public var leading: T
+    public var bottom: T
+    public var trailing: T
+    
+    public init(top: T, leading: T, bottom: T, trailing: T) {
+        self.top = top
+        self.leading = leading
+        self.bottom = bottom
+        self.trailing = trailing
+    }
+}
+#endif
 
 extension Insets: Equatable where T: Equatable {}
 extension Insets: Hashable where T: Hashable {}

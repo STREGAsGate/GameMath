@@ -127,17 +127,4 @@ final class InterpolationTests: XCTestCase {
             XCTAssertEqual(value.z, expected.z, accuracy: 0.000001)
         }
     }
-    
-    static var allTests = [
-        ("testInterpolatedToLinear", testInterpolatedToLinear),
-        ("testInterpolateToLinear", testInterpolateToLinear),
-        
-        
-        ("testPosition3Linear", testPosition3Linear),
-        ("testSize3Linear", testSize3Linear),
-        ("testDirection3Linear", testDirection3Linear),
-        ("testQuaternionLinear", testQuaternionLinear),
-        ("testQuaternionLinearShortest", testQuaternionShortest),
-        
-    ]
 }

@@ -20,8 +20,4 @@ final class Vector3Tests: XCTestCase {
         XCTAssertEqual(vec.y, 2)
         XCTAssertEqual(vec.z, 3)
     }
-
-    static var allTests = [
-        ("testInit", testInit),
-    ]
 }

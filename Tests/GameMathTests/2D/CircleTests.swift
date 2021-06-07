@@ -7,8 +7,4 @@ final class CircleTests: XCTestCase {
         XCTAssertEqual(circle.center, .zero)
         XCTAssertEqual(circle.radius, 1)
     }
-    
-    static var allTests = [
-        ("testInit", testInit),
-    ]
 }

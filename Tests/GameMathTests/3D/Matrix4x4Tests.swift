@@ -5,98 +5,23 @@ final class Matrix4x4Tests: XCTestCase {
     func testInit() {
         do {
             let matrix = Matrix4x4(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16)
-            XCTAssertEqual(matrix.a, 1)
-            XCTAssertEqual(matrix.b, 2)
-            XCTAssertEqual(matrix.c, 3)
-            XCTAssertEqual(matrix.d, 4)
-            XCTAssertEqual(matrix.e, 5)
-            XCTAssertEqual(matrix.f, 6)
-            XCTAssertEqual(matrix.g, 7)
-            XCTAssertEqual(matrix.h, 8)
-            XCTAssertEqual(matrix.i, 9)
-            XCTAssertEqual(matrix.j, 10)
-            XCTAssertEqual(matrix.k, 11)
-            XCTAssertEqual(matrix.l, 12)
-            XCTAssertEqual(matrix.m, 13)
-            XCTAssertEqual(matrix.n, 14)
-            XCTAssertEqual(matrix.o, 15)
-            XCTAssertEqual(matrix.p, 16)
+            XCTAssertEqual(matrix.array(), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])
         }
         do {
             let matrix = Matrix4x4(a: 1, b: 2, c: 3, d: 4, e: 5, f: 6, g: 7, h: 8, i: 9, j: 10, k: 11, l: 12, m: 13, n: 14, o: 15, p: 16)
-            XCTAssertEqual(matrix.a, 1)
-            XCTAssertEqual(matrix.b, 2)
-            XCTAssertEqual(matrix.c, 3)
-            XCTAssertEqual(matrix.d, 4)
-            XCTAssertEqual(matrix.e, 5)
-            XCTAssertEqual(matrix.f, 6)
-            XCTAssertEqual(matrix.g, 7)
-            XCTAssertEqual(matrix.h, 8)
-            XCTAssertEqual(matrix.i, 9)
-            XCTAssertEqual(matrix.j, 10)
-            XCTAssertEqual(matrix.k, 11)
-            XCTAssertEqual(matrix.l, 12)
-            XCTAssertEqual(matrix.m, 13)
-            XCTAssertEqual(matrix.n, 14)
-            XCTAssertEqual(matrix.o, 15)
-            XCTAssertEqual(matrix.p, 16)
+            XCTAssertEqual(matrix.array(), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])
         }
         do {
-            let matrix = Matrix4x4(repeating: 0)
-            XCTAssertEqual(matrix.a, 0)
-            XCTAssertEqual(matrix.b, 0)
-            XCTAssertEqual(matrix.c, 0)
-            XCTAssertEqual(matrix.d, 0)
-            XCTAssertEqual(matrix.e, 0)
-            XCTAssertEqual(matrix.f, 0)
-            XCTAssertEqual(matrix.g, 0)
-            XCTAssertEqual(matrix.h, 0)
-            XCTAssertEqual(matrix.i, 0)
-            XCTAssertEqual(matrix.j, 0)
-            XCTAssertEqual(matrix.k, 0)
-            XCTAssertEqual(matrix.l, 0)
-            XCTAssertEqual(matrix.m, 0)
-            XCTAssertEqual(matrix.n, 0)
-            XCTAssertEqual(matrix.o, 0)
-            XCTAssertEqual(matrix.p, 0)
+            let matrix = Matrix4x4(repeating: 128)
+            XCTAssertEqual(matrix.array(), Array(repeating: 128, count: 16))
         }
         do {
             let matrix = Matrix4x4([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])
-            XCTAssertEqual(matrix.a, 1)
-            XCTAssertEqual(matrix.b, 2)
-            XCTAssertEqual(matrix.c, 3)
-            XCTAssertEqual(matrix.d, 4)
-            XCTAssertEqual(matrix.e, 5)
-            XCTAssertEqual(matrix.f, 6)
-            XCTAssertEqual(matrix.g, 7)
-            XCTAssertEqual(matrix.h, 8)
-            XCTAssertEqual(matrix.i, 9)
-            XCTAssertEqual(matrix.j, 10)
-            XCTAssertEqual(matrix.k, 11)
-            XCTAssertEqual(matrix.l, 12)
-            XCTAssertEqual(matrix.m, 13)
-            XCTAssertEqual(matrix.n, 14)
-            XCTAssertEqual(matrix.o, 15)
-            XCTAssertEqual(matrix.p, 16)
+            XCTAssertEqual(matrix.array(), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])
         }
         do {
             let matrix = Matrix4x4<Float>(Matrix4x4<Double>(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16))
-            XCTAssertEqual(matrix.a, 1)
-            XCTAssertEqual(matrix.b, 2)
-            XCTAssertEqual(matrix.c, 3)
-            XCTAssertEqual(matrix.d, 4)
-            XCTAssertEqual(matrix.e, 5)
-            XCTAssertEqual(matrix.f, 6)
-            XCTAssertEqual(matrix.g, 7)
-            XCTAssertEqual(matrix.h, 8)
-            XCTAssertEqual(matrix.i, 9)
-            XCTAssertEqual(matrix.j, 10)
-            XCTAssertEqual(matrix.k, 11)
-            XCTAssertEqual(matrix.l, 12)
-            XCTAssertEqual(matrix.m, 13)
-            XCTAssertEqual(matrix.n, 14)
-            XCTAssertEqual(matrix.o, 15)
-            XCTAssertEqual(matrix.p, 16)
+            XCTAssertEqual(matrix.array(), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])
         }
     }
 
@@ -188,12 +113,36 @@ final class Matrix4x4Tests: XCTestCase {
         XCTAssertEqual(mtx.rotation.unitNormalized.z, qat.unitNormalized.z, accuracy: 0.01)
     }
 
-    static var allTests = [
-        ("testInit", testInit),
-        ("testIdentity", testIdentity),
-        ("testBecomeIdentity", testBecomeIdentity),
-        ("testInverse", testInverse),
-        ("testSubscript", testSubscript),
-        ("testTransform", testTransform),
-    ]
+    func testMultiplicationPerformance() {
+        let m1 = Transform3<Float>(position: Position3(128, 128, 128),
+                                   rotation: Quaternion(Degrees(128), axis: .up),
+                                   scale: .one).createMatrix()
+        let m2 = Transform3<Float>(position: Position3(0, 1, 2),
+                                   rotation: Quaternion(Degrees(90), axis: .up),
+                                   scale: Size3(-100, -15, -1)).createMatrix()
+        let m3 = Transform3<Float>(position: Position3(-128, -128, -128),
+                                   rotation: Quaternion(Degrees(-65), axis: .up),
+                                   scale: Size3(100, 15, 1)).createMatrix()
+
+        func doMath() {
+            var mtx: Matrix4x4<Float> = .identity
+            mtx *= m1 * m2 * m3
+            mtx *= m1 * m2 * m3
+            mtx *= m1 * m2 * m3
+            mtx *= m1 * m2 * m3
+            func more() -> Matrix4x4<Float> {
+                return m1 * m2 * m3
+            }
+            for _ in 1 ..< 5000 {
+                mtx *= more()
+                mtx *= more()
+            }
+            for _ in 1 ..< 10000 {
+                mtx *= more()
+            }
+        }
+        measure {
+            doMath()
+        }
+    }
 }

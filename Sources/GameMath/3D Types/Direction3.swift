@@ -6,6 +6,7 @@
  * Find me on https://www.YouTube.com/STREGAsGate, or social media @STREGAsGate
  */
 
+#if GameMathUseSIMD
 public struct Direction3<T: FloatingPoint & SIMDScalar>: Vector3 {
     public var x: T
     public var y: T
@@ -16,7 +17,23 @@ public struct Direction3<T: FloatingPoint & SIMDScalar>: Vector3 {
         self.y = y
         self.z = z
     }
-    public init(_ x: T, _ y: T, _ z: T) {
+}
+#else
+public struct Direction3<T: FloatingPoint>: Vector3 {
+    public var x: T
+    public var y: T
+    public var z: T
+    
+    public init(x: T, y: T, z: T) {
+        self.x = x
+        self.y = y
+        self.z = z
+    }
+}
+#endif
+
+public extension Direction3 {
+    init(_ x: T, _ y: T, _ z: T) {
         self.init(x: x, y: y, z: z)
     }
 }

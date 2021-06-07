@@ -7,8 +7,4 @@ final class Size2Tests: XCTestCase {
         XCTAssertEqual(size.width, 1)
         XCTAssertEqual(size.height, 1)
     }
-
-    static var allTests = [
-        ("testInit", testInit),
-    ]
 }

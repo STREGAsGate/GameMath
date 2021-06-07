@@ -33,12 +33,4 @@ final class Position3Tests: XCTestCase {
         src.move(1, toward: .up)
         XCTAssertEqual(src, dst)
     }
-
-    static var allTests = [
-        ("testInit", testInit),
-        ("testDistance", testDistance),
-        ("testIsNear", testIsNear),
-        ("testMoved", testMoved),
-        ("testMove", testMove),
-    ]
 }

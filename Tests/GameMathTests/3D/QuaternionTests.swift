@@ -37,12 +37,4 @@ final class QuaternionTests: XCTestCase {
     func testInitRotationMatrix() {
 
     }
-
-    static var allTests = [
-        ("testInit", testInit),
-        ("testInitDirectionUpRight", testInitDirectionUpRight),
-        ("testInitBetween", testInitBetween),
-        ("testInitRotationMatrix", testInitRotationMatrix),
-
-    ]
 }

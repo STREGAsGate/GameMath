@@ -6,7 +6,43 @@
  * Find me on https://www.YouTube.com/STREGAsGate, or social media @STREGAsGate
  */
 
+#if GameMathUseSIMD
+import Dispatch
 public struct Matrix4x4<T: FloatingPoint & SIMDScalar> {
+    @usableFromInline internal var storage: [SIMD4<T>]
+    @usableFromInline internal init(storage: [SIMD4<T>]) {
+        self.storage = storage
+    }
+
+    @inline(__always) public var a: T {get{storage[0][0]} set{storage[0][0] = newValue}}
+    @inline(__always) public var b: T {get{storage[1][0]} set{storage[1][0] = newValue}}
+    @inline(__always) public var c: T {get{storage[2][0]} set{storage[2][0] = newValue}}
+    @inline(__always) public var d: T {get{storage[3][0]} set{storage[3][0] = newValue}}
+    @inline(__always) public var e: T {get{storage[0][1]} set{storage[0][1] = newValue}}
+    @inline(__always) public var f: T {get{storage[1][1]} set{storage[1][1] = newValue}}
+    @inline(__always) public var g: T {get{storage[2][1]} set{storage[2][1] = newValue}}
+    @inline(__always) public var h: T {get{storage[3][1]} set{storage[3][1] = newValue}}
+    @inline(__always) public var i: T {get{storage[0][2]} set{storage[0][2] = newValue}}
+    @inline(__always) public var j: T {get{storage[1][2]} set{storage[1][2] = newValue}}
+    @inline(__always) public var k: T {get{storage[2][2]} set{storage[2][2] = newValue}}
+    @inline(__always) public var l: T {get{storage[3][2]} set{storage[3][2] = newValue}}
+    @inline(__always) public var m: T {get{storage[0][3]} set{storage[0][3] = newValue}}
+    @inline(__always) public var n: T {get{storage[1][3]} set{storage[1][3] = newValue}}
+    @inline(__always) public var o: T {get{storage[2][3]} set{storage[2][3] = newValue}}
+    @inline(__always) public var p: T {get{storage[3][3]} set{storage[3][3] = newValue}}
+
+    public init(_ a: T, _ b: T, _ c: T, _ d: T,
+                _ e: T, _ f: T, _ g: T, _ h: T,
+                _ i: T, _ j: T, _ k: T, _ l: T,
+                _ m: T, _ n: T, _ o: T, _ p: T) {
+        self.storage = [SIMD4(a,e,i,m),
+                        SIMD4(b,f,j,n),
+                        SIMD4(c,g,k,o),
+                        SIMD4(d,h,l,p)]
+    }
+}
+#else
+public struct Matrix4x4<T: FloatingPoint> {
     public var a: T, b: T, c: T, d: T
     public var e: T, f: T, g: T, h: T
     public var i: T, j: T, k: T, l: T
@@ -21,22 +57,28 @@ public struct Matrix4x4<T: FloatingPoint & SIMDScalar> {
         self.i = i; self.j = j; self.k = k; self.l = l
         self.m = m; self.n = n; self.o = o; self.p = p
     }
+}
+#endif
 
-    public init(a: T, b: T, c: T, d: T,
-                e: T, f: T, g: T, h: T,
-                i: T, j: T, k: T, l: T,
-                m: T, n: T, o: T, p: T) {
+public extension Matrix4x4 {
+    @_transparent
+    init(a: T, b: T, c: T, d: T,
+         e: T, f: T, g: T, h: T,
+         i: T, j: T, k: T, l: T,
+         m: T, n: T, o: T, p: T) {
         self.init(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p)
     }
     
-    public init(repeating value: T) {
+    @_transparent
+    init(repeating value: T) {
         self.init(a: value, b: value, c: value, d: value,
                   e: value, f: value, g: value, h: value,
                   i: value, j: value, k: value, l: value,
                   m: value, n: value, o: value, p: value)
     }
     
-    public init(_ value: [T]) {
+    @_transparent
+    init(_ value: [T]) {
         assert(value.count == 16, "Matrix4x4 must be initialized with exactly 16 elements.")
         self.init(a: value[0],  b: value[1],  c: value[2],  d: value[3],
                   e: value[4],  f: value[5],  g: value[6],  h: value[7],
@@ -46,6 +88,7 @@ public struct Matrix4x4<T: FloatingPoint & SIMDScalar> {
 }
 
 public extension Matrix4x4 where T: BinaryFloatingPoint {
+    @_transparent
     init<V: BinaryFloatingPoint>(_ value: Matrix4x4<V>) {
         self.init(T(value.a),
                   T(value.b),
@@ -67,11 +110,13 @@ public extension Matrix4x4 where T: BinaryFloatingPoint {
 }
 
 public extension Matrix4x4 {
+    @inlinable
     static var identity: Self {Self(a: 1, b: 0, c: 0, d: 0,
                                     e: 0, f: 1, g: 0, h: 0,
                                     i: 0, j: 0, k: 1, l: 0,
                                     m: 0, n: 0, o: 0, p: 1)}
     
+    @inlinable
     mutating func becomeIdentity() {
         a = 1; b = 0; c = 0; d = 0
         e = 0; f = 1; g = 0; h = 0
@@ -79,6 +124,7 @@ public extension Matrix4x4 {
         m = 0; n = 0; o = 0; p = 1
     }
     
+    @_transparent
     var inverse: Self {
         var a: T = self.f * self.k * self.p
         a -= self.f * self.l * self.o
@@ -197,10 +243,11 @@ public extension Matrix4x4 {
         
         return inv
     }
-    
+}
     //MARK: Subscript
+public extension Matrix4x4 {
     subscript (_ index: Array<T>.Index) -> T {
-        get{
+        @_transparent get {
             switch index {
             case 0: return a
             case 1: return b
@@ -223,7 +270,7 @@ public extension Matrix4x4 {
             }
         }
         
-        set(val) {
+        @_transparent set(val) {
             switch index {
             case 0: a = val
             case 1: b = val
@@ -246,10 +293,14 @@ public extension Matrix4x4 {
             }
         }
     }
-    
-    subscript (_ column: Array<T>.Index) -> Array<T> {
-        get{
+}
+public extension Matrix4x4 where T: SIMDScalar {
+    subscript (_ column: Array<T>.Index) -> SIMD4<T> {
+        get {
             assert(column < 4, "Index \(column) out of range \(0 ..< 4) for type \(type(of: self))")
+            #if GameMathUseSIMD
+            return storage[column]
+            #else
             switch column {
             case 0: return [a, e, i, m]
             case 1: return [b, f, j, n]
@@ -258,10 +309,14 @@ public extension Matrix4x4 {
             default:
                 fatalError()
             }
+            #endif
         }
-        set{
+        
+        @_transparent set {
             assert(column < 4, "Index \(column) out of range \(0 ..< 4) for type \(type(of: self))")
-            assert(newValue.count == 4, "NewValue count must be exactly 4.")
+            #if GameMathUseSIMD
+            storage[column] = newValue
+            #else
             switch column {
             case 0:
                 a = newValue[0]
@@ -286,6 +341,7 @@ public extension Matrix4x4 {
             default:
                 fatalError()
             }
+            #endif
         }
     }
 }
@@ -295,17 +351,15 @@ public extension Matrix4x4 {
 //MARK: - Transform
 
 public extension Matrix4x4 where T: BinaryFloatingPoint {
+    @inlinable
     var transform: Transform3<T> {
-        var transform: Transform3<T> = .empty
-        transform.position = position
-        transform.rotation = rotation
-        transform.scale = scale
-        return transform
+        return Transform3(position: position, rotation: rotation, scale: scale)
     }
 }
 
 //MARK: Translate
 public extension Matrix4x4 where T: BinaryFloatingPoint {
+    @_transparent
     init(position: Position3<T>) {
         self.init(1, 0, 0, position.x,
                   0, 1, 0, position.y,
@@ -313,6 +367,7 @@ public extension Matrix4x4 where T: BinaryFloatingPoint {
                   0, 0, 0, 1)
     }
     
+    @inlinable
     var position: Position3<T> {
         get {
             return Position3(x: d, y: h, z: l)
@@ -327,6 +382,7 @@ public extension Matrix4x4 where T: BinaryFloatingPoint {
 
 //MARK: Rotate
 public extension Matrix4x4 where T: BinaryFloatingPoint {
+    @_transparent
     init(rotation quaternion: Quaternion<T>) {
         let w: T = quaternion.w
         let x: T = quaternion.x
@@ -375,12 +431,20 @@ public extension Matrix4x4 where T: BinaryFloatingPoint {
         rz += w * y
         rz *= 2
 
+        #if GameMathUseSIMD
+        self.storage = [SIMD4(rx, ux, fx, 0),
+                        SIMD4(ry, uy, fy, 0),
+                        SIMD4(rz, uz, fz, 0),
+                        SIMD4(0,  0,  0,  1)]
+        #else
         a = rx; b = ry; c = rz; d = 0
         e = ux; f = uy; g = uz; h = 0
         i = fx; j = fy; k = fz; l = 0
         m = 0;  n = 0;  o = 0;  p = 1
+        #endif
     }
     
+    @_transparent
     init(rotationWithForward forward: Direction3<T>, up: Direction3<T> = .up, right: Direction3<T> = .right) {
         self.init(right.x,     right.y,    right.z,    0,
                   up.x,        up.y,       up.z,       0,
@@ -388,6 +452,7 @@ public extension Matrix4x4 where T: BinaryFloatingPoint {
                   0,           0,          0,          1)
     }
     
+    @inlinable
     var rotation: Quaternion<T> {
         get {
             return Quaternion(rotationMatrix: self.rotationMatrix)
@@ -445,6 +510,7 @@ public extension Matrix4x4 where T: BinaryFloatingPoint {
         }
     }
     
+    @inlinable
     var rotationMatrix: Self {
         let scale = self.scale
         return Matrix4x4<T>(a: a/scale.x, b: b/scale.y, c: c/scale.z, d: 0,
@@ -453,6 +519,7 @@ public extension Matrix4x4 where T: BinaryFloatingPoint {
                             m: 0,         n: 0,         o: 0,         p: 0)
     }
     
+    @_transparent
     func lookingAt(_ position: Position3<T>) -> Self {
         let eye = self.position
         let zaxis = Direction3<T>(eye - position).normalized// The "forward" vector.
@@ -468,6 +535,7 @@ public extension Matrix4x4 where T: BinaryFloatingPoint {
 
 //MARK: Scale
 public extension Matrix4x4 {
+    @_transparent
     init(scale size: Size3<T>) {
         self.init(size.x,  0,      0,      0,
                   0,       size.y, 0,      0,
@@ -475,6 +543,7 @@ public extension Matrix4x4 {
                   0,       0,      0,      1)
     }
     
+    @inlinable
     var scale: Size3<T> {
         get {
             var w: T = a * a
@@ -532,13 +601,15 @@ public extension Matrix4x4 where T: BinaryFloatingPoint {
 }
 
 //MARK: - Graphics
-extension Matrix4x4 {
+extension Matrix4x4 where T: SIMDScalar {
+    @inlinable
     public var simd: SIMD16<T> {
         return SIMD16<T>(a, b, c, d,
                          e, f, g, h,
                          i, j, k, l,
                          m, n, o, p)
     }
+    @inlinable
     public var transposedSIMD: SIMD16<T>  {
         return SIMD16<T>(a, e, i, m,
                          b, f, j, n,
@@ -548,6 +619,7 @@ extension Matrix4x4 {
 }
 
 extension Matrix4x4 {
+    @inlinable
     public func transposedArray() -> [T] {
         return [a, e, i, m,
                 b, f, j, n,
@@ -555,14 +627,16 @@ extension Matrix4x4 {
                 d, h, l, p]
     }
     
+    @inlinable
     public func array() -> [T] {
         return [a, b, c, d,
                 e, f, g, h,
                 i, j, k, l,
                 m, n, o, p]
     }
-    
-    internal init(transposedArray value: [T]) {
+
+    @inlinable
+    public init(transposedArray value: [T]) {
         assert(value.count == 16, "Matrix4x4 must be initialized with exactly 16 elements.")
         self.init(a: value[0], b: value[4], c: value[8],  d: value[12],
                   e: value[1], f: value[5], g: value[9],  h: value[13],
@@ -570,12 +644,14 @@ extension Matrix4x4 {
                   m: value[3], n: value[7], o: value[11], p: value[15])
     }
     
+    @inlinable
     public func transposed() -> Self {
         return Self(self.transposedArray())
     }
 }
 
 extension Matrix4x4 where T: BinaryFloatingPoint {
+    @inlinable
     public var isFinite: Bool {
         for value in self.array() {
             guard value.isFinite else {return false}
@@ -585,7 +661,411 @@ extension Matrix4x4 where T: BinaryFloatingPoint {
 }
 
 //MARK: - Operators
+#if GameMathUseSIMD
+#if canImport(simd) && true
+import simd
+public extension Matrix4x4 where T == Float {
+    @inlinable
+    static func *=(lhs: inout Self, rhs: Self) {
+        let r = simd_mul(simd_float4x4(lhs[0], lhs[1], lhs[2], lhs[3]),
+                         simd_float4x4(rhs[0], rhs[1], rhs[2], rhs[3]))
+        
+        lhs[0] = r[0]
+        lhs[1] = r[1]
+        lhs[2] = r[2]
+        lhs[3] = r[3]
+    }
+    
+    @inlinable
+    static func *(lhs: Self, rhs: Self) -> Self {
+        let r = simd_mul(simd_float4x4(lhs[0], lhs[1], lhs[2], lhs[3]),
+                         simd_float4x4(rhs[0], rhs[1], rhs[2], rhs[3]))
+        
+        return Self(storage: [r[0], r[1], r[2], r[3]])
+    }
+}
+public extension Matrix4x4 where T == Double {
+    @inlinable
+    static func *=(lhs: inout Self, rhs: Self) {
+        let r = simd_mul(simd_double4x4(lhs[0], lhs[1], lhs[2], lhs[3]),
+                         simd_double4x4(rhs[0], rhs[1], rhs[2], rhs[3]))
+        
+        lhs[0] = r[0]
+        lhs[1] = r[1]
+        lhs[2] = r[2]
+        lhs[3] = r[3]
+    }
+    
+    @inlinable
+    static func *(lhs: Self, rhs: Self) -> Self {
+        let r = simd_mul(simd_double4x4(lhs[0], lhs[1], lhs[2], lhs[3]),
+                         simd_double4x4(rhs[0], rhs[1], rhs[2], rhs[3]))
+        
+        return Self(storage: [r[0], r[1], r[2], r[3]])
+    }
+}
+#elseif true //Unreasonably slow
 public extension Matrix4x4 {
+    @_transparent
+    static func *=(lhs: inout Self, rhs: Self) {
+        let abcd: SIMD4<T> = SIMD4(lhs.a, lhs.b, lhs.c, lhs.d)
+        let efgh: SIMD4<T> = SIMD4(lhs.e, lhs.f, lhs.g, lhs.h)
+        let ijkl: SIMD4<T> = SIMD4(lhs.i, lhs.j, lhs.k, lhs.l)
+        let mnop: SIMD4<T> = SIMD4(lhs.m, lhs.n, lhs.o, lhs.p)
+        let aeim: SIMD4<T> = rhs[0]//SIMD4(rhs.a, rhs.e, rhs.i, rhs.m)
+        let bfjn: SIMD4<T> = rhs[1]//SIMD4(rhs.b, rhs.f, rhs.j, rhs.n)
+        let cgko: SIMD4<T> = rhs[2]//SIMD4(rhs.c, rhs.g, rhs.k, rhs.o)
+        let dhlp: SIMD4<T> = rhs[3]//SIMD4(rhs.d, rhs.h, rhs.l, rhs.p)
+        
+        DispatchQueue.concurrentPerform(iterations: 16) {
+            switch $0 {
+            case 0:
+                let v = abcd * aeim
+                lhs.a = v[0] + v[1] + v[2] + v[3]
+            case 1:
+                let v = abcd * bfjn
+                lhs.b = v[0] + v[1] + v[2] + v[3]
+            case 2:
+                let v = abcd * cgko
+                lhs.c = v[0] + v[1] + v[2] + v[3]
+            case 3:
+                let v = abcd * dhlp
+                lhs.d = v[0] + v[1] + v[2] + v[3]
+            case 4:
+                let v = efgh * aeim
+                lhs.e = v[0] + v[1] + v[2] + v[3]
+            case 5:
+                let v = efgh * bfjn
+                lhs.f = v[0] + v[1] + v[2] + v[3]
+            case 6:
+                let v = efgh * cgko
+                lhs.g = v[0] + v[1] + v[2] + v[3]
+            case 7:
+                let v = efgh * dhlp
+                lhs.h = v[0] + v[1] + v[2] + v[3]
+            case 8:
+                let v = ijkl * aeim
+                lhs.i = v[0] + v[1] + v[2] + v[3]
+            case 9:
+                let v = ijkl * bfjn
+                lhs.j = v[0] + v[1] + v[2] + v[3]
+            case 10:
+                let v = ijkl * cgko
+                lhs.k = v[0] + v[1] + v[2] + v[3]
+            case 11:
+                let v = ijkl * dhlp
+                lhs.l = v[0] + v[1] + v[2] + v[3]
+            case 12:
+                let v = mnop * aeim
+                lhs.m = v[0] + v[1] + v[2] + v[3]
+            case 13:
+                let v = mnop * bfjn
+                lhs.n = v[0] + v[1] + v[2] + v[3]
+            case 14:
+                let v = mnop * cgko
+                lhs.o = v[0] + v[1] + v[2] + v[3]
+            case 15:
+                let v = mnop * dhlp
+                lhs.p = v[0] + v[1] + v[2] + v[3]
+            default:
+                fatalError()
+            }
+        }
+    }
+    @_transparent
+    static func *(lhs: Self, rhs: Self) -> Self {
+        let abcd: SIMD4<T> = SIMD4(lhs.a, lhs.b, lhs.c, lhs.d)
+        let efgh: SIMD4<T> = SIMD4(lhs.e, lhs.f, lhs.g, lhs.h)
+        let ijkl: SIMD4<T> = SIMD4(lhs.i, lhs.j, lhs.k, lhs.l)
+        let mnop: SIMD4<T> = SIMD4(lhs.m, lhs.n, lhs.o, lhs.p)
+        let aeim: SIMD4<T> = rhs[0]//SIMD4(rhs.a, rhs.e, rhs.i, rhs.m)
+        let bfjn: SIMD4<T> = rhs[1]//SIMD4(rhs.b, rhs.f, rhs.j, rhs.n)
+        let cgko: SIMD4<T> = rhs[2]//SIMD4(rhs.c, rhs.g, rhs.k, rhs.o)
+        let dhlp: SIMD4<T> = rhs[3]//SIMD4(rhs.d, rhs.h, rhs.l, rhs.p)
+        
+        var lhs: Matrix4x4<T> = .identity
+        DispatchQueue.concurrentPerform(iterations: 16) {
+            switch $0 {
+            case 0:
+                let v = abcd * aeim
+                lhs.a = v[0] + v[1] + v[2] + v[3]
+            case 1:
+                let v = abcd * bfjn
+                lhs.b = v[0] + v[1] + v[2] + v[3]
+            case 2:
+                let v = abcd * cgko
+                lhs.c = v[0] + v[1] + v[2] + v[3]
+            case 3:
+                let v = abcd * dhlp
+                lhs.d = v[0] + v[1] + v[2] + v[3]
+            case 4:
+                let v = efgh * aeim
+                lhs.e = v[0] + v[1] + v[2] + v[3]
+            case 5:
+                let v = efgh * bfjn
+                lhs.f = v[0] + v[1] + v[2] + v[3]
+            case 6:
+                let v = efgh * cgko
+                lhs.g = v[0] + v[1] + v[2] + v[3]
+            case 7:
+                let v = efgh * dhlp
+                lhs.h = v[0] + v[1] + v[2] + v[3]
+            case 8:
+                let v = ijkl * aeim
+                lhs.i = v[0] + v[1] + v[2] + v[3]
+            case 9:
+                let v = ijkl * bfjn
+                lhs.j = v[0] + v[1] + v[2] + v[3]
+            case 10:
+                let v = ijkl * cgko
+                lhs.k = v[0] + v[1] + v[2] + v[3]
+            case 11:
+                let v = ijkl * dhlp
+                lhs.l = v[0] + v[1] + v[2] + v[3]
+            case 12:
+                let v = mnop * aeim
+                lhs.m = v[0] + v[1] + v[2] + v[3]
+            case 13:
+                let v = mnop * bfjn
+                lhs.n = v[0] + v[1] + v[2] + v[3]
+            case 14:
+                let v = mnop * cgko
+                lhs.o = v[0] + v[1] + v[2] + v[3]
+            case 15:
+                let v = mnop * dhlp
+                lhs.p = v[0] + v[1] + v[2] + v[3]
+            default:
+                fatalError()
+            }
+        }
+        return lhs
+    }
+}
+#endif
+#else
+#if GameMathUseDispatch && canImport(Dispatch) && false
+import Dispatch
+public extension Matrix4x4 {
+    @_transparent
+    static func *=(lhs: inout Self, rhs: Self) {
+        var out: Matrix4x4<T> = .identity
+        DispatchQueue.concurrentPerform(iterations: 16) {
+            switch $0 {
+            case 0:
+                var a  = lhs.a * rhs.a
+                a += lhs.b * rhs.e
+                a += lhs.c * rhs.i
+                a += lhs.d * rhs.m
+                out.a = a
+            case 1:
+                var b  = lhs.a * rhs.b
+                b += lhs.b * rhs.f
+                b += lhs.c * rhs.j
+                b += lhs.d * rhs.n
+                out.b = b
+            case 2:
+                var c  = lhs.a * rhs.c
+                c += lhs.b * rhs.g
+                c += lhs.c * rhs.k
+                c += lhs.d * rhs.o
+                out.c = c
+            case 3:
+                var d  = lhs.a * rhs.d
+                d += lhs.b * rhs.h
+                d += lhs.c * rhs.l
+                d += lhs.d * rhs.p
+                out.d = d
+            case 4:
+                var e  = lhs.e * rhs.a
+                e += lhs.f * rhs.e
+                e += lhs.g * rhs.i
+                e += lhs.h * rhs.m
+                out.e = e
+            case 5:
+                var f  = lhs.e * rhs.b
+                f += lhs.f * rhs.f
+                f += lhs.g * rhs.j
+                f += lhs.h * rhs.n
+                out.f = f
+            case 6:
+                var g  = lhs.e * rhs.c
+                g += lhs.f * rhs.g
+                g += lhs.g * rhs.k
+                g += lhs.h * rhs.o
+                out.g = g
+            case 7:
+                var h  = lhs.e * rhs.d
+                h += lhs.f * rhs.h
+                h += lhs.g * rhs.l
+                h += lhs.h * rhs.p
+                out.h = h
+            case 8:
+                var i  = lhs.i * rhs.a
+                i += lhs.j * rhs.e
+                i += lhs.k * rhs.i
+                i += lhs.l * rhs.m
+                out.i = i
+            case 9:
+                var j  = lhs.i * rhs.b
+                j += lhs.j * rhs.f
+                j += lhs.k * rhs.j
+                j += lhs.l * rhs.n
+                out.j = j
+            case 10:
+                var k  = lhs.i * rhs.c
+                k += lhs.j * rhs.g
+                k += lhs.k * rhs.k
+                k += lhs.l * rhs.o
+                out.k = k
+            case 11:
+                var l  = lhs.i * rhs.d
+                l += lhs.j * rhs.h
+                l += lhs.k * rhs.l
+                l += lhs.l * rhs.p
+                out.l = l
+            case 12:
+                var m  = lhs.m * rhs.a
+                m += lhs.n * rhs.e
+                m += lhs.o * rhs.i
+                m += lhs.p * rhs.m
+                out.m = m
+            case 13:
+                var n  = lhs.m * rhs.b
+                n += lhs.n * rhs.f
+                n += lhs.o * rhs.j
+                n += lhs.p * rhs.n
+                out.n = n
+            case 14:
+                var o  = lhs.m * rhs.c
+                o += lhs.n * rhs.g
+                o += lhs.o * rhs.k
+                o += lhs.p * rhs.o
+                out.o = o
+            case 15:
+                var p  = lhs.m * rhs.d
+                p += lhs.n * rhs.h
+                p += lhs.o * rhs.l
+                p += lhs.p * rhs.p
+                out.p = p
+            default:
+                fatalError()
+            }
+        }
+        
+        lhs = out
+    }
+    
+    @_transparent
+    static func *(lhs: Self, rhs: Self) -> Self {
+        var out: Matrix4x4<T> = .identity
+        DispatchQueue.concurrentPerform(iterations: 16) {
+            switch $0 {
+            case 0:
+                var a  = lhs.a * rhs.a
+                a += lhs.b * rhs.e
+                a += lhs.c * rhs.i
+                a += lhs.d * rhs.m
+                out.a = a
+            case 1:
+                var b  = lhs.a * rhs.b
+                b += lhs.b * rhs.f
+                b += lhs.c * rhs.j
+                b += lhs.d * rhs.n
+                out.b = b
+            case 2:
+                var c  = lhs.a * rhs.c
+                c += lhs.b * rhs.g
+                c += lhs.c * rhs.k
+                c += lhs.d * rhs.o
+                out.c = c
+            case 3:
+                var d  = lhs.a * rhs.d
+                d += lhs.b * rhs.h
+                d += lhs.c * rhs.l
+                d += lhs.d * rhs.p
+                out.d = d
+            case 4:
+                var e  = lhs.e * rhs.a
+                e += lhs.f * rhs.e
+                e += lhs.g * rhs.i
+                e += lhs.h * rhs.m
+                out.e = e
+            case 5:
+                var f  = lhs.e * rhs.b
+                f += lhs.f * rhs.f
+                f += lhs.g * rhs.j
+                f += lhs.h * rhs.n
+                out.f = f
+            case 6:
+                var g  = lhs.e * rhs.c
+                g += lhs.f * rhs.g
+                g += lhs.g * rhs.k
+                g += lhs.h * rhs.o
+                out.g = g
+            case 7:
+                var h  = lhs.e * rhs.d
+                h += lhs.f * rhs.h
+                h += lhs.g * rhs.l
+                h += lhs.h * rhs.p
+                out.h = h
+            case 8:
+                var i  = lhs.i * rhs.a
+                i += lhs.j * rhs.e
+                i += lhs.k * rhs.i
+                i += lhs.l * rhs.m
+                out.i = i
+            case 9:
+                var j  = lhs.i * rhs.b
+                j += lhs.j * rhs.f
+                j += lhs.k * rhs.j
+                j += lhs.l * rhs.n
+                out.j = j
+            case 10:
+                var k  = lhs.i * rhs.c
+                k += lhs.j * rhs.g
+                k += lhs.k * rhs.k
+                k += lhs.l * rhs.o
+                out.k = k
+            case 11:
+                var l  = lhs.i * rhs.d
+                l += lhs.j * rhs.h
+                l += lhs.k * rhs.l
+                l += lhs.l * rhs.p
+                out.l = l
+            case 12:
+                var m  = lhs.m * rhs.a
+                m += lhs.n * rhs.e
+                m += lhs.o * rhs.i
+                m += lhs.p * rhs.m
+                out.m = m
+            case 13:
+                var n  = lhs.m * rhs.b
+                n += lhs.n * rhs.f
+                n += lhs.o * rhs.j
+                n += lhs.p * rhs.n
+                out.n = n
+            case 14:
+                var o  = lhs.m * rhs.c
+                o += lhs.n * rhs.g
+                o += lhs.o * rhs.k
+                o += lhs.p * rhs.o
+                out.o = o
+            case 15:
+                var p  = lhs.m * rhs.d
+                p += lhs.n * rhs.h
+                p += lhs.o * rhs.l
+                p += lhs.p * rhs.p
+                out.p = p
+            default:
+                fatalError()
+            }
+        }
+        return out
+    }
+}
+#elseif true
+public extension Matrix4x4 {
+    @_transparent
     static func *=(lhs: inout Self, rhs: Self) {
         var a: T = lhs.a * rhs.a
         a += lhs.b * rhs.e
@@ -673,6 +1153,7 @@ public extension Matrix4x4 {
         lhs.p = p
     }
     
+    @_transparent
     static func *(lhs: Self, rhs: Self) -> Self {
         var a: T = lhs.a * rhs.a
         a += lhs.b * rhs.e
@@ -744,47 +1225,20 @@ public extension Matrix4x4 {
         return Self(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p)
     }
 }
+#endif
+#endif
 
 extension Matrix4x4: Equatable where T: Equatable {}
 extension Matrix4x4: Hashable where T: Hashable {}
 extension Matrix4x4: Codable where T: Codable {
     public func encode(to encoder: Encoder) throws {
-        var container = encoder.unkeyedContainer()
-        try container.encode(a)
-        try container.encode(b)
-        try container.encode(c)
-        try container.encode(d)
-        try container.encode(e)
-        try container.encode(f)
-        try container.encode(g)
-        try container.encode(h)
-        try container.encode(i)
-        try container.encode(j)
-        try container.encode(k)
-        try container.encode(l)
-        try container.encode(m)
-        try container.encode(n)
-        try container.encode(o)
-        try container.encode(p)
+        var container = encoder.singleValueContainer()
+        try container.encode([a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p])
     }
-    
+
     public init(from decoder: Decoder) throws {
-        var container = try decoder.unkeyedContainer()
-        self.a = try container.decode(T.self)
-        self.b = try container.decode(T.self)
-        self.c = try container.decode(T.self)
-        self.d = try container.decode(T.self)
-        self.e = try container.decode(T.self)
-        self.f = try container.decode(T.self)
-        self.g = try container.decode(T.self)
-        self.h = try container.decode(T.self)
-        self.i = try container.decode(T.self)
-        self.j = try container.decode(T.self)
-        self.k = try container.decode(T.self)
-        self.l = try container.decode(T.self)
-        self.m = try container.decode(T.self)
-        self.n = try container.decode(T.self)
-        self.o = try container.decode(T.self)
-        self.p = try container.decode(T.self)
+        let container = try decoder.singleValueContainer()
+        let storage = try container.decode(Array<T>.self)
+        self.init(storage)
     }
 }

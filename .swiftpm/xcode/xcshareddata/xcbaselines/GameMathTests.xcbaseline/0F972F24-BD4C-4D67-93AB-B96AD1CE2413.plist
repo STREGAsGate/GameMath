@@ -32,6 +32,21 @@
 				</dict>
 			</dict>
 		</dict>
+		<key>Matrix4x4Tests</key>
+		<dict>
+			<key>testMultiplicationPerformance()</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.065966</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>Local Baseline</string>
+					<key>maxPercentRelativeStandardDeviation</key>
+					<real>1</real>
+				</dict>
+			</dict>
+		</dict>
 	</dict>
 </dict>
 </plist>

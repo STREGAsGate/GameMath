@@ -6,6 +6,7 @@
  * Find me on https://www.YouTube.com/STREGAsGate, or social media @STREGAsGate
  */
 
+#if GameMathUseSIMD
 public struct Size3<T: Numeric & SIMDScalar>: Vector3 {
     public var x: T
     public var y: T
@@ -16,8 +17,23 @@ public struct Size3<T: Numeric & SIMDScalar>: Vector3 {
         self.y = y
         self.z = z
     }
+}
+#else
+public struct Size3<T: Numeric>: Vector3 {
+    public var x: T
+    public var y: T
+    public var z: T
     
-    public init(width: T, height: T, depth: T) {
+    public init(_ x: T, _ y: T, _ z: T) {
+        self.x = x
+        self.y = y
+        self.z = z
+    }
+}
+#endif
+
+public extension Size3 {
+    init(width: T, height: T, depth: T) {
         self.x = width
         self.y = height
         self.z = depth

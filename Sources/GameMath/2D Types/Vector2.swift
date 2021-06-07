@@ -9,15 +9,29 @@
 import Foundation
 
 public protocol Vector2 {
+    #if GameMathUseSIMD
     associatedtype T: Numeric & SIMDScalar
+    #else
+    associatedtype T: Numeric
+    #endif
     var x: T {get set}
     var y: T {get set}
     init(_ x: T, _ y: T)
 }
 
 extension Vector2 {
-    public init(repeating value: T = 0) {
+    @inlinable
+    public init(repeating value: T) {
         self.init(value, value)
+    }
+    
+    public init(_ values: [T]) {
+        assert(values.isEmpty || values.count == 2, "values must be empty or have 2 elements. Use init(repeating:) to fill with a single value.")
+        if values.isEmpty {
+            self.init(0, 0)
+        }else{
+            self.init(values[0], values[1])
+        }
     }
 }
 
@@ -144,7 +158,7 @@ public extension Vector2 where T: Comparable {
 }
 
 //MARK: - SIMD
-public extension Vector2 {
+public extension Vector2 where T: SIMDScalar {
     var simd: SIMD2<T> {
         return SIMD2<T>(x, y)
     }
@@ -165,6 +179,14 @@ public func round<T: Vector2>(_ v: T) -> T where T.T: FloatingPoint {
 
 public func abs<T: Vector2>(_ v: T) -> T where T.T: SignedNumeric & Comparable {
     return T.init(abs(v.x), abs(v.y))
+}
+
+public func min<T: Vector2>(_ lhs: T, _ rhs: T) -> T where T.T: Comparable {
+    return T.init(min(lhs.x, rhs.x), min(lhs.y, rhs.y))
+}
+
+public func max<T: Vector2>(_ lhs: T, _ rhs: T) -> T where T.T: Comparable {
+    return T.init(max(lhs.x, rhs.x), max(lhs.y, rhs.y))
 }
 
 //MARK: Operators (Self)

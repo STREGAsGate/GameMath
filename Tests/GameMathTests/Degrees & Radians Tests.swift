@@ -174,42 +174,6 @@ final class RadiansTests: XCTestCase {
         let r2 = Radians<Double>.RawValue(1.0)
         XCTAssert(r2 == r1)
     }
-    
-    static var allTests = [
-        ("testInitRawValue", testInitRawValue),
-        ("testInitDegrees", testInitDegrees),
-        ("testRadiansPlusRadians", testRadiansPlusRadians),
-        ("testRadiansPlusRawValue", testRadiansPlusRawValue),
-        ("testRawValuePlusRadians", testRawValuePlusRadians),
-        ("testRadiansMinusRadians", testRadiansMinusRadians),
-        ("testRadiansMinusRawValue", testRadiansMinusRawValue),
-        ("testRawValueMinusRadians", testRawValueMinusRadians),
-        ("testRadiansMulRadians", testRadiansMulRadians),
-        ("testRadiansMulRawValue", testRadiansMulRawValue),
-        ("testRawValueMulRadians", testRawValueMulRadians),
-        ("testRadiansDivRadians", testRadiansDivRadians),
-        ("testRadiansDivRawValue", testRadiansDivRawValue),
-        ("testRawValueDivRadians", testRawValueDivRadians),
-        ("testMinRadiansRadians", testMinRadiansRadians),
-        ("testMinRadiansT", testMinRadiansT),
-        ("testMinTRadians", testMinTRadians),
-        ("testMaxRadiansRadians", testMaxRadiansRadians),
-        ("testMaxRadiansT", testMaxRadiansT),
-        ("testMaxTRadians", testMaxTRadians),
-        ("testAbs", testAbs),
-        ("testCeil", testCeil),
-        ("testFloor", testFloor),
-        ("testRound", testRound),
-        ("testRadiansLessThanRadians", testRadiansLessThanRadians),
-        ("testRadiansLessThanRawValue", testRadiansLessThanRawValue),
-        ("testRawValueLessThanRadians", testRawValueLessThanRadians),
-        ("testRadiansGreaterThanRadians", testRadiansGreaterThanRadians),
-        ("testRadiansGreaterThanRawValue", testRadiansGreaterThanRawValue),
-        ("testRawValueGreaterThanRadians", testRawValueGreaterThanRadians),
-        ("testRadiansEqualRadians", testRadiansEqualRadians),
-        ("testRawValueEqualRadians", testRawValueEqualRadians),
-        ("testRadiansEqualRawValue", testRadiansEqualRawValue),
-    ]
 }
 
 final class DegreesTests: XCTestCase {
@@ -398,42 +362,4 @@ final class DegreesTests: XCTestCase {
         XCTAssertEqual(Degrees(-1).shortestAngle(to: Degrees(0)), Degrees(1))
         XCTAssertEqual(Degrees(720).shortestAngle(to: Degrees(-720)), Degrees(0))
     }
-    
-    static var allTests = [
-        ("testInitRawValue", testInitRawValue),
-        ("testInitRadians", testInitRadians),
-        ("testDegreesPlusDegrees", testDegreesPlusDegrees),
-        ("testDegreesPlusRawValue", testDegreesPlusRawValue),
-        ("testRawValuePlusDegrees", testRawValuePlusDegrees),
-        ("testDegreesMinusDegrees", testDegreesMinusDegrees),
-        ("testDegreesMinusRawValue", testDegreesMinusRawValue),
-        ("testRawValueMinusDegrees", testRawValueMinusDegrees),
-        ("testDegreesMulDegrees", testDegreesMulDegrees),
-        ("testDegreesMulRawValue", testDegreesMulRawValue),
-        ("testRawValueMulDegrees", testRawValueMulDegrees),
-        ("testDegreesDivDegrees", testDegreesDivDegrees),
-        ("testDegreesDivRawValue", testDegreesDivRawValue),
-        ("testRawValueDivDegrees", testRawValueDivDegrees),
-        ("testMinDegreesDegrees", testMinDegreesDegrees),
-        ("testMinDegreesT", testMinDegreesT),
-        ("testMinTDegrees", testMinTDegrees),
-        ("testMaxDegreesDegrees", testMaxDegreesDegrees),
-        ("testMaxDegreesT", testMaxDegreesT),
-        ("testMaxTDegrees", testMaxTDegrees),
-        ("testAbs", testAbs),
-        ("testCeil", testCeil),
-        ("testFloor", testFloor),
-        ("testRound", testRound),
-        ("testDegreesLessThanDegrees", testDegreesLessThanDegrees),
-        ("testDegreesLessThanRawValue", testDegreesLessThanRawValue),
-        ("testRawValueLessThanDegrees", testRawValueLessThanDegrees),
-        ("testDegreesGreaterThanDegrees", testDegreesGreaterThanDegrees),
-        ("testDegreesGreaterThanRawValue", testDegreesGreaterThanRawValue),
-        ("testRawValueGreaterThanDegrees", testRawValueGreaterThanDegrees),
-        ("testDegreesEqualDegrees", testDegreesEqualDegrees),
-        ("testRawValueEqualDegrees", testRawValueEqualDegrees),
-        ("testDegreesEqualRawValue", testDegreesEqualRawValue),
-        ("testNormalized", testNormalized),
-        ("testShortestAngle", testShortestAngle),
-    ]
 }

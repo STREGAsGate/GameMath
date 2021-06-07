@@ -6,6 +6,7 @@
  * Find me on https://www.YouTube.com/STREGAsGate, or social media @STREGAsGate
  */
 
+#if GameMathUseSIMD
 public struct Position2<T: Numeric & SIMDScalar>: Vector2 {
     public var x: T
     public var y: T
@@ -13,17 +14,27 @@ public struct Position2<T: Numeric & SIMDScalar>: Vector2 {
         self.x = x
         self.y = y
     }
-    
-    public init(_ x: T, _ y: T) {
-        self.init(x: x, y: y)
+}
+#else
+public struct Position2<T: Numeric>: Vector2 {
+    public var x: T
+    public var y: T
+    public init(x: T, y: T) {
+        self.x = x
+        self.y = y
     }
 }
+#endif
 
 extension Position2: Equatable where T: Equatable {}
 extension Position2: Hashable where T: Hashable {}
 extension Position2: Codable where T: Codable {}
 
 public extension Position2 {
+    init(_ x: T, _ y: T) {
+        self.init(x: x, y: y)
+    }
+    
     static var zero: Self {
         return Self(x: 0, y: 0)
     }

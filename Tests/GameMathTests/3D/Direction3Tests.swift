@@ -92,17 +92,4 @@ final class Direction3Tests: XCTestCase {
         XCTAssertEqual(Direction3<Float>(x: 0, y: 0, z: -1), .forward)
         XCTAssertEqual(Direction3<Float>(x: 0, y: 0, z: 1), .backward)
     }
-
-    static var allTests = [
-        ("testInit", testInit),
-        ("testInitFromTo", testInitFromTo),
-        ("testAngleTo", testAngleTo),
-        ("testAngleAroundX", testAngleAroundX),
-        ("testAngleAroundY", testAngleAroundY),
-        ("testAngleAroundZ", testAngleAroundZ),
-        ("testRotated", testRotated),
-        ("testOrthogonal", testOrthogonal),
-        ("testReflectedOff", testReflectedOff),
-        ("testUpDownLeftRightForwardBackward", testUpDownLeftRightForwardBackward),
-    ]
 }

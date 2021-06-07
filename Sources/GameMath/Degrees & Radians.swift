@@ -8,6 +8,7 @@
 
 import Foundation
 
+#if GameMathUseSIMD
 /// Represents an angle in radians
 public struct Radians<RawValue: BinaryFloatingPoint & SIMDScalar>: RawRepresentable {
     /// The radians as a scalar value
@@ -17,57 +18,71 @@ public struct Radians<RawValue: BinaryFloatingPoint & SIMDScalar>: RawRepresenta
     public init(rawValue: RawValue) {
         self.rawValue = rawValue
     }
+}
+#else
+public struct Radians<RawValue: BinaryFloatingPoint>: RawRepresentable {
+    /// The radians as a scalar value
+    public let rawValue: RawValue
+    
     /// Creates a new angle with an intial value in radians
-    public init(_ rawValue: RawValue) {
+    public init(rawValue: RawValue) {
+        self.rawValue = rawValue
+    }
+}
+#endif
+
+public extension Radians {
+    /// Creates a new angle with an intial value in radians
+    init(_ rawValue: RawValue) {
         self.rawValue = rawValue
     }
     
     /// Converts degrees to radians
-    public init<T: BinaryFloatingPoint>(_ value: Degrees<T>) {
+    init<T: BinaryFloatingPoint>(_ value: Degrees<T>) {
         self.rawValue = RawValue(value.rawValue) * (RawValue.pi / 180)
     }
     /// Converts degrees to radians
-    public init(_ value: Degrees<RawValue>) {
+    init(_ value: Degrees<RawValue>) {
         self.rawValue = value.rawValue * (RawValue.pi / 180)
     }
     
-    public static func +(_ lhs: Self, _ rhs: Self) -> Self {
+    static func +(_ lhs: Self, _ rhs: Self) -> Self {
         return Self(lhs.rawValue + rhs.rawValue)
     }
-    public static func +(_ lhs: Self, _ rhs: RawValue) -> Self {
+    static func +(_ lhs: Self, _ rhs: RawValue) -> Self {
         return Self(lhs.rawValue + rhs)
     }
-    public static func +(_ lhs: RawValue, _ rhs: Self) -> RawValue {
+    static func +(_ lhs: RawValue, _ rhs: Self) -> RawValue {
         return lhs + rhs.rawValue
     }
     
-    public static func -(_ lhs: Self, _ rhs: Self) -> Self {
+    static func -(_ lhs: Self, _ rhs: Self) -> Self {
         return Self(lhs.rawValue - rhs.rawValue)
     }
-    public static func -(_ lhs: Self, _ rhs: RawValue) -> Self {
+    static func -(_ lhs: Self, _ rhs: RawValue) -> Self {
         return Self(lhs.rawValue - rhs)
     }
-    public static func -(_ lhs: RawValue, _ rhs: Self) -> RawValue {
+    static func -(_ lhs: RawValue, _ rhs: Self) -> RawValue {
         return lhs - rhs.rawValue
     }
     
-    public static func *(_ lhs: Self, _ rhs: Self) -> Self {
+    static func *(_ lhs: Self, _ rhs: Self) -> Self {
         return Self(lhs.rawValue * rhs.rawValue)
     }
-    public static func *(_ lhs: Self, _ rhs: RawValue) -> Self {
+    static func *(_ lhs: Self, _ rhs: RawValue) -> Self {
         return Self(lhs.rawValue * rhs)
     }
-    public static func *(_ lhs: RawValue, _ rhs: Self) -> RawValue {
+    static func *(_ lhs: RawValue, _ rhs: Self) -> RawValue {
         return lhs * rhs.rawValue
     }
     
-    public static func /(_ lhs: Self, _ rhs: Self) -> Self {
+    static func /(_ lhs: Self, _ rhs: Self) -> Self {
         return Self(lhs.rawValue / rhs.rawValue)
     }
-    public static func /(_ lhs: Self, _ rhs: RawValue) -> Self {
+    static func /(_ lhs: Self, _ rhs: RawValue) -> Self {
         return Self(lhs.rawValue / rhs)
     }
-    public static func /(_ lhs: RawValue, _ rhs: Self) -> RawValue {
+    static func /(_ lhs: RawValue, _ rhs: Self) -> RawValue {
         return lhs / rhs.rawValue
     }
 }
@@ -143,7 +158,7 @@ extension Radians: Codable where RawValue: Codable {}
 
 
 //MARK: Degrees
-
+#if GameMathUseSIMD
 public struct Degrees<RawValue: BinaryFloatingPoint & SIMDScalar>: RawRepresentable {
     /// The degress scalar value
     public let rawValue: RawValue
@@ -151,57 +166,70 @@ public struct Degrees<RawValue: BinaryFloatingPoint & SIMDScalar>: RawRepresenta
     public init(rawValue: RawValue) {
         self.rawValue = rawValue
     }
+}
+#else
+public struct Degrees<RawValue: BinaryFloatingPoint>: RawRepresentable {
+    /// The degress scalar value
+    public let rawValue: RawValue
     /// Creates a new angle in degrees
-    public init(_ rawValue: RawValue) {
+    public init(rawValue: RawValue) {
+        self.rawValue = rawValue
+    }
+}
+#endif
+
+public extension Degrees {
+    /// Creates a new angle in degrees
+    init(_ rawValue: RawValue) {
         self.rawValue = rawValue
     }
     
     /// Converts radians to degrees
-    public init<T: BinaryFloatingPoint>(_ value: Radians<T>) {
+    init<T: BinaryFloatingPoint>(_ value: Radians<T>) {
         self.rawValue = RawValue(value.rawValue) * (180 / RawValue.pi)
     }
     /// Converts radians to degrees
-    public init(_ value: Radians<RawValue>) {
+    init(_ value: Radians<RawValue>) {
         self.rawValue = value.rawValue * (180 / RawValue.pi)
     }
     
-    public static func +(_ lhs: Self, _ rhs: Self) -> Self {
+    static func +(_ lhs: Self, _ rhs: Self) -> Self {
         return Self(lhs.rawValue + rhs.rawValue)
     }
-    public static func +(_ lhs: Self, _ rhs: RawValue) -> Self {
+    static func +(_ lhs: Self, _ rhs: RawValue) -> Self {
         return Self(lhs.rawValue + rhs)
     }
-    public static func +(_ lhs: RawValue, _ rhs: Self) -> RawValue {
+    static func +(_ lhs: RawValue, _ rhs: Self) -> RawValue {
         return lhs + rhs.rawValue
     }
     
-    public static func -(_ lhs: Self, _ rhs: Self) -> Self {
+    static func -(_ lhs: Self, _ rhs: Self) -> Self {
         return Self(lhs.rawValue - rhs.rawValue)
     }
-    public static func -(_ lhs: Self, _ rhs: RawValue) -> Self {
+    static func -(_ lhs: Self, _ rhs: RawValue) -> Self {
         return Self(lhs.rawValue - rhs)
     }
-    public static func -(_ lhs: RawValue, _ rhs: Self) -> RawValue {
+    static func -(_ lhs: RawValue, _ rhs: Self) -> RawValue {
         return lhs - rhs.rawValue
     }
     
-    public static func *(_ lhs: Self, _ rhs: Self) -> Self {
+    static func *(_ lhs: Self, _ rhs: Self) -> Self {
         return Self(lhs.rawValue * rhs.rawValue)
     }
-    public static func *(_ lhs: Self, _ rhs: RawValue) -> Self {
+    static func *(_ lhs: Self, _ rhs: RawValue) -> Self {
         return Self(lhs.rawValue * rhs)
     }
-    public static func *(_ lhs: RawValue, _ rhs: Self) -> RawValue {
+    static func *(_ lhs: RawValue, _ rhs: Self) -> RawValue {
         return lhs * rhs.rawValue
     }
     
-    public static func /(_ lhs: Self, _ rhs: Self) -> Self {
+    static func /(_ lhs: Self, _ rhs: Self) -> Self {
         return Self(lhs.rawValue / rhs.rawValue)
     }
-    public static func /(_ lhs: Self, _ rhs: RawValue) -> Self {
+    static func /(_ lhs: Self, _ rhs: RawValue) -> Self {
         return Self(lhs.rawValue / rhs)
     }
-    public static func /(_ lhs: RawValue, _ rhs: Self) -> RawValue {
+    static func /(_ lhs: RawValue, _ rhs: Self) -> RawValue {
         return lhs / rhs.rawValue
     }
 }

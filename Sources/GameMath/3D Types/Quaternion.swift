@@ -8,6 +8,7 @@
 
 import Foundation
 
+#if GameMathUseSIMD
 public struct Quaternion<T: FloatingPoint & SIMDScalar> {
     public var w, x, y, z: T
     
@@ -18,6 +19,18 @@ public struct Quaternion<T: FloatingPoint & SIMDScalar> {
         self.z = z
     }
 }
+#else
+public struct Quaternion<T: FloatingPoint> {
+    public var w, x, y, z: T
+    
+    public init(w: T, x: T, y: T, z: T) {
+        self.w = w
+        self.x = x
+        self.y = y
+        self.z = z
+    }
+}
+#endif
 
 extension Quaternion where T: BinaryFloatingPoint {
     public init(direction: Direction3<T>, up: Direction3<T> = .up, right: Direction3<T> = .right) {

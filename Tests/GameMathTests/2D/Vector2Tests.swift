@@ -4,7 +4,7 @@ import XCTest
 extension Vector2Tests.Imposter: Codable where T: Codable {}
 
 final class Vector2Tests: XCTestCase {
-    struct Imposter<T: Numeric>: Vector2, Equatable {
+    struct Imposter<T: Numeric & SIMDScalar>: Vector2, Equatable {
         var x: T
         var y: T
         init(_ x: T, _ y: T) {
@@ -13,7 +13,7 @@ final class Vector2Tests: XCTestCase {
         }
     }
     
-    struct Other<T: Numeric>: Vector2, Equatable {
+    struct Other<T: Numeric & SIMDScalar>: Vector2, Equatable {
         var x: T
         var y: T
         init(_ x: T, _ y: T) {
@@ -374,48 +374,4 @@ final class Vector2Tests: XCTestCase {
         let vec = Imposter<Float>(1, 2)
         XCTAssertEqual(vec.valuesArray(), [1, 2])
     }
-    
-    static var allTests = [
-        ("testInit", testInit),
-        ("testCastIntToInt", testCastIntToInt),
-        ("testCastIntToFloat", testCastIntToFloat),
-        ("testCastFloatToFloat", testCastFloatToFloat),
-        ("testCastFloatToInt", testCastFloatToInt),
-        ("testSquaredLength", testSquaredLength),
-        ("testDot", testDot),
-        ("testMagnitude", testMagnitude),
-        ("testLength", testLength),
-        ("testNormalized", testNormalized),
-        ("testNormalize", testNormalize),
-        ("testIsFinite", testIsFinite),
-        ("testZero", testZero),
-        ("testSubscript", testSubscript),
-        ("testCross", testCross),
-        ("testSquareRoot", testSquareRoot),
-        ("testInterpolatedToLinear", testInterpolatedToLinear),
-        ("testInterpolateToLinear", testInterpolateToLinear),
-        ("testCeil", testCeil),
-        ("testFloor", testFloor),
-        ("testRound", testRound),
-        ("testAbs", testAbs),
-        ("testSelfMulSelf", testSelfMulSelf),
-        ("testSelfAddSelf", testSelfAddSelf),
-        ("testSelfMinusSelf", testSelfMinusSelf),
-        ("testSelfDivSelf", testSelfDivSelf),
-        ("testSelfMulT", testSelfMulT),
-        ("testSelfAddT", testSelfAddT),
-        ("testSelfMinusT", testSelfMinusT),
-        ("testTMinusSelf", testTMinusSelf),
-        ("testSelfDivT", testSelfDivT),
-        ("testTDivSelf", testTDivSelf),
-        ("testSelfMulV", testSelfMulV),
-        ("testSelfAddV", testSelfAddV),
-        ("testSelfMinusV", testSelfMinusV),
-        ("testSelfDivV", testSelfDivV),
-        ("testSelfMulMatrix4x4", testSelfMulMatrix4x4),
-        ("testMatrix4x4MulSelf", testMatrix4x4MulSelf),
-        ("testSelfMulMatrix3x3", testSelfMulMatrix3x3),
-        ("testCodableJSON", testCodableJSON),
-        ("testValuesArray", testValuesArray),
-    ]
 }

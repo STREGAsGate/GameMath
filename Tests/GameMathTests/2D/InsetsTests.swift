@@ -16,9 +16,4 @@ final class InsetsTests: XCTestCase {
         let insetsInt = Insets<Int>(top: 0, leading: 0, bottom: 0, trailing: 0)
         XCTAssertEqual(insetsInt, .zero)
     }
-    
-    static var allTests = [
-        ("testInit", testInit),
-        ("testZero", testZero),
-    ]
 }

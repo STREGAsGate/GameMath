@@ -6,6 +6,7 @@
  * Find me on https://www.YouTube.com/STREGAsGate, or social media @STREGAsGate
  */
 
+#if GameMathUseSIMD
 public struct Size2<T: Numeric & SIMDScalar>: Vector2 {
     public var width: T
     public var height: T
@@ -15,6 +16,17 @@ public struct Size2<T: Numeric & SIMDScalar>: Vector2 {
         self.height = height
     }
 }
+#else
+public struct Size2<T: Numeric>: Vector2 {
+    public var width: T
+    public var height: T
+    
+    public init(width: T, height: T) {
+        self.width = width
+        self.height = height
+    }
+}
+#endif
 
 extension Size2: Equatable where T: Equatable {}
 extension Size2: Hashable where T: Hashable {}

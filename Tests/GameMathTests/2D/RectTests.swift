@@ -76,13 +76,4 @@ final class RectTests: XCTestCase {
         rect *= 2
         XCTAssertEqual(rect, expected)
     }
-
-    static var allTests = [
-        ("testInit", testInit),
-        ("testXYWidthHeight", testXYWidthHeight),
-        ("testMaxYMaxX", testMaxYMaxX),
-        ("textCenter", textCenter),
-        ("testIsFinite", testIsFinite),
-        ("testInterpolatedToLinear", testInterpolatedToLinear),
-    ]
 }

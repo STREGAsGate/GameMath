@@ -8,6 +8,7 @@
 
 import Foundation
 
+#if GameMathUseSIMD
 public struct Rect<T: Numeric & SIMDScalar> {
     public var position: Position2<T>
     public var size: Size2<T>
@@ -16,8 +17,21 @@ public struct Rect<T: Numeric & SIMDScalar> {
         self.position = position
         self.size = size
     }
+}
+#else
+public struct Rect<T: Numeric> {
+    public var position: Position2<T>
+    public var size: Size2<T>
     
-    public init(x: T, y: T, width: T, height: T) {
+    public init(position: Position2<T> = .zero, size: Size2<T>) {
+        self.position = position
+        self.size = size
+    }
+}
+#endif
+
+public extension Rect {
+    init(x: T, y: T, width: T, height: T) {
         self.init(position: Position2(x: x, y: y), size: Size2(width: width, height: height))
     }
 }

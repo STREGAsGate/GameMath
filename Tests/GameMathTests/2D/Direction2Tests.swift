@@ -68,15 +68,4 @@ final class Direction2Tests: XCTestCase {
         let direction = Direction2<Float>(1, 0)
         XCTAssertEqual(direction, .right)
     }
-    
-    static var allTests = [
-        ("testInit", testInit),
-        ("testInitFromTo", testInitFromTo),
-        ("testAngleTo", testAngleTo),
-        ("testZero", testZero),
-        ("testUp", testUp),
-        ("testDown", testDown),
-        ("testLeft", testLeft),
-        ("testRight", testRight),
-    ]
 }

@@ -69,14 +69,4 @@ final class Position2Tests: XCTestCase {
             XCTAssertEqual(lhs, Position2(1, 1))
         }
     }
-
-    static var allTests = [
-        ("testInit", testInit),
-        ("testZero", testZero),
-        ("testDistanceFrom", testDistanceFrom),
-        ("testAddition", testAddition),
-        ("testSubtraction", testSubtraction),
-        ("testDivision", testDivision),
-
-    ]
 }

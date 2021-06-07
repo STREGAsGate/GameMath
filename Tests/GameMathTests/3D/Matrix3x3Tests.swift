@@ -114,14 +114,4 @@ final class Matrix3x3Tests: XCTestCase {
             XCTFail()
         }
     }
-    
-    static var allTests = [
-        ("testInit", testInit),
-        ("testSubscript", testSubscript),
-        ("testInitDirectionUpRight", testInitDirectionUpRight),
-        ("testRotation", testRotation),
-        ("testTransposedArray", testTransposedArray),
-        ("testArray", testArray),
-        ("testCodableJSON", testCodableJSON),
-    ]
 }

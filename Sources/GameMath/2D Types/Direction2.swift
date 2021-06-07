@@ -6,21 +6,36 @@
  * Find me on https://www.YouTube.com/STREGAsGate, or social media @STREGAsGate
  */
 
+#if GameMathUseSIMD
 public struct Direction2<T: FloatingPoint & SIMDScalar>: Vector2 {
     public var x: T
     public var y: T
     
-    public init(x: T, y: T) {
+    public init(_ x: T, _ y: T) {
         self.x = x
         self.y = y
     }
+}
+#else
+public struct Direction2<T: FloatingPoint>: Vector2 {
+    public var x: T
+    public var y: T
+    
     public init(_ x: T, _ y: T) {
-        self.init(x: x, y: y)
+        self.x = x
+        self.y = y
+    }
+}
+#endif
+
+public extension Direction2 {
+    init(x: T, y: T) {
+        self.init(x, y)
     }
 }
 
-extension Direction2 where T: BinaryFloatingPoint {
-    public init(from position1: Position2<T>, to position2: Position2<T>) {
+public extension Direction2 where T: BinaryFloatingPoint {
+    init(from position1: Position2<T>, to position2: Position2<T>) {
         let d = Direction2<T>(position2 - position1)
         self = d.normalized
     }

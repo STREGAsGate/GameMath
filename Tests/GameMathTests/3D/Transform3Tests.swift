@@ -12,8 +12,4 @@ final class Transform3Tests: XCTestCase {
         XCTAssertEqual(t.rotation, r)
         XCTAssertEqual(t.scale, s)
     }
-    
-    static var allTests = [
-        ("testInit", testInit),
-    ]
 }

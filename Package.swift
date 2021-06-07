@@ -3,13 +3,21 @@
 
 import PackageDescription
 
+var settings: [SwiftSetting]? {
+    var array: [SwiftSetting] = []
+
+//    array.append(.define("GameMathUseSIMD"))
+//    array.append(.define("GameMathUseDispatch"))
+    return array.isEmpty ? nil : array
+}
+
 let package = Package(
     name: "GameMath",
     products: [
         .library(name: "GameMath", targets: ["GameMath"]),
     ],
     targets: [
-        .target(name: "GameMath"),
+        .target(name: "GameMath", swiftSettings: settings),
         .testTarget(name: "GameMathTests", dependencies: ["GameMath"]),
     ]
 )

@@ -7,6 +7,7 @@
  */
 
 /// Represents a location in 3D space
+#if GameMathUseSIMD
 public struct Position3<T: Numeric & SIMDScalar>: Vector3 {
     public var x: T
     public var y: T
@@ -16,7 +17,22 @@ public struct Position3<T: Numeric & SIMDScalar>: Vector3 {
         self.y = y
         self.z = z
     }
-    public init(_ x: T, _ y: T, _ z: T) {
+}
+#else
+public struct Position3<T: Numeric>: Vector3 {
+    public var x: T
+    public var y: T
+    public var z: T
+    public init(x: T, y: T, z: T) {
+        self.x = x
+        self.y = y
+        self.z = z
+    }
+}
+#endif
+
+public extension Position3 {
+    init(_ x: T, _ y: T, _ z: T) {
         self.init(x: x, y: y, z: z)
     }
 }

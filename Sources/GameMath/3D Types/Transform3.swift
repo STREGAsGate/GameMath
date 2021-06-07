@@ -5,7 +5,7 @@
  *
  * Find me on https://www.YouTube.com/STREGAsGate, or social media @STREGAsGate
  */
-
+#if GameMathUseSIMD
 public struct Transform3<T: BinaryFloatingPoint & SIMDScalar> {
     public var position: Position3<T> {
         didSet {
@@ -39,8 +39,59 @@ public struct Transform3<T: BinaryFloatingPoint & SIMDScalar> {
     private lazy var _matrix: Matrix4x4<T> = .identity
     private lazy var _roationMatrix: Matrix4x4<T> = .identity
     private lazy var _scaleMatrix: Matrix4x4<T> = .identity
+}
+#else
+public struct Transform3<T: BinaryFloatingPoint> {
+    public var position: Position3<T> {
+        didSet {
+            assert(position.isFinite)
+            guard _needsUpdate == false else {return}
+            if oldValue != position {
+                _needsUpdate = true
+            }
+        }
+    }
+    public var rotation: Quaternion<T> {
+        didSet {
+            assert(rotation.isFinite)
+            guard _needsUpdate == false else {return}
+            if oldValue != rotation {
+                _needsUpdate = true
+            }
+        }
+    }
+    public var scale: Size3<T> {
+        didSet {
+            assert(scale.isFinite)
+            guard _needsUpdate == false else {return}
+            if oldValue != scale {
+                _needsUpdate = true
+            }
+        }
+    }
+    
+    private var _needsUpdate: Bool = true
+    private lazy var _matrix: Matrix4x4<T> = .identity
+    private lazy var _roationMatrix: Matrix4x4<T> = .identity
+    private lazy var _scaleMatrix: Matrix4x4<T> = .identity
+}
+#endif
+
+public extension Transform3 {
+    init(position: Position3<T> = .zero, rotation: Quaternion<T> = .zero, scale: Size3<T> = .one) {
+        self.position = position
+        self.rotation = rotation
+        self.scale = scale
+    }
+    
+    var isFinite: Bool {
+        return position.isFinite && scale.isFinite && rotation.isFinite
+    }
+}
+
+public extension Transform3 where T == Float {
     ///Returns a cached matrix, creating the cache if needed.
-    public mutating func matrix() -> Matrix4x4<T> {
+    mutating func matrix() -> Matrix4x4<T> {
         if _needsUpdate {
             _matrix = self.createMatrix()
             _needsUpdate = false
@@ -49,21 +100,30 @@ public struct Transform3<T: BinaryFloatingPoint & SIMDScalar> {
     }
     
     ///Creates and returns a new matrix.
-    public func createMatrix() -> Matrix4x4<T> {
+    func createMatrix() -> Matrix4x4<T> {
         var matrix = Matrix4x4<T>(position: self.position)
         matrix *= Matrix4x4<T>(rotation: self.rotation)
         matrix *= Matrix4x4<T>(scale: self.scale)
         return matrix
     }
-    
-    public init(position: Position3<T> = .zero, rotation: Quaternion<T> = .zero, scale: Size3<T> = .one) {
-        self.position = position
-        self.rotation = rotation
-        self.scale = scale
+}
+
+public extension Transform3 where T == Double {
+    ///Returns a cached matrix, creating the cache if needed.
+    mutating func matrix() -> Matrix4x4<T> {
+        if _needsUpdate {
+            _matrix = self.createMatrix()
+            _needsUpdate = false
+        }
+        return _matrix
     }
     
-    public var isFinite: Bool {
-        return position.isFinite && scale.isFinite && rotation.isFinite
+    ///Creates and returns a new matrix.
+    func createMatrix() -> Matrix4x4<T> {
+        var matrix = Matrix4x4<T>(position: self.position)
+        matrix *= Matrix4x4<T>(rotation: self.rotation)
+        matrix *= Matrix4x4<T>(scale: self.scale)
+        return matrix
     }
 }
 
