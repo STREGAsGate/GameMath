@@ -46,6 +46,18 @@ public extension Radians {
         self.rawValue = value.rawValue * (RawValue.pi / 180)
     }
     
+    var isFinite: Bool {
+        return rawValue.isFinite
+    }
+    
+    mutating func interpolate(to: Radians<RawValue>, _ method: InterpolationMethod<RawValue>) {
+        self.rawValue.interpolate(to: to.rawValue, method)
+    }
+    
+    mutating func interpolated(to: Radians<RawValue>, _ method: InterpolationMethod<RawValue>) -> Radians<RawValue> {
+        return Radians(self.rawValue.interpolated(to: to.rawValue, method))
+    }
+    
     static func +(_ lhs: Self, _ rhs: Self) -> Self {
         return Self(lhs.rawValue + rhs.rawValue)
     }
@@ -193,43 +205,65 @@ public extension Degrees {
         self.rawValue = value.rawValue * (180 / RawValue.pi)
     }
     
-    static func +(_ lhs: Self, _ rhs: Self) -> Self {
+    var isFinite: Bool {
+        return rawValue.isFinite
+    }
+    
+    mutating func interpolate(to: Degrees<RawValue>, _ method: InterpolationMethod<RawValue>) {
+        self.rawValue.interpolate(to: to.rawValue, method)
+    }
+    
+    mutating func interpolated(to: Degrees<RawValue>, _ method: InterpolationMethod<RawValue>) -> Degrees<RawValue> {
+        return Degrees(self.rawValue.interpolated(to: to.rawValue, method))
+    }
+}
+
+extension Degrees: AdditiveArithmetic {
+    public static var zero: Degrees<RawValue> {
+        return Self(0)
+    }
+    
+    public static func +(_ lhs: Self, _ rhs: Self) -> Self {
         return Self(lhs.rawValue + rhs.rawValue)
     }
-    static func +(_ lhs: Self, _ rhs: RawValue) -> Self {
+    public static func +(_ lhs: Self, _ rhs: RawValue) -> Self {
         return Self(lhs.rawValue + rhs)
     }
-    static func +(_ lhs: RawValue, _ rhs: Self) -> RawValue {
+    public static func +(_ lhs: RawValue, _ rhs: Self) -> RawValue {
         return lhs + rhs.rawValue
     }
     
-    static func -(_ lhs: Self, _ rhs: Self) -> Self {
+    public static func -(_ lhs: Self, _ rhs: Self) -> Self {
         return Self(lhs.rawValue - rhs.rawValue)
     }
-    static func -(_ lhs: Self, _ rhs: RawValue) -> Self {
+    public static func -(_ lhs: Self, _ rhs: RawValue) -> Self {
         return Self(lhs.rawValue - rhs)
     }
-    static func -(_ lhs: RawValue, _ rhs: Self) -> RawValue {
+    public static func -(_ lhs: RawValue, _ rhs: Self) -> RawValue {
         return lhs - rhs.rawValue
     }
-    
-    static func *(_ lhs: Self, _ rhs: Self) -> Self {
+}
+
+extension Degrees {
+    public static func *(_ lhs: Self, _ rhs: Self) -> Self {
         return Self(lhs.rawValue * rhs.rawValue)
     }
-    static func *(_ lhs: Self, _ rhs: RawValue) -> Self {
+    public static func *(_ lhs: Self, _ rhs: RawValue) -> Self {
         return Self(lhs.rawValue * rhs)
     }
-    static func *(_ lhs: RawValue, _ rhs: Self) -> RawValue {
+    public static func *(_ lhs: RawValue, _ rhs: Self) -> RawValue {
         return lhs * rhs.rawValue
     }
-    
-    static func /(_ lhs: Self, _ rhs: Self) -> Self {
+}
+
+extension Degrees {
+    public static func /(_ lhs: Self, _ rhs: Self) -> Self {
         return Self(lhs.rawValue / rhs.rawValue)
     }
-    static func /(_ lhs: Self, _ rhs: RawValue) -> Self {
+    public static func /(_ lhs: Self, _ rhs: RawValue) -> Self {
         return Self(lhs.rawValue / rhs)
     }
-    static func /(_ lhs: RawValue, _ rhs: Self) -> RawValue {
+    public static func /(_ lhs: RawValue, _ rhs: Self) -> RawValue {
         return lhs / rhs.rawValue
     }
 }
