@@ -161,7 +161,7 @@ extension Radians: Codable where RawValue: Codable {}
 #if GameMathUseSIMD
 public struct Degrees<RawValue: BinaryFloatingPoint & SIMDScalar>: RawRepresentable {
     /// The degress scalar value
-    public let rawValue: RawValue
+    public var rawValue: RawValue
     /// Creates a new angle in degrees
     public init(rawValue: RawValue) {
         self.rawValue = rawValue
@@ -170,7 +170,7 @@ public struct Degrees<RawValue: BinaryFloatingPoint & SIMDScalar>: RawRepresenta
 #else
 public struct Degrees<RawValue: BinaryFloatingPoint>: RawRepresentable {
     /// The degress scalar value
-    public let rawValue: RawValue
+    public var rawValue: RawValue
     /// Creates a new angle in degrees
     public init(rawValue: RawValue) {
         self.rawValue = rawValue
