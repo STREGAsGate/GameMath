@@ -96,3 +96,21 @@ extension Position2 where T: BinaryInteger {
         lhs =  lhs / rhs
     }
 }
+
+public extension Position2 where T: BinaryFloatingPoint {
+    /** Creates a position a specified distance from self in a particular direction
+    - parameter distance: The units away from `self` to create the new position.
+    - parameter direction: The angle away from self to create the new position.
+     */
+    func moved(_ distance: T, toward direction: Direction2<T>) -> Self {
+        return self + (direction.normalized * distance)
+    }
+
+    /** Moves `self` by a specified distance from in a particular direction
+    - parameter distance: The units away to move.
+    - parameter direction: The angle to move.
+     */
+    mutating func move(_ distance: T, toward direction: Direction2<T>) {
+        self = moved(distance, toward: direction)
+    }
+}
