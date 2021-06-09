@@ -4,11 +4,17 @@
 import PackageDescription
 
 var settings: [SwiftSetting]? {
+    
+    //Attemts to use SIMD have resulted in significantly slower code.
+    //These settings will be turned on in a future commit when using them is benefitical.
+    #if false
     var array: [SwiftSetting] = []
-
-//    array.append(.define("GameMathUseSIMD"))
-//    array.append(.define("GameMathUseDispatch"))
+    array.append(.define("GameMathUseSIMD"))
+    array.append(.define("GameMathUseDispatch"))
     return array.isEmpty ? nil : array
+    #else
+    return nil
+    #endif
 }
 
 let package = Package(

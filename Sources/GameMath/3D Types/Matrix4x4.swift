@@ -8,28 +8,29 @@
 
 #if GameMathUseSIMD
 import Dispatch
+
 public struct Matrix4x4<T: FloatingPoint & SIMDScalar> {
     @usableFromInline internal var storage: [SIMD4<T>]
     @usableFromInline internal init(storage: [SIMD4<T>]) {
         self.storage = storage
     }
 
-    @inline(__always) public var a: T {get{storage[0][0]} set{storage[0][0] = newValue}}
-    @inline(__always) public var b: T {get{storage[1][0]} set{storage[1][0] = newValue}}
-    @inline(__always) public var c: T {get{storage[2][0]} set{storage[2][0] = newValue}}
-    @inline(__always) public var d: T {get{storage[3][0]} set{storage[3][0] = newValue}}
-    @inline(__always) public var e: T {get{storage[0][1]} set{storage[0][1] = newValue}}
-    @inline(__always) public var f: T {get{storage[1][1]} set{storage[1][1] = newValue}}
-    @inline(__always) public var g: T {get{storage[2][1]} set{storage[2][1] = newValue}}
-    @inline(__always) public var h: T {get{storage[3][1]} set{storage[3][1] = newValue}}
-    @inline(__always) public var i: T {get{storage[0][2]} set{storage[0][2] = newValue}}
-    @inline(__always) public var j: T {get{storage[1][2]} set{storage[1][2] = newValue}}
-    @inline(__always) public var k: T {get{storage[2][2]} set{storage[2][2] = newValue}}
-    @inline(__always) public var l: T {get{storage[3][2]} set{storage[3][2] = newValue}}
-    @inline(__always) public var m: T {get{storage[0][3]} set{storage[0][3] = newValue}}
-    @inline(__always) public var n: T {get{storage[1][3]} set{storage[1][3] = newValue}}
-    @inline(__always) public var o: T {get{storage[2][3]} set{storage[2][3] = newValue}}
-    @inline(__always) public var p: T {get{storage[3][3]} set{storage[3][3] = newValue}}
+    @_transparent @_optimize(speed) public var a: T {get{storage[0][0]} set{storage[0][0] = newValue}}
+    @_transparent @_optimize(speed) public var b: T {get{storage[1][0]} set{storage[1][0] = newValue}}
+    @_transparent @_optimize(speed) public var c: T {get{storage[2][0]} set{storage[2][0] = newValue}}
+    @_transparent @_optimize(speed) public var d: T {get{storage[3][0]} set{storage[3][0] = newValue}}
+    @_transparent @_optimize(speed) public var e: T {get{storage[0][1]} set{storage[0][1] = newValue}}
+    @_transparent @_optimize(speed) public var f: T {get{storage[1][1]} set{storage[1][1] = newValue}}
+    @_transparent @_optimize(speed) public var g: T {get{storage[2][1]} set{storage[2][1] = newValue}}
+    @_transparent @_optimize(speed) public var h: T {get{storage[3][1]} set{storage[3][1] = newValue}}
+    @_transparent @_optimize(speed) public var i: T {get{storage[0][2]} set{storage[0][2] = newValue}}
+    @_transparent @_optimize(speed) public var j: T {get{storage[1][2]} set{storage[1][2] = newValue}}
+    @_transparent @_optimize(speed) public var k: T {get{storage[2][2]} set{storage[2][2] = newValue}}
+    @_transparent @_optimize(speed) public var l: T {get{storage[3][2]} set{storage[3][2] = newValue}}
+    @_transparent @_optimize(speed) public var m: T {get{storage[0][3]} set{storage[0][3] = newValue}}
+    @_transparent @_optimize(speed) public var n: T {get{storage[1][3]} set{storage[1][3] = newValue}}
+    @_transparent @_optimize(speed) public var o: T {get{storage[2][3]} set{storage[2][3] = newValue}}
+    @_transparent @_optimize(speed) public var p: T {get{storage[3][3]} set{storage[3][3] = newValue}}
 
     public init(_ a: T, _ b: T, _ c: T, _ d: T,
                 _ e: T, _ f: T, _ g: T, _ h: T,
@@ -124,7 +125,7 @@ public extension Matrix4x4 {
         m = 0; n = 0; o = 0; p = 1
     }
     
-    @_transparent
+    @_transparent @_optimize(speed)
     var inverse: Self {
         var a: T = self.f * self.k * self.p
         a -= self.f * self.l * self.o
@@ -247,7 +248,11 @@ public extension Matrix4x4 {
     //MARK: Subscript
 public extension Matrix4x4 {
     subscript (_ index: Array<T>.Index) -> T {
-        @_transparent get {
+        @_transparent
+        @_optimize(speed)
+        @_specialize(where T == Float)
+        @_specialize(where T == Double)
+        get {
             switch index {
             case 0: return a
             case 1: return b
@@ -270,7 +275,11 @@ public extension Matrix4x4 {
             }
         }
         
-        @_transparent set(val) {
+        @_transparent
+        @_optimize(speed)
+        @_specialize(where T == Float)
+        @_specialize(where T == Double)
+        set(val) {
             switch index {
             case 0: a = val
             case 1: b = val
@@ -296,6 +305,10 @@ public extension Matrix4x4 {
 }
 public extension Matrix4x4 where T: SIMDScalar {
     subscript (_ column: Array<T>.Index) -> SIMD4<T> {
+        @_transparent
+        @_optimize(speed)
+        @_specialize(where T == Float)
+        @_specialize(where T == Double)
         get {
             assert(column < 4, "Index \(column) out of range \(0 ..< 4) for type \(type(of: self))")
             #if GameMathUseSIMD
@@ -312,7 +325,11 @@ public extension Matrix4x4 where T: SIMDScalar {
             #endif
         }
         
-        @_transparent set {
+        @_transparent
+        @_optimize(speed)
+        @_specialize(where T == Float)
+        @_specialize(where T == Double)
+        set {
             assert(column < 4, "Index \(column) out of range \(0 ..< 4) for type \(type(of: self))")
             #if GameMathUseSIMD
             storage[column] = newValue
@@ -662,21 +679,22 @@ extension Matrix4x4 where T: BinaryFloatingPoint {
 
 //MARK: - Operators
 #if GameMathUseSIMD
-#if canImport(simd) && true
+#if canImport(simd) && false
 import simd
+
 public extension Matrix4x4 where T == Float {
-    @inlinable
+    @_transparent
+    @_optimize(speed)
+    @_effects(readnone)
+    @_specialize(where T == Float)
     static func *=(lhs: inout Self, rhs: Self) {
-        let r = simd_mul(simd_float4x4(lhs[0], lhs[1], lhs[2], lhs[3]),
-                         simd_float4x4(rhs[0], rhs[1], rhs[2], rhs[3]))
-        
-        lhs[0] = r[0]
-        lhs[1] = r[1]
-        lhs[2] = r[2]
-        lhs[3] = r[3]
+        lhs = lhs * rhs
     }
     
-    @inlinable
+    @_transparent
+    @_optimize(speed)
+    @_effects(readnone)
+    @_specialize(where T == Float)
     static func *(lhs: Self, rhs: Self) -> Self {
         let r = simd_mul(simd_float4x4(lhs[0], lhs[1], lhs[2], lhs[3]),
                          simd_float4x4(rhs[0], rhs[1], rhs[2], rhs[3]))
@@ -685,18 +703,18 @@ public extension Matrix4x4 where T == Float {
     }
 }
 public extension Matrix4x4 where T == Double {
-    @inlinable
+    @_transparent
+    @_optimize(speed)
+    @_effects(readnone)
+    @_specialize(where T == Double)
     static func *=(lhs: inout Self, rhs: Self) {
-        let r = simd_mul(simd_double4x4(lhs[0], lhs[1], lhs[2], lhs[3]),
-                         simd_double4x4(rhs[0], rhs[1], rhs[2], rhs[3]))
-        
-        lhs[0] = r[0]
-        lhs[1] = r[1]
-        lhs[2] = r[2]
-        lhs[3] = r[3]
+        lhs = lhs * rhs
     }
     
-    @inlinable
+    @_transparent
+    @_optimize(speed)
+    @_effects(readnone)
+    @_specialize(where T == Double)
     static func *(lhs: Self, rhs: Self) -> Self {
         let r = simd_mul(simd_double4x4(lhs[0], lhs[1], lhs[2], lhs[3]),
                          simd_double4x4(rhs[0], rhs[1], rhs[2], rhs[3]))
@@ -707,72 +725,19 @@ public extension Matrix4x4 where T == Double {
 #elseif true //Unreasonably slow
 public extension Matrix4x4 {
     @_transparent
+    @_optimize(speed)
+    @_effects(readnone)
+    @_specialize(where T == Float)
+    @_specialize(where T == Double)
     static func *=(lhs: inout Self, rhs: Self) {
-        let abcd: SIMD4<T> = SIMD4(lhs.a, lhs.b, lhs.c, lhs.d)
-        let efgh: SIMD4<T> = SIMD4(lhs.e, lhs.f, lhs.g, lhs.h)
-        let ijkl: SIMD4<T> = SIMD4(lhs.i, lhs.j, lhs.k, lhs.l)
-        let mnop: SIMD4<T> = SIMD4(lhs.m, lhs.n, lhs.o, lhs.p)
-        let aeim: SIMD4<T> = rhs[0]//SIMD4(rhs.a, rhs.e, rhs.i, rhs.m)
-        let bfjn: SIMD4<T> = rhs[1]//SIMD4(rhs.b, rhs.f, rhs.j, rhs.n)
-        let cgko: SIMD4<T> = rhs[2]//SIMD4(rhs.c, rhs.g, rhs.k, rhs.o)
-        let dhlp: SIMD4<T> = rhs[3]//SIMD4(rhs.d, rhs.h, rhs.l, rhs.p)
-        
-        DispatchQueue.concurrentPerform(iterations: 16) {
-            switch $0 {
-            case 0:
-                let v = abcd * aeim
-                lhs.a = v[0] + v[1] + v[2] + v[3]
-            case 1:
-                let v = abcd * bfjn
-                lhs.b = v[0] + v[1] + v[2] + v[3]
-            case 2:
-                let v = abcd * cgko
-                lhs.c = v[0] + v[1] + v[2] + v[3]
-            case 3:
-                let v = abcd * dhlp
-                lhs.d = v[0] + v[1] + v[2] + v[3]
-            case 4:
-                let v = efgh * aeim
-                lhs.e = v[0] + v[1] + v[2] + v[3]
-            case 5:
-                let v = efgh * bfjn
-                lhs.f = v[0] + v[1] + v[2] + v[3]
-            case 6:
-                let v = efgh * cgko
-                lhs.g = v[0] + v[1] + v[2] + v[3]
-            case 7:
-                let v = efgh * dhlp
-                lhs.h = v[0] + v[1] + v[2] + v[3]
-            case 8:
-                let v = ijkl * aeim
-                lhs.i = v[0] + v[1] + v[2] + v[3]
-            case 9:
-                let v = ijkl * bfjn
-                lhs.j = v[0] + v[1] + v[2] + v[3]
-            case 10:
-                let v = ijkl * cgko
-                lhs.k = v[0] + v[1] + v[2] + v[3]
-            case 11:
-                let v = ijkl * dhlp
-                lhs.l = v[0] + v[1] + v[2] + v[3]
-            case 12:
-                let v = mnop * aeim
-                lhs.m = v[0] + v[1] + v[2] + v[3]
-            case 13:
-                let v = mnop * bfjn
-                lhs.n = v[0] + v[1] + v[2] + v[3]
-            case 14:
-                let v = mnop * cgko
-                lhs.o = v[0] + v[1] + v[2] + v[3]
-            case 15:
-                let v = mnop * dhlp
-                lhs.p = v[0] + v[1] + v[2] + v[3]
-            default:
-                fatalError()
-            }
-        }
+        lhs = lhs * rhs
     }
+    
     @_transparent
+    @_optimize(speed)
+    @_effects(readnone)
+    @_specialize(where T == Float)
+    @_specialize(where T == Double)
     static func *(lhs: Self, rhs: Self) -> Self {
         let abcd: SIMD4<T> = SIMD4(lhs.a, lhs.b, lhs.c, lhs.d)
         let efgh: SIMD4<T> = SIMD4(lhs.e, lhs.f, lhs.g, lhs.h)
@@ -783,62 +748,22 @@ public extension Matrix4x4 {
         let cgko: SIMD4<T> = rhs[2]//SIMD4(rhs.c, rhs.g, rhs.k, rhs.o)
         let dhlp: SIMD4<T> = rhs[3]//SIMD4(rhs.d, rhs.h, rhs.l, rhs.p)
         
-        var lhs: Matrix4x4<T> = .identity
-        DispatchQueue.concurrentPerform(iterations: 16) {
-            switch $0 {
-            case 0:
-                let v = abcd * aeim
-                lhs.a = v[0] + v[1] + v[2] + v[3]
-            case 1:
-                let v = abcd * bfjn
-                lhs.b = v[0] + v[1] + v[2] + v[3]
-            case 2:
-                let v = abcd * cgko
-                lhs.c = v[0] + v[1] + v[2] + v[3]
-            case 3:
-                let v = abcd * dhlp
-                lhs.d = v[0] + v[1] + v[2] + v[3]
-            case 4:
-                let v = efgh * aeim
-                lhs.e = v[0] + v[1] + v[2] + v[3]
-            case 5:
-                let v = efgh * bfjn
-                lhs.f = v[0] + v[1] + v[2] + v[3]
-            case 6:
-                let v = efgh * cgko
-                lhs.g = v[0] + v[1] + v[2] + v[3]
-            case 7:
-                let v = efgh * dhlp
-                lhs.h = v[0] + v[1] + v[2] + v[3]
-            case 8:
-                let v = ijkl * aeim
-                lhs.i = v[0] + v[1] + v[2] + v[3]
-            case 9:
-                let v = ijkl * bfjn
-                lhs.j = v[0] + v[1] + v[2] + v[3]
-            case 10:
-                let v = ijkl * cgko
-                lhs.k = v[0] + v[1] + v[2] + v[3]
-            case 11:
-                let v = ijkl * dhlp
-                lhs.l = v[0] + v[1] + v[2] + v[3]
-            case 12:
-                let v = mnop * aeim
-                lhs.m = v[0] + v[1] + v[2] + v[3]
-            case 13:
-                let v = mnop * bfjn
-                lhs.n = v[0] + v[1] + v[2] + v[3]
-            case 14:
-                let v = mnop * cgko
-                lhs.o = v[0] + v[1] + v[2] + v[3]
-            case 15:
-                let v = mnop * dhlp
-                lhs.p = v[0] + v[1] + v[2] + v[3]
-            default:
-                fatalError()
-            }
-        }
-        return lhs
+        return Matrix4x4<T>((abcd * aeim).sum(),
+                            (abcd * bfjn).sum(),
+                            (abcd * cgko).sum(),
+                            (abcd * dhlp).sum(),
+                            (efgh * aeim).sum(),
+                            (efgh * bfjn).sum(),
+                            (efgh * cgko).sum(),
+                            (efgh * dhlp).sum(),
+                            (ijkl * aeim).sum(),
+                            (ijkl * bfjn).sum(),
+                            (ijkl * cgko).sum(),
+                            (ijkl * dhlp).sum(),
+                            (mnop * aeim).sum(),
+                            (mnop * bfjn).sum(),
+                            (mnop * cgko).sum(),
+                            (mnop * dhlp).sum())
     }
 }
 #endif
@@ -846,116 +771,12 @@ public extension Matrix4x4 {
 #if GameMathUseDispatch && canImport(Dispatch) && false
 import Dispatch
 public extension Matrix4x4 {
-    @_transparent
+    @inlinable @_optimize(speed)
     static func *=(lhs: inout Self, rhs: Self) {
-        var out: Matrix4x4<T> = .identity
-        DispatchQueue.concurrentPerform(iterations: 16) {
-            switch $0 {
-            case 0:
-                var a  = lhs.a * rhs.a
-                a += lhs.b * rhs.e
-                a += lhs.c * rhs.i
-                a += lhs.d * rhs.m
-                out.a = a
-            case 1:
-                var b  = lhs.a * rhs.b
-                b += lhs.b * rhs.f
-                b += lhs.c * rhs.j
-                b += lhs.d * rhs.n
-                out.b = b
-            case 2:
-                var c  = lhs.a * rhs.c
-                c += lhs.b * rhs.g
-                c += lhs.c * rhs.k
-                c += lhs.d * rhs.o
-                out.c = c
-            case 3:
-                var d  = lhs.a * rhs.d
-                d += lhs.b * rhs.h
-                d += lhs.c * rhs.l
-                d += lhs.d * rhs.p
-                out.d = d
-            case 4:
-                var e  = lhs.e * rhs.a
-                e += lhs.f * rhs.e
-                e += lhs.g * rhs.i
-                e += lhs.h * rhs.m
-                out.e = e
-            case 5:
-                var f  = lhs.e * rhs.b
-                f += lhs.f * rhs.f
-                f += lhs.g * rhs.j
-                f += lhs.h * rhs.n
-                out.f = f
-            case 6:
-                var g  = lhs.e * rhs.c
-                g += lhs.f * rhs.g
-                g += lhs.g * rhs.k
-                g += lhs.h * rhs.o
-                out.g = g
-            case 7:
-                var h  = lhs.e * rhs.d
-                h += lhs.f * rhs.h
-                h += lhs.g * rhs.l
-                h += lhs.h * rhs.p
-                out.h = h
-            case 8:
-                var i  = lhs.i * rhs.a
-                i += lhs.j * rhs.e
-                i += lhs.k * rhs.i
-                i += lhs.l * rhs.m
-                out.i = i
-            case 9:
-                var j  = lhs.i * rhs.b
-                j += lhs.j * rhs.f
-                j += lhs.k * rhs.j
-                j += lhs.l * rhs.n
-                out.j = j
-            case 10:
-                var k  = lhs.i * rhs.c
-                k += lhs.j * rhs.g
-                k += lhs.k * rhs.k
-                k += lhs.l * rhs.o
-                out.k = k
-            case 11:
-                var l  = lhs.i * rhs.d
-                l += lhs.j * rhs.h
-                l += lhs.k * rhs.l
-                l += lhs.l * rhs.p
-                out.l = l
-            case 12:
-                var m  = lhs.m * rhs.a
-                m += lhs.n * rhs.e
-                m += lhs.o * rhs.i
-                m += lhs.p * rhs.m
-                out.m = m
-            case 13:
-                var n  = lhs.m * rhs.b
-                n += lhs.n * rhs.f
-                n += lhs.o * rhs.j
-                n += lhs.p * rhs.n
-                out.n = n
-            case 14:
-                var o  = lhs.m * rhs.c
-                o += lhs.n * rhs.g
-                o += lhs.o * rhs.k
-                o += lhs.p * rhs.o
-                out.o = o
-            case 15:
-                var p  = lhs.m * rhs.d
-                p += lhs.n * rhs.h
-                p += lhs.o * rhs.l
-                p += lhs.p * rhs.p
-                out.p = p
-            default:
-                fatalError()
-            }
-        }
-        
-        lhs = out
+        lhs = lhs * rhs
     }
     
-    @_transparent
+    @inlinable @_optimize(speed)
     static func *(lhs: Self, rhs: Self) -> Self {
         var out: Matrix4x4<T> = .identity
         DispatchQueue.concurrentPerform(iterations: 16) {
@@ -1066,94 +887,19 @@ public extension Matrix4x4 {
 #elseif true
 public extension Matrix4x4 {
     @_transparent
+    @_optimize(speed)
+    @_effects(readnone)
+    @_specialize(where T == Float)
+    @_specialize(where T == Double)
     static func *=(lhs: inout Self, rhs: Self) {
-        var a: T = lhs.a * rhs.a
-        a += lhs.b * rhs.e
-        a += lhs.c * rhs.i
-        a += lhs.d * rhs.m
-        var b: T = lhs.a * rhs.b
-        b += lhs.b * rhs.f
-        b += lhs.c * rhs.j
-        b += lhs.d * rhs.n
-        var c: T = lhs.a * rhs.c
-        c += lhs.b * rhs.g
-        c += lhs.c * rhs.k
-        c += lhs.d * rhs.o
-        var d: T = lhs.a * rhs.d
-        d += lhs.b * rhs.h
-        d += lhs.c * rhs.l
-        d += lhs.d * rhs.p
-        
-        var e: T = lhs.e * rhs.a
-        e += lhs.f * rhs.e
-        e += lhs.g * rhs.i
-        e += lhs.h * rhs.m
-        var f: T = lhs.e * rhs.b
-        f += lhs.f * rhs.f
-        f += lhs.g * rhs.j
-        f += lhs.h * rhs.n
-        var g: T = lhs.e * rhs.c
-        g += lhs.f * rhs.g
-        g += lhs.g * rhs.k
-        g += lhs.h * rhs.o
-        var h: T = lhs.e * rhs.d
-        h += lhs.f * rhs.h
-        h += lhs.g * rhs.l
-        h += lhs.h * rhs.p
-        
-        var i: T = lhs.i * rhs.a
-        i += lhs.j * rhs.e
-        i += lhs.k * rhs.i
-        i += lhs.l * rhs.m
-        var j: T = lhs.i * rhs.b
-        j += lhs.j * rhs.f
-        j += lhs.k * rhs.j
-        j += lhs.l * rhs.n
-        var k: T = lhs.i * rhs.c
-        k += lhs.j * rhs.g
-        k += lhs.k * rhs.k
-        k += lhs.l * rhs.o
-        var l: T = lhs.i * rhs.d
-        l += lhs.j * rhs.h
-        l += lhs.k * rhs.l
-        l += lhs.l * rhs.p
-        
-        var m: T = lhs.m * rhs.a
-        m += lhs.n * rhs.e
-        m += lhs.o * rhs.i
-        m += lhs.p * rhs.m
-        var n: T = lhs.m * rhs.b
-        n += lhs.n * rhs.f
-        n += lhs.o * rhs.j
-        n += lhs.p * rhs.n
-        var o: T = lhs.m * rhs.c
-        o += lhs.n * rhs.g
-        o += lhs.o * rhs.k
-        o += lhs.p * rhs.o
-        var p: T = lhs.m * rhs.d
-        p += lhs.n * rhs.h
-        p += lhs.o * rhs.l
-        p += lhs.p * rhs.p
-        
-        lhs.a = a
-        lhs.b = b
-        lhs.c = c
-        lhs.d = d
-        lhs.e = e
-        lhs.f = f
-        lhs.g = g
-        lhs.h = h
-        lhs.i = i
-        lhs.j = j
-        lhs.k = k
-        lhs.l = l
-        lhs.m = m
-        lhs.n = n
-        lhs.o = o
-        lhs.p = p
+        lhs = lhs * rhs
     }
     
     @_transparent
+    @_optimize(speed)
+    @_effects(readnone)
+    @_specialize(where T == Float)
+    @_specialize(where T == Double)
     static func *(lhs: Self, rhs: Self) -> Self {
         var a: T = lhs.a * rhs.a
         a += lhs.b * rhs.e
