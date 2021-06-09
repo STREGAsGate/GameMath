@@ -12,7 +12,7 @@ import Foundation
 /// Represents an angle in radians
 public struct Radians<RawValue: BinaryFloatingPoint & SIMDScalar>: RawRepresentable {
     /// The radians as a scalar value
-    public let rawValue: RawValue
+    public var rawValue: RawValue
     
     /// Creates a new angle with an intial value in radians
     public init(rawValue: RawValue) {
@@ -22,7 +22,7 @@ public struct Radians<RawValue: BinaryFloatingPoint & SIMDScalar>: RawRepresenta
 #else
 public struct Radians<RawValue: BinaryFloatingPoint>: RawRepresentable {
     /// The radians as a scalar value
-    public let rawValue: RawValue
+    public var rawValue: RawValue
     
     /// Creates a new angle with an intial value in radians
     public init(rawValue: RawValue) {
