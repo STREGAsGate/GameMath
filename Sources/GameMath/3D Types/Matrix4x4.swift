@@ -15,22 +15,22 @@ public struct Matrix4x4<T: FloatingPoint & SIMDScalar> {
         self.storage = storage
     }
 
-    @_transparent @_optimize(speed) public var a: T {get{storage[0][0]} set{storage[0][0] = newValue}}
-    @_transparent @_optimize(speed) public var b: T {get{storage[1][0]} set{storage[1][0] = newValue}}
-    @_transparent @_optimize(speed) public var c: T {get{storage[2][0]} set{storage[2][0] = newValue}}
-    @_transparent @_optimize(speed) public var d: T {get{storage[3][0]} set{storage[3][0] = newValue}}
-    @_transparent @_optimize(speed) public var e: T {get{storage[0][1]} set{storage[0][1] = newValue}}
-    @_transparent @_optimize(speed) public var f: T {get{storage[1][1]} set{storage[1][1] = newValue}}
-    @_transparent @_optimize(speed) public var g: T {get{storage[2][1]} set{storage[2][1] = newValue}}
-    @_transparent @_optimize(speed) public var h: T {get{storage[3][1]} set{storage[3][1] = newValue}}
-    @_transparent @_optimize(speed) public var i: T {get{storage[0][2]} set{storage[0][2] = newValue}}
-    @_transparent @_optimize(speed) public var j: T {get{storage[1][2]} set{storage[1][2] = newValue}}
-    @_transparent @_optimize(speed) public var k: T {get{storage[2][2]} set{storage[2][2] = newValue}}
-    @_transparent @_optimize(speed) public var l: T {get{storage[3][2]} set{storage[3][2] = newValue}}
-    @_transparent @_optimize(speed) public var m: T {get{storage[0][3]} set{storage[0][3] = newValue}}
-    @_transparent @_optimize(speed) public var n: T {get{storage[1][3]} set{storage[1][3] = newValue}}
-    @_transparent @_optimize(speed) public var o: T {get{storage[2][3]} set{storage[2][3] = newValue}}
-    @_transparent @_optimize(speed) public var p: T {get{storage[3][3]} set{storage[3][3] = newValue}}
+    @_transparent public var a: T {get{storage[0][0]} set{storage[0][0] = newValue}}
+    @_transparent public var b: T {get{storage[1][0]} set{storage[1][0] = newValue}}
+    @_transparent public var c: T {get{storage[2][0]} set{storage[2][0] = newValue}}
+    @_transparent public var d: T {get{storage[3][0]} set{storage[3][0] = newValue}}
+    @_transparent public var e: T {get{storage[0][1]} set{storage[0][1] = newValue}}
+    @_transparent public var f: T {get{storage[1][1]} set{storage[1][1] = newValue}}
+    @_transparent public var g: T {get{storage[2][1]} set{storage[2][1] = newValue}}
+    @_transparent public var h: T {get{storage[3][1]} set{storage[3][1] = newValue}}
+    @_transparent public var i: T {get{storage[0][2]} set{storage[0][2] = newValue}}
+    @_transparent public var j: T {get{storage[1][2]} set{storage[1][2] = newValue}}
+    @_transparent public var k: T {get{storage[2][2]} set{storage[2][2] = newValue}}
+    @_transparent public var l: T {get{storage[3][2]} set{storage[3][2] = newValue}}
+    @_transparent public var m: T {get{storage[0][3]} set{storage[0][3] = newValue}}
+    @_transparent public var n: T {get{storage[1][3]} set{storage[1][3] = newValue}}
+    @_transparent public var o: T {get{storage[2][3]} set{storage[2][3] = newValue}}
+    @_transparent public var p: T {get{storage[3][3]} set{storage[3][3] = newValue}}
 
     public init(_ a: T, _ b: T, _ c: T, _ d: T,
                 _ e: T, _ f: T, _ g: T, _ h: T,
@@ -125,7 +125,7 @@ public extension Matrix4x4 {
         m = 0; n = 0; o = 0; p = 1
     }
     
-    @_transparent @_optimize(speed)
+    @_transparent
     var inverse: Self {
         var a: T = self.f * self.k * self.p
         a -= self.f * self.l * self.o
@@ -249,7 +249,6 @@ public extension Matrix4x4 {
 public extension Matrix4x4 {
     subscript (_ index: Array<T>.Index) -> T {
         @_transparent
-        @_optimize(speed)
         @_specialize(where T == Float)
         @_specialize(where T == Double)
         get {
@@ -276,7 +275,6 @@ public extension Matrix4x4 {
         }
         
         @_transparent
-        @_optimize(speed)
         @_specialize(where T == Float)
         @_specialize(where T == Double)
         set(val) {
@@ -306,7 +304,6 @@ public extension Matrix4x4 {
 public extension Matrix4x4 where T: SIMDScalar {
     subscript (_ column: Array<T>.Index) -> SIMD4<T> {
         @_transparent
-        @_optimize(speed)
         @_specialize(where T == Float)
         @_specialize(where T == Double)
         get {
@@ -326,7 +323,6 @@ public extension Matrix4x4 where T: SIMDScalar {
         }
         
         @_transparent
-        @_optimize(speed)
         @_specialize(where T == Float)
         @_specialize(where T == Double)
         set {
@@ -684,16 +680,12 @@ import simd
 
 public extension Matrix4x4 where T == Float {
     @_transparent
-    @_optimize(speed)
-    @_effects(readnone)
     @_specialize(where T == Float)
     static func *=(lhs: inout Self, rhs: Self) {
         lhs = lhs * rhs
     }
     
     @_transparent
-    @_optimize(speed)
-    @_effects(readnone)
     @_specialize(where T == Float)
     static func *(lhs: Self, rhs: Self) -> Self {
         let r = simd_mul(simd_float4x4(lhs[0], lhs[1], lhs[2], lhs[3]),
@@ -704,16 +696,12 @@ public extension Matrix4x4 where T == Float {
 }
 public extension Matrix4x4 where T == Double {
     @_transparent
-    @_optimize(speed)
-    @_effects(readnone)
     @_specialize(where T == Double)
     static func *=(lhs: inout Self, rhs: Self) {
         lhs = lhs * rhs
     }
     
     @_transparent
-    @_optimize(speed)
-    @_effects(readnone)
     @_specialize(where T == Double)
     static func *(lhs: Self, rhs: Self) -> Self {
         let r = simd_mul(simd_double4x4(lhs[0], lhs[1], lhs[2], lhs[3]),
@@ -725,8 +713,6 @@ public extension Matrix4x4 where T == Double {
 #elseif true //Unreasonably slow
 public extension Matrix4x4 {
     @_transparent
-    @_optimize(speed)
-    @_effects(readnone)
     @_specialize(where T == Float)
     @_specialize(where T == Double)
     static func *=(lhs: inout Self, rhs: Self) {
@@ -734,8 +720,6 @@ public extension Matrix4x4 {
     }
     
     @_transparent
-    @_optimize(speed)
-    @_effects(readnone)
     @_specialize(where T == Float)
     @_specialize(where T == Double)
     static func *(lhs: Self, rhs: Self) -> Self {
@@ -771,12 +755,12 @@ public extension Matrix4x4 {
 #if GameMathUseDispatch && canImport(Dispatch) && false
 import Dispatch
 public extension Matrix4x4 {
-    @inlinable @_optimize(speed)
+    @inlinable
     static func *=(lhs: inout Self, rhs: Self) {
         lhs = lhs * rhs
     }
     
-    @inlinable @_optimize(speed)
+    @inlinable
     static func *(lhs: Self, rhs: Self) -> Self {
         var out: Matrix4x4<T> = .identity
         DispatchQueue.concurrentPerform(iterations: 16) {
@@ -887,8 +871,6 @@ public extension Matrix4x4 {
 #elseif true
 public extension Matrix4x4 {
     @_transparent
-    @_optimize(speed)
-    @_effects(readnone)
     @_specialize(where T == Float)
     @_specialize(where T == Double)
     static func *=(lhs: inout Self, rhs: Self) {
@@ -896,8 +878,6 @@ public extension Matrix4x4 {
     }
     
     @_transparent
-    @_optimize(speed)
-    @_effects(readnone)
     @_specialize(where T == Float)
     @_specialize(where T == Double)
     static func *(lhs: Self, rhs: Self) -> Self {
