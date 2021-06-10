@@ -141,10 +141,10 @@ extension Rect where T: Comparable & SignedNumeric {
 extension Rect where T: Comparable {
     //TODO: Move this to GamePhysics in AxisAlignedBoundingBox2
     public func contains(_ position: Position2<T>) -> Bool {
-        if position.x < x || position.x > x + width {
+        if position.x < x || position.x > maxX {
             return false
         }
-        if position.y < y || position.y > y + height {
+        if position.y < y || position.y > maxY {
             return false
         }
         return true
