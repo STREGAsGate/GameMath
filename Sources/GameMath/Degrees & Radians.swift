@@ -214,6 +214,11 @@ public extension Degrees {
     }
     
     mutating func interpolated(to: Degrees<RawValue>, _ method: InterpolationMethod<RawValue>) -> Degrees<RawValue> {
+        if case .linear(_, shortest: true) = method {
+            // Shortest distance
+            let shortest = self.shortestAngle(to: to)
+            return Degrees(self.rawValue.interpolated(to: (self + shortest).rawValue, method))
+        }
         return Degrees(self.rawValue.interpolated(to: to.rawValue, method))
     }
 }
