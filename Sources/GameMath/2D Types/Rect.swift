@@ -89,6 +89,19 @@ public extension Rect {
     }
 }
 
+
+extension Rect where T: BinaryInteger {
+    public var center: Position2<T> {
+        get{
+            return Position2(x: x + width / 2, y: y + height / 2)
+        }
+        set(point) {
+            x = point.x - width / 2
+            y = point.y - height / 2
+        }
+    }
+}
+
 extension Rect where T: FloatingPoint {
     public var center: Position2<T> {
         get{
