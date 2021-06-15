@@ -64,7 +64,7 @@ public extension Direction2 where T: BinaryFloatingPoint {
     }
     
     var angleAroundZ: Radians<T> {
-        return Radians<T>(atan2(x, y))
+        return Radians<T>(atan2(x, -y))
     }
 }
 
