@@ -39,6 +39,15 @@ public extension Direction2 where T: BinaryFloatingPoint {
         let d = Direction2<T>(position2 - position1)
         self = d.normalized
     }
+    
+    init(_ radians: Radians<T>) {
+        self.x = cos(radians.rawValue)
+        self.y = sin(radians.rawValue)
+    }
+    
+    init(_ degrees: Degrees<T>) {
+        self.init(Radians(degrees))
+    }
 }
 
 extension Direction2: Equatable where T: Equatable {}
