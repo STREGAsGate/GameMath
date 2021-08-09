@@ -10,9 +10,8 @@ jobs:
   build-Windows:
     runs-on: windows-latest
     env:
-        SNAPSHOT: "https://swift.org/builds/swift-5.5-branch/windows10/swift-5.5-DEVELOPMENT-SNAPSHOT-2021-08-03-a/swift-5.5-DEVELOPMENT-SNAPSHOT-2021-08-03-a-windows10.exe"
+        SNAPSHOT: "https://swift.org/builds/development/windows10/swift-DEVELOPMENT-SNAPSHOT-2021-08-03-a/swift-DEVELOPMENT-SNAPSHOT-2021-08-03-a-windows10.exe"
     steps:
-    - uses: actions/checkout@v2
     - uses: seanmiddleditch/gha-setup-vsdevenv@master
       
     - name: Install Swift
@@ -32,6 +31,7 @@ jobs:
           Copy-Item "$env:SDKROOT\usr\share\visualc.modulemap" -destination "$env:VCToolsInstallDir\include\module.modulemap"
           Copy-Item "$env:SDKROOT\usr\share\visualc.apinotes" -destination "$env:VCToolsInstallDir\include\visualc.apinotes"
           Copy-Item "$env:SDKROOT\usr\share\winsdk.modulemap" -destination "$env:UniversalCRTSdkDir\Include\$env:UCRTVersion\um\module.modulemap"
+    - uses: actions/checkout@v2
     - name: Build
       run: swift build
     - name: Test
