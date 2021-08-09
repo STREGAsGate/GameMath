@@ -15,7 +15,6 @@ jobs:
       image: ghcr.io/swiftwasm/carton:latest
       
     steps:
-    - uses: fwal/setup-swift@v1
     - uses: actions/checkout@v2
     - name: Test
       run: carton test
