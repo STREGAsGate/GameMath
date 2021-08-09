@@ -10,7 +10,7 @@ jobs:
   build-Windows:
     runs-on: windows-latest
     env:
-        SNAPSHOT: "https://swift.org/builds/swift-5.5-branch/windows10/swift-5.5-DEVELOPMENT-SNAPSHOT-2021-06-14-a/swift-5.5-DEVELOPMENT-SNAPSHOT-2021-06-14-a-windows10.exe"
+        SNAPSHOT: "https://swift.org/builds/swift-5.5-branch/windows10/swift-5.5-DEVELOPMENT-SNAPSHOT-2021-08-03-a/swift-5.5-DEVELOPMENT-SNAPSHOT-2021-08-03-a-windows10.exe"
     steps:
     - uses: actions/checkout@v2
     - uses: seanmiddleditch/gha-setup-vsdevenv@master
