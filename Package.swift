@@ -25,5 +25,6 @@ let package = Package(
     targets: [
         .target(name: "GameMath", swiftSettings: settings),
         .testTarget(name: "GameMathTests", dependencies: ["GameMath"]),
-    ]
+    ],
+    swiftLanguageVersions: [.v5]
 )
