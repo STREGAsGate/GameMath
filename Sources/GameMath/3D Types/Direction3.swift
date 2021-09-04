@@ -57,12 +57,15 @@ public extension Direction3 where T: BinaryFloatingPoint {
         return Radians(acos(dot / (v0.magnitude * v1.magnitude)))
     }
     var angleAroundX: Radians<T> {
+        guard isFinite else {return Radians(0)}
         return Radians(atan2(y, z))
     }
     var angleAroundY: Radians<T> {
+        guard isFinite else {return Radians(0)}
         return Radians(atan2(x, z))
     }
     var angleAroundZ: Radians<T> {
+        guard isFinite else {return Radians(0)}
         return Radians(atan2(y, x))
     }
 }
