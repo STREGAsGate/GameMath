@@ -4,17 +4,21 @@
 import PackageDescription
 
 var settings: [SwiftSetting]? {
+    var array: [SwiftSetting] = []
+    
+    #if false
+    // A little bit faster, but less accurate
+    array.append(.define("GameMathUseFastInverseSquareRoot"))
+    #endif
     
     //Attemts to use SIMD have resulted in significantly slower code.
     //These settings will be turned on in a future commit when using them is benefitical.
     #if false
-    var array: [SwiftSetting] = []
     array.append(.define("GameMathUseSIMD"))
     array.append(.define("GameMathUseDispatch"))
-    return array.isEmpty ? nil : array
-    #else
-    return nil
     #endif
+    
+    return array.isEmpty ? nil : array
 }
 
 let package = Package(
