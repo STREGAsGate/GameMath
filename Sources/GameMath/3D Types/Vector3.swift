@@ -22,7 +22,7 @@ public protocol Vector3 {
 
 extension Vector3 {
     @inlinable
-    public init(repeating value: T) {
+    public init(_ value: T) {
         self.init(value, value, value)
     }
     
@@ -71,7 +71,7 @@ extension Vector3 where T: BinaryFloatingPoint {
 public extension Vector3 {
     @_transparent
     static var zero: Self {
-        return Self(repeating: 0)
+        return Self(0)
     }
 }
 
