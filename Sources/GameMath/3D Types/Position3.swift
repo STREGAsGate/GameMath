@@ -8,22 +8,22 @@
 
 /// Represents a location in 3D space
 #if GameMathUseSIMD
-public struct Position3<T: Numeric & SIMDScalar>: Vector3 {
-    public var x: T
-    public var y: T
-    public var z: T
-    public init(x: T, y: T, z: T) {
+public struct Position3: Vector3 {
+    public var x: Float
+    public var y: Float
+    public var z: Float
+    public init(x: Float, y: Float, z: Float) {
         self.x = x
         self.y = y
         self.z = z
     }
 }
 #else
-public struct Position3<T: Numeric>: Vector3 {
-    public var x: T
-    public var y: T
-    public var z: T
-    public init(x: T, y: T, z: T) {
+public struct Position3: Vector3 {
+    public var x: Float
+    public var y: Float
+    public var z: Float
+    public init(x: Float, y: Float, z: Float) {
         self.x = x
         self.y = y
         self.z = z
@@ -32,20 +32,20 @@ public struct Position3<T: Numeric>: Vector3 {
 #endif
 
 public extension Position3 {
-    init(_ x: T, _ y: T, _ z: T) {
+    init(_ x: Float, _ y: Float, _ z: Float) {
         self.init(x: x, y: y, z: z)
     }
 }
 
-extension Position3: Equatable where T: Equatable {}
-extension Position3: Hashable where T: Hashable {}
-extension Position3: Codable where T: Codable {}
+extension Position3: Equatable {}
+extension Position3: Hashable {}
+extension Position3: Codable {}
 
-public extension Position3 where T: FloatingPoint {
+public extension Position3 {
     /** The distance between `from` and `self`
     - parameter from: A value representing the source positon.
      */
-    func distance(from: Self) -> T {
+    func distance(from: Self) -> Float {
         let difference = self - from
         let distance = difference.dot(difference)
         return distance.squareRoot()
@@ -55,17 +55,17 @@ public extension Position3 where T: FloatingPoint {
     - parameter rhs: A value representing the destination positon.
     - parameter threshold: The maximum distance that is considered "near".
      */
-    func isNear(_ rhs: Self, threshold: T) -> Bool {
+    func isNear(_ rhs: Self, threshold: Float) -> Bool {
         return self.distance(from: rhs) < threshold
     }
 }
 
-public extension Position3 where T: BinaryFloatingPoint {
+public extension Position3 {
     /** Creates a position a specified distance from self in a particular direction
     - parameter distance: The units away from `self` to create the new position.
     - parameter direction: The angle away from self to create the new position.
      */
-    func moved(_ distance: T, toward direction: Direction3<T>) -> Self {
+    func moved(_ distance: Float, toward direction: Direction3) -> Self {
         return self + (direction.normalized * distance)
     }
 
@@ -73,7 +73,7 @@ public extension Position3 where T: BinaryFloatingPoint {
     - parameter distance: The units away to move.
     - parameter direction: The angle to move.
      */
-    mutating func move(_ distance: T, toward direction: Direction3<T>) {
+    mutating func move(_ distance: Float, toward direction: Direction3) {
         self = moved(distance, toward: direction)
     }
 }

@@ -9,33 +9,33 @@
 #if GameMathUseSIMD
 import Dispatch
 
-public struct Matrix4x4<T: FloatingPoint & SIMDScalar> {
-    @usableFromInline internal var storage: [SIMD4<T>]
-    @usableFromInline internal init(storage: [SIMD4<T>]) {
+public struct Matrix4x4 {
+    @usableFromInline internal var storage: [SIMD4<Float>]
+    @usableFromInline internal init(storage: [SIMD4<Float>]) {
         self.storage = storage
     }
 
-    @_transparent public var a: T {get{storage[0][0]} set{storage[0][0] = newValue}}
-    @_transparent public var b: T {get{storage[1][0]} set{storage[1][0] = newValue}}
-    @_transparent public var c: T {get{storage[2][0]} set{storage[2][0] = newValue}}
-    @_transparent public var d: T {get{storage[3][0]} set{storage[3][0] = newValue}}
-    @_transparent public var e: T {get{storage[0][1]} set{storage[0][1] = newValue}}
-    @_transparent public var f: T {get{storage[1][1]} set{storage[1][1] = newValue}}
-    @_transparent public var g: T {get{storage[2][1]} set{storage[2][1] = newValue}}
-    @_transparent public var h: T {get{storage[3][1]} set{storage[3][1] = newValue}}
-    @_transparent public var i: T {get{storage[0][2]} set{storage[0][2] = newValue}}
-    @_transparent public var j: T {get{storage[1][2]} set{storage[1][2] = newValue}}
-    @_transparent public var k: T {get{storage[2][2]} set{storage[2][2] = newValue}}
-    @_transparent public var l: T {get{storage[3][2]} set{storage[3][2] = newValue}}
-    @_transparent public var m: T {get{storage[0][3]} set{storage[0][3] = newValue}}
-    @_transparent public var n: T {get{storage[1][3]} set{storage[1][3] = newValue}}
-    @_transparent public var o: T {get{storage[2][3]} set{storage[2][3] = newValue}}
-    @_transparent public var p: T {get{storage[3][3]} set{storage[3][3] = newValue}}
+    @_transparent public var a: Float {get{storage[0][0]} set{storage[0][0] = newValue}}
+    @_transparent public var b: Float {get{storage[1][0]} set{storage[1][0] = newValue}}
+    @_transparent public var c: Float {get{storage[2][0]} set{storage[2][0] = newValue}}
+    @_transparent public var d: Float {get{storage[3][0]} set{storage[3][0] = newValue}}
+    @_transparent public var e: Float {get{storage[0][1]} set{storage[0][1] = newValue}}
+    @_transparent public var f: Float {get{storage[1][1]} set{storage[1][1] = newValue}}
+    @_transparent public var g: Float {get{storage[2][1]} set{storage[2][1] = newValue}}
+    @_transparent public var h: Float {get{storage[3][1]} set{storage[3][1] = newValue}}
+    @_transparent public var i: Float {get{storage[0][2]} set{storage[0][2] = newValue}}
+    @_transparent public var j: Float {get{storage[1][2]} set{storage[1][2] = newValue}}
+    @_transparent public var k: Float {get{storage[2][2]} set{storage[2][2] = newValue}}
+    @_transparent public var l: Float {get{storage[3][2]} set{storage[3][2] = newValue}}
+    @_transparent public var m: Float {get{storage[0][3]} set{storage[0][3] = newValue}}
+    @_transparent public var n: Float {get{storage[1][3]} set{storage[1][3] = newValue}}
+    @_transparent public var o: Float {get{storage[2][3]} set{storage[2][3] = newValue}}
+    @_transparent public var p: Float {get{storage[3][3]} set{storage[3][3] = newValue}}
 
-    public init(_ a: T, _ b: T, _ c: T, _ d: T,
-                _ e: T, _ f: T, _ g: T, _ h: T,
-                _ i: T, _ j: T, _ k: T, _ l: T,
-                _ m: T, _ n: T, _ o: T, _ p: T) {
+    public init(_ a: Float, _ b: Float, _ c: Float, _ d: Float,
+                _ e: Float, _ f: Float, _ g: Float, _ h: Float,
+                _ i: Float, _ j: Float, _ k: Float, _ l: Float,
+                _ m: Float, _ n: Float, _ o: Float, _ p: Float) {
         self.storage = [SIMD4(a,e,i,m),
                         SIMD4(b,f,j,n),
                         SIMD4(c,g,k,o),
@@ -43,16 +43,16 @@ public struct Matrix4x4<T: FloatingPoint & SIMDScalar> {
     }
 }
 #else
-public struct Matrix4x4<T: FloatingPoint> {
-    public var a: T, b: T, c: T, d: T
-    public var e: T, f: T, g: T, h: T
-    public var i: T, j: T, k: T, l: T
-    public var m: T, n: T, o: T, p: T
+public struct Matrix4x4 {
+    public var a: Float, b: Float, c: Float, d: Float
+    public var e: Float, f: Float, g: Float, h: Float
+    public var i: Float, j: Float, k: Float, l: Float
+    public var m: Float, n: Float, o: Float, p: Float
     
-    public init(_ a: T, _ b: T, _ c: T, _ d: T,
-                _ e: T, _ f: T, _ g: T, _ h: T,
-                _ i: T, _ j: T, _ k: T, _ l: T,
-                _ m: T, _ n: T, _ o: T, _ p: T) {
+    public init(_ a: Float, _ b: Float, _ c: Float, _ d: Float,
+                _ e: Float, _ f: Float, _ g: Float, _ h: Float,
+                _ i: Float, _ j: Float, _ k: Float, _ l: Float,
+                _ m: Float, _ n: Float, _ o: Float, _ p: Float) {
         self.a = a; self.b = b; self.c = c; self.d = d
         self.e = e; self.f = f; self.g = g; self.h = h
         self.i = i; self.j = j; self.k = k; self.l = l
@@ -63,15 +63,15 @@ public struct Matrix4x4<T: FloatingPoint> {
 
 public extension Matrix4x4 {
     @_transparent
-    init(a: T, b: T, c: T, d: T,
-         e: T, f: T, g: T, h: T,
-         i: T, j: T, k: T, l: T,
-         m: T, n: T, o: T, p: T) {
+    init(a: Float, b: Float, c: Float, d: Float,
+         e: Float, f: Float, g: Float, h: Float,
+         i: Float, j: Float, k: Float, l: Float,
+         m: Float, n: Float, o: Float, p: Float) {
         self.init(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p)
     }
     
     @_transparent
-    init(repeating value: T) {
+    init(repeating value: Float) {
         self.init(a: value, b: value, c: value, d: value,
                   e: value, f: value, g: value, h: value,
                   i: value, j: value, k: value, l: value,
@@ -79,34 +79,12 @@ public extension Matrix4x4 {
     }
     
     @_transparent
-    init(_ value: [T]) {
+    init(_ value: [Float]) {
         assert(value.count == 16, "Matrix4x4 must be initialized with exactly 16 elements.")
         self.init(a: value[0],  b: value[1],  c: value[2],  d: value[3],
                   e: value[4],  f: value[5],  g: value[6],  h: value[7],
                   i: value[8],  j: value[9],  k: value[10], l: value[11],
                   m: value[12], n: value[13], o: value[14], p: value[15])
-    }
-}
-
-public extension Matrix4x4 where T: BinaryFloatingPoint {
-    @_transparent
-    init<V: BinaryFloatingPoint>(_ value: Matrix4x4<V>) {
-        self.init(T(value.a),
-                  T(value.b),
-                  T(value.c),
-                  T(value.d),
-                  T(value.e),
-                  T(value.f),
-                  T(value.g),
-                  T(value.h),
-                  T(value.i),
-                  T(value.j),
-                  T(value.k),
-                  T(value.l),
-                  T(value.m),
-                  T(value.n),
-                  T(value.o),
-                  T(value.p))
     }
 }
 
@@ -127,109 +105,109 @@ public extension Matrix4x4 {
     
     @_transparent
     var inverse: Self {
-        var a: T = self.f * self.k * self.p
+        var a: Float = self.f * self.k * self.p
         a -= self.f * self.l * self.o
         a -= self.j * self.g * self.p
         a += self.j * self.h * self.o
         a += self.n * self.g * self.l
         a -= self.n * self.h * self.k
-        var b: T = -self.b * self.k * self.p
+        var b: Float = -self.b * self.k * self.p
         b += self.b * self.l * self.o
         b += self.j * self.c * self.p
         b -= self.j * self.d * self.o
         b -= self.n * self.c * self.l
         b += self.n * self.d * self.k
-        var c: T = self.b * self.g * self.p
+        var c: Float = self.b * self.g * self.p
         c -= self.b * self.h * self.o
         c -= self.f * self.c * self.p
         c += self.f * self.d * self.o
         c += self.n * self.c * self.h
         c -= self.n * self.d * self.g
-        var d: T = -self.b * self.g * self.l
+        var d: Float = -self.b * self.g * self.l
         d += self.b * self.h * self.k
         d += self.f * self.c * self.l
         d -= self.f * self.d * self.k
         d -= self.j * self.c * self.h
         d += self.j * self.d * self.g
         
-        var e: T = -self.e * self.k * self.p
+        var e: Float = -self.e * self.k * self.p
         e += self.e * self.l * self.o
         e += self.i * self.g * self.p
         e -= self.i * self.h * self.o
         e -= self.m * self.g * self.l
         e += self.m * self.h * self.k
-        var f: T = self.a * self.k * self.p
+        var f: Float = self.a * self.k * self.p
         f -= self.a * self.l * self.o
         f -= self.i * self.c * self.p
         f += self.i * self.d * self.o
         f += self.m * self.c * self.l
         f -= self.m * self.d * self.k
-        var g: T = -self.a * self.g * self.p
+        var g: Float = -self.a * self.g * self.p
         g += self.a * self.h * self.o
         g += self.e * self.c * self.p
         g -= self.e * self.d * self.o
         g -= self.m * self.c * self.h
         g += self.m * self.d * self.g
-        var h: T = self.a * self.g * self.l
+        var h: Float = self.a * self.g * self.l
         h -= self.a * self.h * self.k
         h -= self.e * self.c * self.l
         h += self.e * self.d * self.k
         h += self.i * self.c * self.h
         h -= self.i * self.d * self.g
         
-        var i: T = self.e * self.j * self.p
+        var i: Float = self.e * self.j * self.p
         i -= self.e * self.l * self.n
         i -= self.i * self.f * self.p
         i += self.i * self.h * self.n
         i += self.m * self.f * self.l
         i -= self.m * self.h * self.j
-        var j: T = -self.a * self.j * self.p
+        var j: Float = -self.a * self.j * self.p
         j += self.a * self.l * self.n
         j += self.i * self.b * self.p
         j -= self.i * self.d * self.n
         j -= self.m * self.b * self.l
         j += self.m * self.d * self.j
-        var k: T = self.a * self.f * self.p
+        var k: Float = self.a * self.f * self.p
         k -= self.a * self.h * self.n
         k -= self.e * self.b * self.p
         k += self.e * self.d * self.n
         k += self.m * self.b * self.h
         k -= self.m * self.d * self.f
-        var l: T = -self.a * self.f * self.l
+        var l: Float = -self.a * self.f * self.l
         l += self.a * self.h * self.j
         l += self.e * self.b * self.l
         l -= self.e * self.d * self.j
         l -= self.i * self.b * self.h
         l += self.i * self.d * self.f
         
-        var m: T = -self.e * self.j * self.o
+        var m: Float = -self.e * self.j * self.o
         m += self.e * self.k * self.n
         m += self.i * self.f * self.o
         m -= self.i * self.g * self.n
         m -= self.m * self.f * self.k
         m += self.m * self.g * self.j
-        var n: T = self.a * self.j * self.o
+        var n: Float = self.a * self.j * self.o
         n -= self.a * self.k * self.n
         n -= self.i * self.b * self.o
         n += self.i * self.c * self.n
         n += self.m * self.b * self.k
         n -= self.m * self.c * self.j
-        var o: T = -self.a * self.f * self.o
+        var o: Float = -self.a * self.f * self.o
         o += self.a * self.g * self.n
         o += self.e * self.b * self.o
         o -= self.e * self.c * self.n
         o -= self.m * self.b * self.g
         o += self.m * self.c * self.f
-        var p: T = self.a * self.f * self.k
+        var p: Float = self.a * self.f * self.k
         p -= self.a * self.g * self.j
         p -= self.e * self.b * self.k
         p += self.e * self.c * self.j
         p += self.i * self.b * self.g
         p -= self.i * self.c * self.f
         
-        var inv: Matrix4x4<T> = Matrix4x4<T>(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p)
+        var inv: Matrix4x4 = Matrix4x4(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p)
         
-        var det: T = self.a * inv.a
+        var det: Float = self.a * inv.a
         det += self.b * inv.b
         det += self.c * inv.i
         det += self.d * inv.m
@@ -247,10 +225,8 @@ public extension Matrix4x4 {
 }
     //MARK: Subscript
 public extension Matrix4x4 {
-    subscript (_ index: Array<T>.Index) -> T {
+    subscript (_ index: Array<Float>.Index) -> Float {
         @_transparent
-        @_specialize(where T == Float)
-        @_specialize(where T == Double)
         get {
             switch index {
             case 0: return a
@@ -275,8 +251,6 @@ public extension Matrix4x4 {
         }
         
         @_transparent
-        @_specialize(where T == Float)
-        @_specialize(where T == Double)
         set(val) {
             switch index {
             case 0: a = val
@@ -301,11 +275,9 @@ public extension Matrix4x4 {
         }
     }
 }
-public extension Matrix4x4 where T: SIMDScalar {
-    subscript (_ column: Array<T>.Index) -> SIMD4<T> {
+public extension Matrix4x4 {
+    subscript (_ column: Array<Float>.Index) -> SIMD4<Float> {
         @_transparent
-        @_specialize(where T == Float)
-        @_specialize(where T == Double)
         get {
             assert(column < 4, "Index \(column) out of range \(0 ..< 4) for type \(type(of: self))")
             #if GameMathUseSIMD
@@ -323,8 +295,6 @@ public extension Matrix4x4 where T: SIMDScalar {
         }
         
         @_transparent
-        @_specialize(where T == Float)
-        @_specialize(where T == Double)
         set {
             assert(column < 4, "Index \(column) out of range \(0 ..< 4) for type \(type(of: self))")
             #if GameMathUseSIMD
@@ -363,17 +333,17 @@ public extension Matrix4x4 where T: SIMDScalar {
 
 //MARK: - Transform
 
-public extension Matrix4x4 where T: BinaryFloatingPoint {
+public extension Matrix4x4 {
     @inlinable
-    var transform: Transform3<T> {
+    var transform: Transform3 {
         return Transform3(position: position, rotation: rotation, scale: scale)
     }
 }
 
 //MARK: Translate
-public extension Matrix4x4 where T: BinaryFloatingPoint {
+public extension Matrix4x4 {
     @_transparent
-    init(position: Position3<T>) {
+    init(position: Position3) {
         self.init(1, 0, 0, position.x,
                   0, 1, 0, position.y,
                   0, 0, 1, position.z,
@@ -381,7 +351,7 @@ public extension Matrix4x4 where T: BinaryFloatingPoint {
     }
     
     @inlinable
-    var position: Position3<T> {
+    var position: Position3 {
         get {
             return Position3(x: d, y: h, z: l)
         }
@@ -394,53 +364,53 @@ public extension Matrix4x4 where T: BinaryFloatingPoint {
 }
 
 //MARK: Rotate
-public extension Matrix4x4 where T: BinaryFloatingPoint {
+public extension Matrix4x4 {
     @_transparent
-    init(rotation quaternion: Quaternion<T>) {
-        let w: T = quaternion.w
-        let x: T = quaternion.x
-        let y: T = quaternion.y
-        let z: T = quaternion.z
+    init(rotation quaternion: Quaternion) {
+        let w: Float = quaternion.w
+        let x: Float = quaternion.x
+        let y: Float = quaternion.y
+        let z: Float = quaternion.z
 
 
-        var fx: T = x * z
+        var fx: Float = x * z
         fx -= w * y
         fx *= 2
 
-        var fy: T = y * z
+        var fy: Float = y * z
         fy += w * x
         fy *= 2
 
-        var fz: T = x * x
+        var fz: Float = x * x
         fz += y * y
         fz *= 2
         fz = 1 - fz
 
 
-        var ux: T = x * y
+        var ux: Float = x * y
         ux += w * z
         ux *= 2
 
-        var uy: T = x * x
+        var uy: Float = x * x
         uy += z * z
         uy *= 2
         uy = 1 - uy
 
-        var uz: T = y * z
+        var uz: Float = y * z
         uz -= w * x
         uz *= 2
 
 
-        var rx: T = y * y
+        var rx: Float = y * y
         rx += z * z
         rx *= 2
         rx = 1 - rx
 
-        var ry: T = x * y
+        var ry: Float = x * y
         ry -= w * z
         ry *= 2
 
-        var rz: T = x * z
+        var rz: Float = x * z
         rz += w * y
         rz *= 2
 
@@ -458,7 +428,7 @@ public extension Matrix4x4 where T: BinaryFloatingPoint {
     }
     
     @_transparent
-    init(rotationWithForward forward: Direction3<T>, up: Direction3<T> = .up, right: Direction3<T> = .right) {
+    init(rotationWithForward forward: Direction3, up: Direction3 = .up, right: Direction3 = .right) {
         self.init(right.x,     right.y,    right.z,    0,
                   up.x,        up.y,       up.z,       0,
                   forward.x,   forward.y,  forward.z,  0,
@@ -466,54 +436,54 @@ public extension Matrix4x4 where T: BinaryFloatingPoint {
     }
     
     @inlinable
-    var rotation: Quaternion<T> {
+    var rotation: Quaternion {
         get {
             return Quaternion(rotationMatrix: self.rotationMatrix)
         }
         set {
-            let w: T = newValue.w
-            let x: T = newValue.x
-            let y: T = newValue.y
-            let z: T = newValue.z
+            let w: Float = newValue.w
+            let x: Float = newValue.x
+            let y: Float = newValue.y
+            let z: Float = newValue.z
             
-            var fx: T = x * z
+            var fx: Float = x * z
             fx -= w * y
             fx *= 2
             
-            var fy: T = y * z
+            var fy: Float = y * z
             fy += w * x
             fy *= 2
             
-            var fz: T = x * x
+            var fz: Float = x * x
             fz += y * y
             fz *= 2
             fz = 1 - fz
             
             
-            var ux: T = x * y
+            var ux: Float = x * y
             ux += w * z
             ux *= 2
             
-            var uy: T = x * x
+            var uy: Float = x * x
             uy += z * z
             uy *= 2
             uy = 1 - uy
             
-            var uz: T = y * z
+            var uz: Float = y * z
             uz -= w * x
             uz *= 2
             
 
-            var rx: T = y * y
+            var rx: Float = y * y
             rx += z * z
             rx *= 2
             rx = 1 - rx
             
-            var ry: T = x * y
+            var ry: Float = x * y
             ry -= w * z
             ry *= 2
             
-            var rz: T = x * z
+            var rz: Float = x * z
             rz += w * y
             rz *= 2
             
@@ -526,30 +496,30 @@ public extension Matrix4x4 where T: BinaryFloatingPoint {
     @inlinable
     var rotationMatrix: Self {
         let scale = self.scale
-        return Matrix4x4<T>(a: a/scale.x, b: b/scale.y, c: c/scale.z, d: 0,
-                            e: e/scale.x, f: f/scale.y, g: g/scale.z, h: 0,
-                            i: i/scale.x, j: j/scale.y, k: k/scale.z, l: 0,
-                            m: 0,         n: 0,         o: 0,         p: 0)
+        return Matrix4x4(a: a/scale.x, b: b/scale.y, c: c/scale.z, d: 0,
+                         e: e/scale.x, f: f/scale.y, g: g/scale.z, h: 0,
+                         i: i/scale.x, j: j/scale.y, k: k/scale.z, l: 0,
+                         m: 0,         n: 0,         o: 0,         p: 0)
     }
     
     @_transparent
-    func lookingAt(_ position: Position3<T>) -> Self {
+    func lookingAt(_ position: Position3) -> Self {
         let eye = self.position
-        let zaxis = Direction3<T>(eye - position).normalized// The "forward" vector.
+        let zaxis = Direction3(eye - position).normalized// The "forward" vector.
         let xaxis = self.rotation.up.cross(zaxis)           // The "right" vector.
         let yaxis = zaxis.cross(xaxis)                      // The "up" vector.
         
-        return Matrix4x4<T>(a: xaxis.x, b: xaxis.y, c: xaxis.z, d: -xaxis.dot(eye),
-                            e: yaxis.x, f: yaxis.y, g: yaxis.z, h: -yaxis.dot(eye),
-                            i: zaxis.x, j: zaxis.y, k: zaxis.z, l: -zaxis.dot(eye),
-                            m: 0,       n: 0,       o: 0,       p: 1)
+        return Matrix4x4(a: xaxis.x, b: xaxis.y, c: xaxis.z, d: -xaxis.dot(eye),
+                         e: yaxis.x, f: yaxis.y, g: yaxis.z, h: -yaxis.dot(eye),
+                         i: zaxis.x, j: zaxis.y, k: zaxis.z, l: -zaxis.dot(eye),
+                         m: 0,       n: 0,       o: 0,       p: 1)
     }
 }
 
 //MARK: Scale
 public extension Matrix4x4 {
     @_transparent
-    init(scale size: Size3<T>) {
+    init(scale size: Size3) {
         self.init(size.x,  0,      0,      0,
                   0,       size.y, 0,      0,
                   0,       0,      size.z, 0,
@@ -557,20 +527,20 @@ public extension Matrix4x4 {
     }
     
     @inlinable
-    var scale: Size3<T> {
+    var scale: Size3 {
         get {
-            var w: T = a * a
+            var w: Float = a * a
             w += e * e
             w += i * i
-            var h: T = b * b
+            var h: Float = b * b
             h += f * f
             h += j * j
-            var d: T = c * c
+            var d: Float = c * c
             d += g * g
             d += k * k
-            return Size3<T>(width: w.squareRoot(),
-                            height: h.squareRoot(),
-                            depth: d.squareRoot())
+            return Size3(width: w.squareRoot(),
+                         height: h.squareRoot(),
+                         depth: d.squareRoot())
         }
         set {
             a = newValue.width
@@ -581,17 +551,17 @@ public extension Matrix4x4 {
 }
 
 //MARK: - Projection
-public extension Matrix4x4 where T: BinaryFloatingPoint {
-    init(perspectiveWithFOV fov: T, aspect: T, near: T, far: T) {
-        let tanHalfFOV: T = tan(fov / 2);
-        let zRange: T = near - far;
+public extension Matrix4x4 {
+    init(perspectiveWithFOV fov: Float, aspect: Float, near: Float, far: Float) {
+        let tanHalfFOV: Float = tan(fov / 2);
+        let zRange: Float = near - far;
         
-        var a: T = tanHalfFOV * aspect
+        var a: Float = tanHalfFOV * aspect
         a = 1 / a
-        let f: T = 1 / tanHalfFOV
-        var k: T = -near - far
+        let f: Float = 1 / tanHalfFOV
+        var k: Float = -near - far
         k /= zRange
-        var l: T = far * near
+        var l: Float = far * near
         l *= 2
         l /= zRange
         
@@ -601,7 +571,7 @@ public extension Matrix4x4 where T: BinaryFloatingPoint {
                   0, 0, 1, 0)
     }
     
-    init(orthographicWithTop top: T, left: T, bottom: T, right: T, near: T, far: T) {
+    init(orthographicWithTop top: Float, left: Float, bottom: Float, right: Float, near: Float, far: Float) {
         let width = right - left;
         let height = top - bottom;
         let depth = -(far - near);
@@ -614,17 +584,17 @@ public extension Matrix4x4 where T: BinaryFloatingPoint {
 }
 
 //MARK: - Graphics
-extension Matrix4x4 where T: SIMDScalar {
+extension Matrix4x4 {
     @inlinable
-    public var simd: SIMD16<T> {
-        return SIMD16<T>(a, b, c, d,
+    public var simd: SIMD16<Float> {
+        return SIMD16<Float>(a, b, c, d,
                          e, f, g, h,
                          i, j, k, l,
                          m, n, o, p)
     }
     @inlinable
-    public var transposedSIMD: SIMD16<T>  {
-        return SIMD16<T>(a, e, i, m,
+    public var transposedSIMD: SIMD16<Float>  {
+        return SIMD16<Float>(a, e, i, m,
                          b, f, j, n,
                          c, g, k, o,
                          d, h, l, p)
@@ -633,7 +603,7 @@ extension Matrix4x4 where T: SIMDScalar {
 
 extension Matrix4x4 {
     @inlinable
-    public func transposedArray() -> [T] {
+    public func transposedArray() -> [Float] {
         return [a, e, i, m,
                 b, f, j, n,
                 c, g, k, o,
@@ -641,7 +611,7 @@ extension Matrix4x4 {
     }
     
     @inlinable
-    public func array() -> [T] {
+    public func array() -> [Float] {
         return [a, b, c, d,
                 e, f, g, h,
                 i, j, k, l,
@@ -649,7 +619,7 @@ extension Matrix4x4 {
     }
 
     @inlinable
-    public init(transposedArray value: [T]) {
+    public init(transposedArray value: [Float]) {
         assert(value.count == 16, "Matrix4x4 must be initialized with exactly 16 elements.")
         self.init(a: value[0], b: value[4], c: value[8],  d: value[12],
                   e: value[1], f: value[5], g: value[9],  h: value[13],
@@ -663,7 +633,7 @@ extension Matrix4x4 {
     }
 }
 
-extension Matrix4x4 where T: BinaryFloatingPoint {
+extension Matrix4x4 {
     @inlinable
     public var isFinite: Bool {
         for value in self.array() {
@@ -678,15 +648,13 @@ extension Matrix4x4 where T: BinaryFloatingPoint {
 #if canImport(simd) && false
 import simd
 
-public extension Matrix4x4 where T == Float {
+public extension Matrix4x4 {
     @_transparent
-    @_specialize(where T == Float)
     static func *=(lhs: inout Self, rhs: Self) {
         lhs = lhs * rhs
     }
     
     @_transparent
-    @_specialize(where T == Float)
     static func *(lhs: Self, rhs: Self) -> Self {
         let r = simd_mul(simd_float4x4(lhs[0], lhs[1], lhs[2], lhs[3]),
                          simd_float4x4(rhs[0], rhs[1], rhs[2], rhs[3]))
@@ -694,60 +662,40 @@ public extension Matrix4x4 where T == Float {
         return Self(storage: [r[0], r[1], r[2], r[3]])
     }
 }
-public extension Matrix4x4 where T == Double {
-    @_transparent
-    @_specialize(where T == Double)
-    static func *=(lhs: inout Self, rhs: Self) {
-        lhs = lhs * rhs
-    }
-    
-    @_transparent
-    @_specialize(where T == Double)
-    static func *(lhs: Self, rhs: Self) -> Self {
-        let r = simd_mul(simd_double4x4(lhs[0], lhs[1], lhs[2], lhs[3]),
-                         simd_double4x4(rhs[0], rhs[1], rhs[2], rhs[3]))
-        
-        return Self(storage: [r[0], r[1], r[2], r[3]])
-    }
-}
 #elseif true //Unreasonably slow
 public extension Matrix4x4 {
     @_transparent
-    @_specialize(where T == Float)
-    @_specialize(where T == Double)
     static func *=(lhs: inout Self, rhs: Self) {
         lhs = lhs * rhs
     }
     
     @_transparent
-    @_specialize(where T == Float)
-    @_specialize(where T == Double)
     static func *(lhs: Self, rhs: Self) -> Self {
-        let abcd: SIMD4<T> = SIMD4(lhs.a, lhs.b, lhs.c, lhs.d)
-        let efgh: SIMD4<T> = SIMD4(lhs.e, lhs.f, lhs.g, lhs.h)
-        let ijkl: SIMD4<T> = SIMD4(lhs.i, lhs.j, lhs.k, lhs.l)
-        let mnop: SIMD4<T> = SIMD4(lhs.m, lhs.n, lhs.o, lhs.p)
-        let aeim: SIMD4<T> = rhs[0]//SIMD4(rhs.a, rhs.e, rhs.i, rhs.m)
-        let bfjn: SIMD4<T> = rhs[1]//SIMD4(rhs.b, rhs.f, rhs.j, rhs.n)
-        let cgko: SIMD4<T> = rhs[2]//SIMD4(rhs.c, rhs.g, rhs.k, rhs.o)
-        let dhlp: SIMD4<T> = rhs[3]//SIMD4(rhs.d, rhs.h, rhs.l, rhs.p)
+        let abcd: SIMD4<Float> = SIMD4(lhs.a, lhs.b, lhs.c, lhs.d)
+        let efgh: SIMD4<Float> = SIMD4(lhs.e, lhs.f, lhs.g, lhs.h)
+        let ijkl: SIMD4<Float> = SIMD4(lhs.i, lhs.j, lhs.k, lhs.l)
+        let mnop: SIMD4<Float> = SIMD4(lhs.m, lhs.n, lhs.o, lhs.p)
+        let aeim: SIMD4<Float> = rhs[0]//SIMD4(rhs.a, rhs.e, rhs.i, rhs.m)
+        let bfjn: SIMD4<Float> = rhs[1]//SIMD4(rhs.b, rhs.f, rhs.j, rhs.n)
+        let cgko: SIMD4<Float> = rhs[2]//SIMD4(rhs.c, rhs.g, rhs.k, rhs.o)
+        let dhlp: SIMD4<Float> = rhs[3]//SIMD4(rhs.d, rhs.h, rhs.l, rhs.p)
         
-        return Matrix4x4<T>((abcd * aeim).sum(),
-                            (abcd * bfjn).sum(),
-                            (abcd * cgko).sum(),
-                            (abcd * dhlp).sum(),
-                            (efgh * aeim).sum(),
-                            (efgh * bfjn).sum(),
-                            (efgh * cgko).sum(),
-                            (efgh * dhlp).sum(),
-                            (ijkl * aeim).sum(),
-                            (ijkl * bfjn).sum(),
-                            (ijkl * cgko).sum(),
-                            (ijkl * dhlp).sum(),
-                            (mnop * aeim).sum(),
-                            (mnop * bfjn).sum(),
-                            (mnop * cgko).sum(),
-                            (mnop * dhlp).sum())
+        return Matrix4x4((abcd * aeim).sum(),
+                         (abcd * bfjn).sum(),
+                         (abcd * cgko).sum(),
+                         (abcd * dhlp).sum(),
+                         (efgh * aeim).sum(),
+                         (efgh * bfjn).sum(),
+                         (efgh * cgko).sum(),
+                         (efgh * dhlp).sum(),
+                         (ijkl * aeim).sum(),
+                         (ijkl * bfjn).sum(),
+                         (ijkl * cgko).sum(),
+                         (ijkl * dhlp).sum(),
+                         (mnop * aeim).sum(),
+                         (mnop * bfjn).sum(),
+                         (mnop * cgko).sum(),
+                         (mnop * dhlp).sum())
     }
 }
 #endif
@@ -762,7 +710,7 @@ public extension Matrix4x4 {
     
     @inlinable
     static func *(lhs: Self, rhs: Self) -> Self {
-        var out: Matrix4x4<T> = .identity
+        var out: Matrix4x4 = .identity
         DispatchQueue.concurrentPerform(iterations: 16) {
             switch $0 {
             case 0:
@@ -871,80 +819,76 @@ public extension Matrix4x4 {
 #elseif true
 public extension Matrix4x4 {
     @_transparent
-    @_specialize(where T == Float)
-    @_specialize(where T == Double)
     static func *=(lhs: inout Self, rhs: Self) {
         lhs = lhs * rhs
     }
     
     @_transparent
-    @_specialize(where T == Float)
-    @_specialize(where T == Double)
     static func *(lhs: Self, rhs: Self) -> Self {
-        var a: T = lhs.a * rhs.a
+        var a: Float = lhs.a * rhs.a
         a += lhs.b * rhs.e
         a += lhs.c * rhs.i
         a += lhs.d * rhs.m
-        var b: T = lhs.a * rhs.b
+        var b: Float = lhs.a * rhs.b
         b += lhs.b * rhs.f
         b += lhs.c * rhs.j
         b += lhs.d * rhs.n
-        var c: T = lhs.a * rhs.c
+        var c: Float = lhs.a * rhs.c
         c += lhs.b * rhs.g
         c += lhs.c * rhs.k
         c += lhs.d * rhs.o
-        var d: T = lhs.a * rhs.d
+        var d: Float = lhs.a * rhs.d
         d += lhs.b * rhs.h
         d += lhs.c * rhs.l
         d += lhs.d * rhs.p
         
-        var e: T = lhs.e * rhs.a
+        var e: Float = lhs.e * rhs.a
         e += lhs.f * rhs.e
         e += lhs.g * rhs.i
         e += lhs.h * rhs.m
-        var f: T = lhs.e * rhs.b
+        var f: Float = lhs.e * rhs.b
         f += lhs.f * rhs.f
         f += lhs.g * rhs.j
         f += lhs.h * rhs.n
-        var g: T = lhs.e * rhs.c
+        var g: Float = lhs.e * rhs.c
         g += lhs.f * rhs.g
         g += lhs.g * rhs.k
         g += lhs.h * rhs.o
-        var h: T = lhs.e * rhs.d
+        var h: Float = lhs.e * rhs.d
         h += lhs.f * rhs.h
         h += lhs.g * rhs.l
         h += lhs.h * rhs.p
         
-        var i: T = lhs.i * rhs.a
+        var i: Float = lhs.i * rhs.a
         i += lhs.j * rhs.e
         i += lhs.k * rhs.i
         i += lhs.l * rhs.m
-        var j: T = lhs.i * rhs.b
+        var j: Float = lhs.i * rhs.b
         j += lhs.j * rhs.f
         j += lhs.k * rhs.j
         j += lhs.l * rhs.n
-        var k: T = lhs.i * rhs.c
+        var k: Float = lhs.i * rhs.c
         k += lhs.j * rhs.g
         k += lhs.k * rhs.k
         k += lhs.l * rhs.o
-        var l: T = lhs.i * rhs.d
+        var l: Float = lhs.i * rhs.d
         l += lhs.j * rhs.h
         l += lhs.k * rhs.l
         l += lhs.l * rhs.p
         
-        var m: T = lhs.m * rhs.a
+        var m: Float = lhs.m * rhs.a
         m += lhs.n * rhs.e
         m += lhs.o * rhs.i
         m += lhs.p * rhs.m
-        var n: T = lhs.m * rhs.b
+        var n: Float = lhs.m * rhs.b
         n += lhs.n * rhs.f
         n += lhs.o * rhs.j
         n += lhs.p * rhs.n
-        var o: T = lhs.m * rhs.c
+        var o: Float = lhs.m * rhs.c
         o += lhs.n * rhs.g
         o += lhs.o * rhs.k
         o += lhs.p * rhs.o
-        var p: T = lhs.m * rhs.d
+        var p: Float = lhs.m * rhs.d
         p += lhs.n * rhs.h
         p += lhs.o * rhs.l
         p += lhs.p * rhs.p
@@ -954,9 +898,9 @@ public extension Matrix4x4 {
 #endif
 #endif
 
-extension Matrix4x4: Equatable where T: Equatable {}
-extension Matrix4x4: Hashable where T: Hashable {}
-extension Matrix4x4: Codable where T: Codable {
+extension Matrix4x4: Equatable {}
+extension Matrix4x4: Hashable {}
+extension Matrix4x4: Codable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         try container.encode([a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p])
@@ -964,7 +908,7 @@ extension Matrix4x4: Codable where T: Codable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        let storage = try container.decode(Array<T>.self)
+        let storage = try container.decode(Array<Float>.self)
         self.init(storage)
     }
 }

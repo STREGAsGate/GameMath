@@ -7,21 +7,21 @@
  */
 
 #if GameMathUseSIMD
-public struct Direction2<T: FloatingPoint & SIMDScalar>: Vector2 {
-    public var x: T
-    public var y: T
+public struct Direction2: Vector2 {
+    public var x: Float
+    public var y: Float
     
-    public init(_ x: T, _ y: T) {
+    public init(_ x: Float, _ y: Float) {
         self.x = x
         self.y = y
     }
 }
 #else
-public struct Direction2<T: FloatingPoint>: Vector2 {
-    public var x: T
-    public var y: T
+public struct Direction2: Vector2 {
+    public var x: Float
+    public var y: Float
     
-    public init(_ x: T, _ y: T) {
+    public init(_ x: Float, _ y: Float) {
         self.x = x
         self.y = y
     }
@@ -29,47 +29,47 @@ public struct Direction2<T: FloatingPoint>: Vector2 {
 #endif
 
 public extension Direction2 {
-    init(x: T, y: T) {
+    init(x: Float, y: Float) {
         self.init(x, y)
     }
 }
 
-public extension Direction2 where T: BinaryFloatingPoint {
-    init(from position1: Position2<T>, to position2: Position2<T>) {
-        let d = Direction2<T>(position2 - position1)
+public extension Direction2 {
+    init(from position1: Position2, to position2: Position2) {
+        let d = Direction2(position2 - position1)
         self = d.normalized
     }
     
-    init(_ radians: Radians<T>) {
+    init(_ radians: Radians) {
         self.x = cos(radians.rawValue)
         self.y = sin(radians.rawValue)
     }
     
-    init(_ degrees: Degrees<T>) {
+    init(_ degrees: Degrees) {
         self.init(Radians(degrees))
     }
 }
 
-extension Direction2: Equatable where T: Equatable {}
-extension Direction2: Hashable where T: Hashable {}
-extension Direction2: Codable where T: Codable {}
+extension Direction2: Equatable {}
+extension Direction2: Hashable {}
+extension Direction2: Codable {}
 
-public extension Direction2 where T: BinaryFloatingPoint {
-    func angle(to rhs: Self) -> Radians<T> {
+public extension Direction2 {
+    func angle(to rhs: Self) -> Radians {
         let v0 = self.normalized
         let v1 = rhs.normalized
         
         let dot = v0.dot(v1)
-        return Radians<T>(acos(dot))
+        return Radians(acos(dot))
     }
     
-    var angleAroundZ: Radians<T> {
-        return Radians<T>(atan2(x, -y))
+    var angleAroundZ: Radians {
+        return Radians(atan2(x, -y))
     }
 }
 
 public extension Direction2 {
-    func rotated(by rotation: Quaternion<T>) -> Self {
+    func rotated(by rotation: Quaternion) -> Self {
         let conjugate = rotation.normalized.conjugate
         let w = rotation * self * conjugate
         let dir3 = w.direction
@@ -78,7 +78,7 @@ public extension Direction2 {
     
     func reflected(off normal: Self) -> Self {
         let normal: Self = normal.normalized
-        let dn: T = -2 * self.dot(normal)
+        let dn: Float = -2 * self.dot(normal)
         return (normal * dn) + self
     }
 }

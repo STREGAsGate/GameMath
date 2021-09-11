@@ -9,21 +9,21 @@
 import Foundation
 
 #if GameMathUseSIMD
-public struct Rect<T: Numeric & SIMDScalar> {
-    public var position: Position2<T>
-    public var size: Size2<T>
+public struct Rect {
+    public var position: Position2
+    public var size: Size2
     
-    public init(position: Position2<T> = .zero, size: Size2<T>) {
+    public init(position: Position2 = .zero, size: Size2) {
         self.position = position
         self.size = size
     }
 }
 #else
-public struct Rect<T: Numeric> {
-    public var position: Position2<T>
-    public var size: Size2<T>
+public struct Rect {
+    public var position: Position2
+    public var size: Size2
     
-    public init(position: Position2<T> = .zero, size: Size2<T>) {
+    public init(position: Position2 = .zero, size: Size2) {
         self.position = position
         self.size = size
     }
@@ -31,21 +31,21 @@ public struct Rect<T: Numeric> {
 #endif
 
 public extension Rect {
-    init(x: T, y: T, width: T, height: T) {
+    init(x: Float, y: Float, width: Float, height: Float) {
         self.init(position: Position2(x: x, y: y), size: Size2(width: width, height: height))
     }
 }
 
-extension Rect: Equatable where T: Equatable {}
-extension Rect: Hashable where T: Hashable {}
-extension Rect: Codable where T: Codable {}
+extension Rect: Equatable {}
+extension Rect: Hashable {}
+extension Rect: Codable {}
 
 public extension Rect {
-    var area: T {
+    var area: Float {
         return size.width * size.height
     }
     // The left side of the rect
-    var x: T {
+    var x: Float {
         get {
             return position.x
         }
@@ -54,7 +54,7 @@ public extension Rect {
         }
     }
     // The top of the rect
-    var y: T {
+    var y: Float {
         get {
             return position.y
         }
@@ -62,7 +62,7 @@ public extension Rect {
             position.y = y
         }
     }
-    var width: T {
+    var width: Float {
         get {
             return size.width
         }
@@ -70,7 +70,7 @@ public extension Rect {
             size.width = width
         }
     }
-    var height: T {
+    var height: Float {
         get {
             return size.height
         }
@@ -80,30 +80,17 @@ public extension Rect {
     }
     
     // The right side of the rect
-    var maxX: T {
+    var maxX: Float {
         return x + width
     }
     // The bottom of the rect
-    var maxY: T {
+    var maxY: Float {
         return y + height
     }
 }
 
-
-extension Rect where T: BinaryInteger {
-    public var center: Position2<T> {
-        get{
-            return Position2(x: x + width / 2, y: y + height / 2)
-        }
-        set(point) {
-            x = point.x - width / 2
-            y = point.y - height / 2
-        }
-    }
-}
-
-extension Rect where T: FloatingPoint {
-    public var center: Position2<T> {
+extension Rect {
+    public var center: Position2 {
         get{
             return Position2(x: x + width / 2, y: y + height / 2)
         }
@@ -114,7 +101,7 @@ extension Rect where T: FloatingPoint {
     }
 
     //TODO: Move this to GamePhysics in AxisAlignedBoundingBox2
-    public func nearest(outsidePositionFrom circle: Circle<T>) -> Position2<T> {
+    public func nearest(outsidePositionFrom circle: Circle) -> Position2 {
         var position = circle.center
         
         if intersects(circle) {
@@ -134,9 +121,9 @@ extension Rect where T: FloatingPoint {
     }
 }
 
-extension Rect where T: Comparable & SignedNumeric {
+extension Rect {
     //TODO: Move this to GamePhysics in AxisAlignedBoundingBox2
-    public func intersects(_ rect: Rect<T>) -> Bool {
+    public func intersects(_ rect: Rect) -> Bool {
         var part1: Bool {
             let lhs = abs(x - rect.x) * 2
             let rhs = width + rect.width
@@ -151,9 +138,9 @@ extension Rect where T: Comparable & SignedNumeric {
     }
 }
 
-extension Rect where T: Comparable {
+extension Rect {
     //TODO: Move this to GamePhysics in AxisAlignedBoundingBox2
-    public func contains(_ position: Position2<T>) -> Bool {
+    public func contains(_ position: Position2) -> Bool {
         if position.x < x || position.x > maxX {
             return false
         }
@@ -164,23 +151,23 @@ extension Rect where T: Comparable {
     }
 
     //TODO: Move this to GamePhysics in AxisAlignedBoundingBox2
-    public func intersects(_ circle: Circle<T>) -> Bool {
-        let topLeft = Position2<T>(x: circle.center.x - circle.radius, y: circle.center.y - circle.radius)
+    public func intersects(_ circle: Circle) -> Bool {
+        let topLeft = Position2(x: circle.center.x - circle.radius, y: circle.center.y - circle.radius)
         if contains(topLeft) {
             return true
         }
         
-        let topRight = Position2<T>(x: circle.center.x + circle.radius, y: circle.center.y - circle.radius)
+        let topRight = Position2(x: circle.center.x + circle.radius, y: circle.center.y - circle.radius)
         if contains(topRight) {
             return true
         }
         
-        let bottomLeft = Position2<T>(x: circle.center.x - circle.radius, y: circle.center.y + circle.radius)
+        let bottomLeft = Position2(x: circle.center.x - circle.radius, y: circle.center.y + circle.radius)
         if contains(bottomLeft) {
             return true
         }
         
-        let bottomRight = Position2<T>(x: circle.center.x + circle.radius, y: circle.center.y + circle.radius)
+        let bottomRight = Position2(x: circle.center.x + circle.radius, y: circle.center.y + circle.radius)
         if contains(bottomRight) {
             return true
         }
@@ -189,19 +176,19 @@ extension Rect where T: Comparable {
     }
 }
 
-public extension Rect where T == Float {
+public extension Rect {
     var isFinite: Bool {
         return position.isFinite && size.isFinite
     }
 }
 
-public extension Rect where T: BinaryFloatingPoint {
-    func interpolated(to: Self, _ method: InterpolationMethod<T>) -> Self {
+public extension Rect {
+    func interpolated(to: Self, _ method: InterpolationMethod) -> Self {
         var copy = self
         copy.interpolate(to: to, method)
         return copy
     }
-    mutating func interpolate(to: Self, _ method: InterpolationMethod<T>) {
+    mutating func interpolate(to: Self, _ method: InterpolationMethod) {
         self.position.interpolate(to: to.position, method)
         self.size.interpolate(to: to.size, method)
     }
@@ -212,10 +199,10 @@ extension Rect {
 }
 
 extension Rect {
-    public static func *=(lhs: inout Self, rhs: T) {
+    public static func *=(lhs: inout Self, rhs: Float) {
         lhs = lhs * rhs
     }
-    public static func *(lhs: Self, rhs: T) -> Self {
+    public static func *(lhs: Self, rhs: Float) -> Self {
         return Rect(position: lhs.position * rhs, size: lhs.size * rhs)
     }
 }

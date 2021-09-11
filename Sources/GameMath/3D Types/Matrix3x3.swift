@@ -7,28 +7,28 @@
  */
 
 #if GameMathUseSIMD
-public struct Matrix3x3<T: FloatingPoint & SIMDScalar> {
-    public var a, b, c: T
-    public var e, f, g: T
-    public var i, j, k: T
+public struct Matrix3x3 {
+    public var a, b, c: Float
+    public var e, f, g: Float
+    public var i, j, k: Float
 
-    public init(_ a: T, _ b: T, _ c: T,
-                _ e: T, _ f: T, _ g: T,
-                _ i: T, _ j: T, _ k: T) {
+    public init(_ a: Float, _ b: Float, _ c: Float,
+                _ e: Float, _ f: Float, _ g: Float,
+                _ i: Float, _ j: Float, _ k: Float) {
         self.a = a; self.b = b; self.c = c;
         self.e = e; self.f = f; self.g = g;
         self.i = i; self.j = j; self.k = k;
     }
 }
 #else
-public struct Matrix3x3<T: FloatingPoint> {
-    public var a, b, c: T
-    public var e, f, g: T
-    public var i, j, k: T
+public struct Matrix3x3 {
+    public var a, b, c: Float
+    public var e, f, g: Float
+    public var i, j, k: Float
 
-    public init(_ a: T, _ b: T, _ c: T,
-                _ e: T, _ f: T, _ g: T,
-                _ i: T, _ j: T, _ k: T) {
+    public init(_ a: Float, _ b: Float, _ c: Float,
+                _ e: Float, _ f: Float, _ g: Float,
+                _ i: Float, _ j: Float, _ k: Float) {
         self.a = a; self.b = b; self.c = c;
         self.e = e; self.f = f; self.g = g;
         self.i = i; self.j = j; self.k = k;
@@ -37,13 +37,13 @@ public struct Matrix3x3<T: FloatingPoint> {
 #endif
  
 public extension Matrix3x3 {
-    init(a: T, b: T, c: T,
-                e: T, f: T, g: T,
-                i: T, j: T, k: T) {
+    init(a: Float, b: Float, c: Float,
+                e: Float, f: Float, g: Float,
+                i: Float, j: Float, k: Float) {
         self.init(a, b, c, e, f, g, i, j, k)
     }
     
-    init(_ matrix4: Matrix4x4<T>) {
+    init(_ matrix4: Matrix4x4) {
         self.a = matrix4.a; self.b = matrix4.b; self.c = matrix4.c;
         self.e = matrix4.e; self.f = matrix4.f; self.g = matrix4.g;
         self.i = matrix4.i; self.j = matrix4.j; self.k = matrix4.k;
@@ -56,7 +56,7 @@ public extension Matrix3x3 {
     }
     
     //MARK: Subscript
-    subscript (_ index: Array<T>.Index) -> T {
+    subscript (_ index: Array<Float>.Index) -> Float {
         get{
             switch index {
             case 0: return a
@@ -90,7 +90,7 @@ public extension Matrix3x3 {
         }
     }
     
-    subscript (_ column: Array<T>.Index) -> Array<T> {
+    subscript (_ column: Array<Float>.Index) -> Array<Float> {
         get {
             switch column {
             case 0: return [a, e, i]
@@ -120,7 +120,7 @@ public extension Matrix3x3 {
         }
     }
 
-    subscript <V: Vector3>(_ index: Array<T>.Index) -> V where V.T == T {
+    subscript <V: Vector3>(_ index: Array<Float>.Index) -> V {
         get {
             switch index {
             case 0: return V(a, b, c)
@@ -151,9 +151,9 @@ public extension Matrix3x3 {
     }
 }
 
-public extension Matrix3x3 where T: BinaryFloatingPoint {
-    init(direction: Direction3<T>, up: Direction3<T> = .up, right: Direction3<T> = .right) {
-        var xaxis: Direction3<T>
+public extension Matrix3x3 {
+    init(direction: Direction3, up: Direction3 = .up, right: Direction3 = .right) {
+        var xaxis: Direction3
         if direction == up {
             xaxis = right
         }else{
@@ -181,54 +181,54 @@ public extension Matrix3x3 where T: BinaryFloatingPoint {
         k = direction.z
     }
     
-    var rotation: Quaternion<T> {
+    var rotation: Quaternion {
         get {
             return Quaternion(rotationMatrix: self)
         }
         set {
-            let w: T = newValue.w
-            let x: T = newValue.x
-            let y: T = newValue.y
-            let z: T = newValue.z
+            let w: Float = newValue.w
+            let x: Float = newValue.x
+            let y: Float = newValue.y
+            let z: Float = newValue.z
             
-            var fx: T = x * z
+            var fx: Float = x * z
             fx -= w * y
             fx *= 2
             
-            var fy: T = y * z
+            var fy: Float = y * z
             fy += w * x
             fy *= 2
             
-            var fz: T = x * x
+            var fz: Float = x * x
             fz += y * y
             fz *= 2
             fz = 1 - fz
             
             
-            var ux: T = x * y
+            var ux: Float = x * y
             ux += w * z
             ux *= 2
             
-            var uy: T = x * x
+            var uy: Float = x * x
             uy += z * z
             uy *= 2
             uy = 1 - uy
             
-            var uz: T = y * z
+            var uz: Float = y * z
             uz -= w * x
             uz *= 2
             
             
-            var rx: T = y * y
+            var rx: Float = y * y
             rx += z * z
             rx *= 2
             rx = 1 - rx
             
-            var ry: T = x * y
+            var ry: Float = x * y
             ry -= w * z
             ry *= 2
             
-            var rz: T = x * z
+            var rz: Float = x * z
             rz += w * y
             rz *= 2
             
@@ -240,21 +240,21 @@ public extension Matrix3x3 where T: BinaryFloatingPoint {
 }
 
 public extension Matrix3x3 {
-    func transposedArray() -> [T] {
+    func transposedArray() -> [Float] {
         return [a, e, i,
                 b, f, j,
                 c, g, k]
     }
-    func array() -> [T] {
+    func array() -> [Float] {
         return [a, b, c,
                 e, f, g,
                 i, j, k]
     }
 }
 
-extension Matrix3x3: Equatable where T: Equatable {}
-extension Matrix3x3: Hashable where T: Hashable {}
-extension Matrix3x3: Codable where T: Codable {
+extension Matrix3x3: Equatable {}
+extension Matrix3x3: Hashable {}
+extension Matrix3x3: Codable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.unkeyedContainer()
         try container.encode(a)
@@ -270,14 +270,14 @@ extension Matrix3x3: Codable where T: Codable {
     
     public init(from decoder: Decoder) throws {
         var container = try decoder.unkeyedContainer()
-        self.a = try container.decode(T.self)
-        self.b = try container.decode(T.self)
-        self.c = try container.decode(T.self)
-        self.e = try container.decode(T.self)
-        self.f = try container.decode(T.self)
-        self.g = try container.decode(T.self)
-        self.i = try container.decode(T.self)
-        self.j = try container.decode(T.self)
-        self.k = try container.decode(T.self)
+        self.a = try container.decode(Float.self)
+        self.b = try container.decode(Float.self)
+        self.c = try container.decode(Float.self)
+        self.e = try container.decode(Float.self)
+        self.f = try container.decode(Float.self)
+        self.g = try container.decode(Float.self)
+        self.i = try container.decode(Float.self)
+        self.j = try container.decode(Float.self)
+        self.k = try container.decode(Float.self)
     }
 }

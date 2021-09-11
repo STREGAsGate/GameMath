@@ -7,13 +7,13 @@
  */
 
 #if GameMathUseSIMD
-public struct Insets<T: Numeric & SIMDScalar>{
-    public var top: T
-    public var leading: T
-    public var bottom: T
-    public var trailing: T
+public struct Insets {
+    public var top: Float
+    public var leading: Float
+    public var bottom: Float
+    public var trailing: Float
     
-    public init(top: T, leading: T, bottom: T, trailing: T) {
+    public init(top: Float, leading: Float, bottom: Float, trailing: Float) {
         self.top = top
         self.leading = leading
         self.bottom = bottom
@@ -21,13 +21,13 @@ public struct Insets<T: Numeric & SIMDScalar>{
     }
 }
 #else
-public struct Insets<T: Numeric>{
-    public var top: T
-    public var leading: T
-    public var bottom: T
-    public var trailing: T
+public struct Insets {
+    public var top: Float
+    public var leading: Float
+    public var bottom: Float
+    public var trailing: Float
     
-    public init(top: T, leading: T, bottom: T, trailing: T) {
+    public init(top: Float, leading: Float, bottom: Float, trailing: Float) {
         self.top = top
         self.leading = leading
         self.bottom = bottom
@@ -36,9 +36,9 @@ public struct Insets<T: Numeric>{
 }
 #endif
 
-extension Insets: Equatable where T: Equatable {}
-extension Insets: Hashable where T: Hashable {}
-extension Insets: Codable where T: Codable {}
+extension Insets: Equatable {}
+extension Insets: Hashable {}
+extension Insets: Codable {}
 
 public extension Insets {
     static var zero: Self {
@@ -47,28 +47,19 @@ public extension Insets {
 }
 
 public extension Insets {
-    static func *(lhs: Self, rhs: T) -> Self {
+    static func *(lhs: Self, rhs: Float) -> Self {
         return Insets(top: lhs.top * rhs, leading: lhs.leading * rhs, bottom: lhs.bottom * rhs, trailing: lhs.trailing * rhs)
     }
-    static func *=(lhs: inout Self, rhs: T) {
+    static func *=(lhs: inout Self, rhs: Float) {
         lhs = lhs * rhs
     }
 }
 
-public extension Insets where T: BinaryInteger {
-    static func /(lhs: Self, rhs: T) -> Self {
+public extension Insets {
+    static func /(lhs: Self, rhs: Float) -> Self {
         return Insets(top: lhs.top / rhs, leading: lhs.leading / rhs, bottom: lhs.bottom / rhs, trailing: lhs.trailing / rhs)
     }
-    static func /=(lhs: inout Self, rhs: T) {
-        lhs = lhs / rhs
-    }
-}
-
-public extension Insets where T: FloatingPoint {
-    static func /(lhs: Self, rhs: T) -> Self {
-        return Insets(top: lhs.top / rhs, leading: lhs.leading / rhs, bottom: lhs.bottom / rhs, trailing: lhs.trailing / rhs)
-    }
-    static func /=(lhs: inout Self, rhs: T) {
+    static func /=(lhs: inout Self, rhs: Float) {
         lhs = lhs / rhs
     }
 }

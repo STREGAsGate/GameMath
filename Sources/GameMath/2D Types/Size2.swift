@@ -7,34 +7,34 @@
  */
 
 #if GameMathUseSIMD
-public struct Size2<T: Numeric & SIMDScalar>: Vector2 {
-    public var width: T
-    public var height: T
+public struct Size2: Vector2 {
+    public var width: Float
+    public var height: Float
     
-    public init(width: T, height: T) {
+    public init(width: Float, height: Float) {
         self.width = width
         self.height = height
     }
 }
 #else
-public struct Size2<T: Numeric>: Vector2 {
-    public var width: T
-    public var height: T
+public struct Size2: Vector2 {
+    public var width: Float
+    public var height: Float
     
-    public init(width: T, height: T) {
+    public init(width: Float, height: Float) {
         self.width = width
         self.height = height
     }
 }
 #endif
 
-extension Size2: Equatable where T: Equatable {}
-extension Size2: Hashable where T: Hashable {}
-extension Size2: Codable where T: Codable {}
+extension Size2: Equatable {}
+extension Size2: Hashable {}
+extension Size2: Codable {}
 
 //MARK: Vector2
 extension Size2 {
-    public var x: T {
+    public var x: Float {
         get {
             return width
         }
@@ -43,7 +43,7 @@ extension Size2 {
         }
     }
     
-    public var y: T {
+    public var y: Float {
         get {
             return height
         }
@@ -52,7 +52,7 @@ extension Size2 {
         }
     }
     
-    public init(_ x: T, _ y: T) {
+    public init(_ x: Float, _ y: Float) {
         self.width = x
         self.height = y
     }
@@ -63,24 +63,24 @@ public extension Size2 {
     static var one: Self {Self(width: 1, height: 1)}
 }
 
-public extension Size2 where T: FloatingPoint {
-    var aspectRatio: T {
+public extension Size2 {
+    var aspectRatio: Float {
         return width / height
     }
 }
 
 public extension Size2 {
-    static func *(lhs: Size2, rhs: T) -> Self {
+    static func *(lhs: Size2, rhs: Float) -> Self {
         return Size2(width: lhs.width * rhs, height: lhs.height * rhs)
     }
-    static func *=(lhs: inout Self, rhs: T) {
+    static func *=(lhs: inout Self, rhs: Float) {
         lhs = lhs * rhs
     }
 }
 
 
 //Addition
-public extension Size2 where T: Numeric {
+public extension Size2 {
     //Self:Self
     static func +(lhs: Self, rhs: Self) -> Self {
         return Self(lhs.x + rhs.x,
@@ -92,7 +92,7 @@ public extension Size2 where T: Numeric {
 }
 
 //Subtraction
-public extension Size2 where T: Numeric {
+public extension Size2 {
     //Self:Self
     static func -(lhs: Self, rhs: Self) -> Self {
         return Self(lhs.x - rhs.x,
@@ -104,19 +104,7 @@ public extension Size2 where T: Numeric {
 }
 
 //Division(FloatingPoint)
-public extension Size2 where T: FloatingPoint {
-    //Self:Self
-    static func /(lhs: Self, rhs: Self) -> Self {
-        return Self(lhs.x / rhs.x,
-                    lhs.y / rhs.y)
-    }
-    static func /=(lhs: inout Self, rhs: Self) {
-        lhs =  lhs / rhs
-    }
-}
-
-//Division(Integer)
-public extension Size2 where T: BinaryInteger {
+public extension Size2 {
     //Self:Self
     static func /(lhs: Self, rhs: Self) -> Self {
         return Self(lhs.x / rhs.x,

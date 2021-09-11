@@ -6,17 +6,17 @@
  * Find me on https://www.YouTube.com/STREGAsGate, or social media @STREGAsGate
  */
 
-public enum InterpolationMethod<T: FloatingPoint> {
+public enum InterpolationMethod {
     /** Interpolates at a constant rate
      `factor` is progress of interpolation. 0 being the source and 1 being destination.
      `shortest` is true if the interpolation direction is the shortest physical distance, otherwise it's the scalar numerical distance. Usful for rotations.
      */
-    case linear(_ factor: T, shortest: Bool = true)
+    case linear(_ factor: Float, shortest: Bool = true)
 }
 
-public extension FloatingPoint {
+public extension Float {
     /// Interpolates toward `to` by using `method `
-    func interpolated(to: Self, _ method: InterpolationMethod<Self>) -> Self {
+    func interpolated(to: Float, _ method: InterpolationMethod) -> Float {
         switch method {
         case let .linear(factor, _):
             return self.lerped(to: to, factor: factor)
@@ -24,7 +24,7 @@ public extension FloatingPoint {
     }
     
     /// Interpolates toward `to` by using `method `
-    mutating func interpolate(to: Self, _ method: InterpolationMethod<Self>) {
+    mutating func interpolate(to: Float, _ method: InterpolationMethod) {
         switch method {
         case let .linear(factor, _):
             return self.lerp(to: to, factor: factor)
@@ -32,11 +32,11 @@ public extension FloatingPoint {
     }
 }
 
-fileprivate extension FloatingPoint {
-    func lerped(to: Self, factor: Self) -> Self {
+fileprivate extension Float {
+    func lerped(to: Float, factor: Float) -> Float {
         return self + (to - self) * factor
     }
-    mutating func lerp(to: Self, factor: Self) {
+    mutating func lerp(to: Float, factor: Float) {
         self = self.lerped(to: to, factor: factor)
     }
 }

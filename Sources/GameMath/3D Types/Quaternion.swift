@@ -9,10 +9,10 @@
 import Foundation
 
 #if GameMathUseSIMD
-public struct Quaternion<T: FloatingPoint & SIMDScalar> {
-    public var w, x, y, z: T
+public struct Quaternion {
+    public var w, x, y, z: Float
     
-    public init(w: T, x: T, y: T, z: T) {
+    public init(w: Float, x: Float, y: Float, z: Float) {
         self.w = w
         self.x = x
         self.y = y
@@ -20,10 +20,10 @@ public struct Quaternion<T: FloatingPoint & SIMDScalar> {
     }
 }
 #else
-public struct Quaternion<T: FloatingPoint> {
-    public var w, x, y, z: T
+public struct Quaternion {
+    public var w, x, y, z: Float
     
-    public init(w: T, x: T, y: T, z: T) {
+    public init(w: Float, x: Float, y: Float, z: Float) {
         self.w = w
         self.x = x
         self.y = y
@@ -32,12 +32,12 @@ public struct Quaternion<T: FloatingPoint> {
 }
 #endif
 
-extension Quaternion where T: BinaryFloatingPoint {
-    public init(direction: Direction3<T>, up: Direction3<T> = .up, right: Direction3<T> = .right) {
+extension Quaternion {
+    public init(direction: Direction3, up: Direction3 = .up, right: Direction3 = .right) {
         self = Matrix3x3(direction: direction.normalized).rotation.normalized
     }
     
-    public init(between v1: Direction3<T>, and v2: Direction3<T>) where T: BinaryFloatingPoint {
+    public init(between v1: Direction3, and v2: Direction3) {
         let cosTheta = v1.dot(v2)
         let k = (v1.squaredLength * v2.squaredLength).squareRoot()
         
@@ -48,9 +48,9 @@ extension Quaternion where T: BinaryFloatingPoint {
         }
     }
     
-    public init(_ radians: Radians<T>, axis: Direction3<T>) {
-        let sinHalfAngle: T = sin(radians.rawValue / 2.0)
-        let cosHalfAngle: T = cos(radians.rawValue / 2.0)
+    public init(_ radians: Radians, axis: Direction3) {
+        let sinHalfAngle: Float = sin(radians.rawValue / 2.0)
+        let cosHalfAngle: Float = cos(radians.rawValue / 2.0)
         
         x = axis.x * sinHalfAngle
         y = axis.y * sinHalfAngle
@@ -58,36 +58,36 @@ extension Quaternion where T: BinaryFloatingPoint {
         w = cosHalfAngle
     }
     
-    public init(_ degrees: Degrees<T>, axis: Direction3<T>) {
-        self.init(Radians<T>(degrees), axis: axis)
+    public init(_ degrees: Degrees, axis: Direction3) {
+        self.init(Radians(degrees), axis: axis)
     }
 }
 
-extension Quaternion where T: BinaryFloatingPoint {
-    public init(rotationMatrix rot: Matrix4x4<T>) {
-        let trace: T = rot.a + rot.f + rot.k
+extension Quaternion {
+    public init(rotationMatrix rot: Matrix4x4) {
+        let trace: Float = rot.a + rot.f + rot.k
         
         if trace > 0 {
-            let s: T = 0.5 / (trace + 1.0).squareRoot()
+            let s: Float = 0.5 / (trace + 1.0).squareRoot()
             w = 0.25 / s
             x = (rot.g - rot.j) * s
             y = (rot.i - rot.c) * s
             z = (rot.b - rot.e) * s
         }else{
             if rot.a > rot.f && rot.a > rot.k {
-                let s: T = 2.0 * (1.0 + rot.a - rot.f - rot.k).squareRoot()
+                let s: Float = 2.0 * (1.0 + rot.a - rot.f - rot.k).squareRoot()
                 w = (rot.g - rot.j) / s
                 x = 0.25 * s
                 y = (rot.e + rot.b) / s
                 z = (rot.i + rot.c) / s
             }else if rot.f > rot.k {
-                let s: T = 2.0 * (1.0 + rot.f - rot.a - rot.k).squareRoot()
+                let s: Float = 2.0 * (1.0 + rot.f - rot.a - rot.k).squareRoot()
                 w = (rot.i - rot.c) / s
                 x = (rot.e + rot.b) / s
                 y = 0.25 * s
                 z = (rot.j + rot.g) / s
             }else{
-                let s: T = 2.0 * (1.0 + rot.k - rot.a - rot.f).squareRoot()
+                let s: Float = 2.0 * (1.0 + rot.k - rot.a - rot.f).squareRoot()
                 w = (rot.b - rot.e) / s
                 x = (rot.i + rot.c) / s
                 y = (rot.g + rot.j) / s
@@ -96,37 +96,37 @@ extension Quaternion where T: BinaryFloatingPoint {
         }
         
         //Normalize
-        let length: T = self.magnitude
+        let length: Float = self.magnitude
         x /= length;
         y /= length;
         z /= length;
         w /= length;
     }
     
-    public init(rotationMatrix rot: Matrix3x3<T>) {
-        let trace: T = rot.a + rot.f + rot.k
+    public init(rotationMatrix rot: Matrix3x3) {
+        let trace: Float = rot.a + rot.f + rot.k
         
         if trace > 0 {
-            let s: T = 0.5 / (trace + 1.0).squareRoot()
+            let s: Float = 0.5 / (trace + 1.0).squareRoot()
             w = 0.25 / s
             x = (rot.g - rot.j) * s
             y = (rot.i - rot.c) * s
             z = (rot.b - rot.e) * s
         }else{
             if rot.a > rot.f && rot.a > rot.k {
-                let s: T = 2.0 * (1.0 + rot.a - rot.f - rot.k).squareRoot()
+                let s: Float = 2.0 * (1.0 + rot.a - rot.f - rot.k).squareRoot()
                 w = (rot.g - rot.j) / s
                 x = 0.25 * s
                 y = (rot.e + rot.b) / s
                 z = (rot.i + rot.c) / s
             }else if rot.f > rot.k {
-                let s: T = 2.0 * (1.0 + rot.f - rot.a - rot.k).squareRoot()
+                let s: Float = 2.0 * (1.0 + rot.f - rot.a - rot.k).squareRoot()
                 w = (rot.i - rot.c) / s
                 x = (rot.e + rot.b) / s
                 y = 0.25 * s
                 z = (rot.j + rot.g) / s
             }else{
-                let s: T = 2.0 * (1.0 + rot.k - rot.a - rot.f).squareRoot()
+                let s: Float = 2.0 * (1.0 + rot.k - rot.a - rot.f).squareRoot()
                 w = (rot.b - rot.e) / s
                 x = (rot.i + rot.c) / s
                 y = (rot.g + rot.j) / s
@@ -135,7 +135,7 @@ extension Quaternion where T: BinaryFloatingPoint {
         }
         
         //Normalize
-        let length: T = self.magnitude
+        let length: Float = self.magnitude
         x /= length;
         y /= length;
         z /= length;
@@ -143,10 +143,10 @@ extension Quaternion where T: BinaryFloatingPoint {
     }
 }
 
-extension Quaternion where T: BinaryFloatingPoint {
-    public mutating func lookAt(_ target: Position3<T>, from source: Position3<T>) {
+extension Quaternion {
+    public mutating func lookAt(_ target: Position3, from source: Position3) {
         let forwardVector = (source - target).normalized
-        let dot = Direction3<T>.forward.dot(forwardVector)
+        let dot = Direction3.forward.dot(forwardVector)
         
         if abs(dot - -1) < .ulpOfOne {
             self.w = .pi
@@ -155,11 +155,11 @@ extension Quaternion where T: BinaryFloatingPoint {
             self.w = 1
             self.direction = .zero
         }else{
-            let angle: T = acos(dot)
-            let axis = Direction3<T>.forward.cross(forwardVector).normalized
+            let angle: Float = acos(dot)
+            let axis = Direction3.forward.cross(forwardVector).normalized
             
-            let halfAngle: T = angle * 0.5
-            let s: T = sin(halfAngle)
+            let halfAngle: Float = angle * 0.5
+            let s: Float = sin(halfAngle)
             x = axis.x * s
             y = axis.y * s
             z = axis.z * s
@@ -169,7 +169,7 @@ extension Quaternion where T: BinaryFloatingPoint {
     }
 }
 
-extension Quaternion where T: BinaryFloatingPoint {
+extension Quaternion {
     public enum LookAtConstraint {
         case none
         case justYaw
@@ -177,7 +177,7 @@ extension Quaternion where T: BinaryFloatingPoint {
         case pitchAndYaw
     }
     
-    public init(lookingAt target: Position3<T>, from source: Position3<T>, up: Direction3<T> = .up, right: Direction3<T> = .right, constraint: LookAtConstraint, isCamera: Bool = false) {
+    public init(lookingAt target: Position3, from source: Position3, up: Direction3 = .up, right: Direction3 = .right, constraint: LookAtConstraint, isCamera: Bool = false) {
         self.init(Direction3(from: source, to: target), up: up, right: right, constraint: constraint, isCamera: isCamera)
     }
     
@@ -188,7 +188,7 @@ extension Quaternion where T: BinaryFloatingPoint {
      - Parameter right: The relative right axis. Defualt value is  `Direction3.right`.
      - Parameter constraint: Limits the rotation to an Euler angle. Use this to look in directions without a roll.
      */
-    public init(_ direction: Direction3<T>, up: Direction3<T> = .up, right: Direction3<T> = .right, constraint: LookAtConstraint, isCamera: Bool = false) {
+    public init(_ direction: Direction3, up: Direction3 = .up, right: Direction3 = .right, constraint: LookAtConstraint, isCamera: Bool = false) {
         switch constraint {
         case .none:
             self.init(direction: direction, up: up, right: right)
@@ -216,20 +216,20 @@ public extension Quaternion {
         return x.isFinite && y.isFinite && z.isFinite && w.isFinite
     }
     
-    var squaredLength: T {
-        var value: T = x * x
+    var squaredLength: Float {
+        var value: Float = x * x
         value += y * y
         value += z * z
         value += w * w
         return value
     }
     
-    var magnitude: T {
+    var magnitude: Float {
         return squaredLength.squareRoot()
     }
     
     var normalized: Self {
-        let magnitude: T = self.magnitude
+        let magnitude: Float = self.magnitude
         return Self(w: w / magnitude, x: x / magnitude, y: y / magnitude, z: z / magnitude)
     }
     
@@ -238,10 +238,10 @@ public extension Quaternion {
     }
 }
 
-public extension Quaternion where T: BinaryFloatingPoint {
+public extension Quaternion {
     var unitNormalized: Self {
-        let angle: T = w
-        let degrees: T = cos(angle * 0.5)
+        let angle: Float = w
+        let degrees: Float = cos(angle * 0.5)
         let vector = self.direction * sin(angle * 0.5)
         return Self(Degrees(degrees), axis: vector)
     }
@@ -249,9 +249,9 @@ public extension Quaternion where T: BinaryFloatingPoint {
 
 public extension Quaternion {
     @inlinable
-    var direction: Direction3<T> {
+    var direction: Direction3 {
         get {
-            return Direction3<T>(x: x, y: y, z: z)
+            return Direction3(x: x, y: y, z: z)
         }
         set {
             self.x = newValue.x
@@ -261,45 +261,45 @@ public extension Quaternion {
     }
     
     @inlinable
-    var forward: Direction3<T> {
+    var forward: Direction3 {
         return Direction3.forward.rotated(by: self)
     }
     @inlinable
-    var backward: Direction3<T> {
+    var backward: Direction3 {
         return Direction3.backward.rotated(by: self)
     }
     @inlinable
-    var up: Direction3<T> {
+    var up: Direction3 {
         return Direction3.up.rotated(by: self)
     }
     @inlinable
-    var down: Direction3<T> {
+    var down: Direction3 {
         return Direction3.down.rotated(by: self)
     }
     @inlinable
-    var left: Direction3<T> {
+    var left: Direction3 {
         return Direction3.left.rotated(by: self)
     }
     @inlinable
-    var right: Direction3<T> {
+    var right: Direction3 {
         return Direction3.right.rotated(by: self)
     }
 }
 
-public extension Quaternion where T: BinaryFloatingPoint {
+public extension Quaternion {
     @inlinable
     static var zero: Self {
         return Self(Radians(0), axis: .forward)
     }
     
     var inverse: Self {
-        var absoluteValue: T = magnitude
+        var absoluteValue: Float = magnitude
         absoluteValue *= absoluteValue
         absoluteValue = 1 / absoluteValue
         
         let conjugateValue = conjugate
         
-        let w: T = conjugateValue.w * absoluteValue
+        let w: Float = conjugateValue.w * absoluteValue
         let vector = conjugateValue.direction * absoluteValue
         return Self(Radians(w), axis: vector)
     }
@@ -312,8 +312,8 @@ public extension Quaternion {
     }
 }
 
-public extension Quaternion where T: BinaryFloatingPoint {
-    func interpolated(to: Self, _ method: InterpolationMethod<T>) -> Self {
+public extension Quaternion {
+    func interpolated(to: Self, _ method: InterpolationMethod) -> Self {
         switch method {
         case let .linear(factor, shortest):
             if shortest {
@@ -324,14 +324,14 @@ public extension Quaternion where T: BinaryFloatingPoint {
         }
     }
     
-    mutating func interpolate(to: Self, _ method: InterpolationMethod<T>) {
+    mutating func interpolate(to: Self, _ method: InterpolationMethod) {
         self = self.interpolated(to: to, method)
     }
 }
 
-private extension Quaternion where T: BinaryFloatingPoint {
-    func lerped(to q2: Self, factor t: T) -> Self {
-        var qr: Quaternion<T> = .zero
+private extension Quaternion {
+    func lerped(to q2: Self, factor t: Float) -> Self {
+        var qr: Quaternion = .zero
         
         let t_ = 1 - t
         qr.x = t_ * self.x + t * q2.x
@@ -342,11 +342,11 @@ private extension Quaternion where T: BinaryFloatingPoint {
         return qr.normalized
     }
     
-    mutating func lerp(to q2: Self, factor: T) {
+    mutating func lerp(to q2: Self, factor: Float) {
         self = self.lerped(to: q2, factor: factor)
     }
     
-    func slerped(to qb: Self, factor t: T) -> Self {
+    func slerped(to qb: Self, factor t: Float) -> Self {
         let qa = self
         var qb = qb
         // Calculate angle between them.
@@ -366,11 +366,11 @@ private extension Quaternion where T: BinaryFloatingPoint {
         }
         
         // quaternion to return
-        var qm: Quaternion<T> = Quaternion(w: 1, x: 0, y: 0, z: 0)
+        var qm: Quaternion = Quaternion(w: 1, x: 0, y: 0, z: 0)
         
         // Calculate temporary values.
-        let halfTheta: T = acos(cosHalfTheta)
-        let sinHalfTheta: T = sqrt(1 - cosHalfTheta * cosHalfTheta)
+        let halfTheta: Float = acos(cosHalfTheta)
+        let sinHalfTheta: Float = sqrt(1 - cosHalfTheta * cosHalfTheta)
         // if theta = 180 degrees then result is not fully defined
         // we could rotate around any axis normal to qa or qb
         if abs(sinHalfTheta) < 0.001 { // fabs is floating point absolute
@@ -380,8 +380,8 @@ private extension Quaternion where T: BinaryFloatingPoint {
             qm.z = (qa.z * 0.5 + qb.z * 0.5)
             return qm
         }
-        let ratioA: T = sin((1 - t) * halfTheta) / sinHalfTheta
-        let ratioB: T = sin(t * halfTheta) / sinHalfTheta
+        let ratioA: Float = sin((1 - t) * halfTheta) / sinHalfTheta
+        let ratioB: Float = sin(t * halfTheta) / sinHalfTheta
         //calculate Quaternion.
         qm.w = (qa.w * ratioA + qb.w * ratioB)
         qm.x = (qa.x * ratioA + qb.x * ratioB)
@@ -390,32 +390,32 @@ private extension Quaternion where T: BinaryFloatingPoint {
         return qm
     }
     
-    mutating func slerp(to qb: Self, factor: T) {
+    mutating func slerp(to qb: Self, factor: Float) {
         self = self.slerped(to: qb, factor: factor)
     }
 }
 
 public extension Quaternion {
-    static func *(lhs: Self, rhs: T) -> Self {
+    static func *(lhs: Self, rhs: Float) -> Self {
         return Self(w: lhs.w * rhs, x: lhs.x * rhs, y: lhs.y * rhs, z: lhs.z * rhs)
     }
     static func *=(lhs: inout Self, rhs: Self) {
         lhs = lhs * rhs
     }
     static func *(lhs: Self, rhs: Self) -> Self {
-        var w: T = lhs.w * rhs.w
+        var w: Float = lhs.w * rhs.w
         w -= lhs.x * rhs.x
         w -= lhs.y * rhs.y
         w -= lhs.z * rhs.z
-        var x: T = lhs.x * rhs.w
+        var x: Float = lhs.x * rhs.w
         x += lhs.w * rhs.x
         x += lhs.y * rhs.z
         x -= lhs.z * rhs.y
-        var y: T = lhs.y * rhs.w
+        var y: Float = lhs.y * rhs.w
         y += lhs.w * rhs.y
         y += lhs.z * rhs.x
         y -= lhs.x * rhs.z
-        var z: T = lhs.z * rhs.w
+        var z: Float = lhs.z * rhs.w
         z += lhs.w * rhs.z
         z += lhs.x * rhs.y
         z -= lhs.y * rhs.x
@@ -423,48 +423,48 @@ public extension Quaternion {
         return Self(w: w, x: x, y: y, z: z)
     }
     
-    static func *=<V: Vector2>(lhs: inout Self, rhs: V) where V.T == T {
+    static func *=<V: Vector2>(lhs: inout Self, rhs: V) {
         lhs = (lhs * rhs).normalized
     }
-    static func *<V: Vector2>(lhs: Self, rhs: V) -> Self where V.T == T {
-        var w: T = -lhs.x * rhs.x
+    static func *<V: Vector2>(lhs: Self, rhs: V) -> Self {
+        var w: Float = -lhs.x * rhs.x
         w -= lhs.y * rhs.y
         w -= lhs.z * 0
-        var x: T =  lhs.w * rhs.x
+        var x: Float =  lhs.w * rhs.x
         x += lhs.y * 0
         x -= lhs.z * rhs.y
-        var y: T =  lhs.w * rhs.y
+        var y: Float =  lhs.w * rhs.y
         y += lhs.z * rhs.x
         y -= lhs.x * 0
-        var z: T =  lhs.w * 0
+        var z: Float =  lhs.w * 0
         z += lhs.x * rhs.y
         z -= lhs.y * rhs.x
         return Self(w: w, x: x, y: y, z: z)
     }
     
-    static func *=<V: Vector3>(lhs: inout Self, rhs: V) where V.T == T {
+    static func *=<V: Vector3>(lhs: inout Self, rhs: V) {
         lhs = (lhs * rhs).normalized
     }
-    static func *<V: Vector3>(lhs: Self, rhs: V) -> Self where V.T == T {
-        var w: T = -lhs.x * rhs.x
+    static func *<V: Vector3>(lhs: Self, rhs: V) -> Self {
+        var w: Float = -lhs.x * rhs.x
         w -= lhs.y * rhs.y
         w -= lhs.z * rhs.z
-        var x: T =  lhs.w * rhs.x
+        var x: Float =  lhs.w * rhs.x
         x += lhs.y * rhs.z
         x -= lhs.z * rhs.y
-        var y: T =  lhs.w * rhs.y
+        var y: Float =  lhs.w * rhs.y
         y += lhs.z * rhs.x
         y -= lhs.x * rhs.z
-        var z: T =  lhs.w * rhs.z
+        var z: Float =  lhs.w * rhs.z
         z += lhs.x * rhs.y
         z -= lhs.y * rhs.x
         return Self(w: w, x: x, y: y, z: z)
     }
     
-    static func /(lhs: Self, rhs: T) -> Self {
+    static func /(lhs: Self, rhs: Float) -> Self {
         return Self(w: lhs.w / rhs, x: lhs.x / rhs, y: lhs.y / rhs, z: lhs.z / rhs)
     }
-    static func /=(lhs: inout Self, rhs: T) {
+    static func /=(lhs: inout Self, rhs: Float) {
         lhs = lhs / rhs
     }
     
@@ -482,10 +482,10 @@ public extension Quaternion {
     }
 }
 
-extension Quaternion: Equatable where T: Equatable {}
-extension Quaternion: Hashable where T: Hashable {}
+extension Quaternion: Equatable {}
+extension Quaternion: Hashable {}
 
-extension Quaternion: Codable where T: Codable {
+extension Quaternion: Codable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         try container.encode([w, x, y, z])
@@ -493,7 +493,7 @@ extension Quaternion: Codable where T: Codable {
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        let values = try container.decode(Array<T>.self)
+        let values = try container.decode(Array<Float>.self)
         
         self.w = values[0]
         self.x = values[1]

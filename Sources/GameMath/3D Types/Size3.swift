@@ -7,24 +7,24 @@
  */
 
 #if GameMathUseSIMD
-public struct Size3<T: Numeric & SIMDScalar>: Vector3 {
-    public var x: T
-    public var y: T
-    public var z: T
+public struct Size3: Vector3 {
+    public var x: Float
+    public var y: Float
+    public var z: Float
     
-    public init(_ x: T, _ y: T, _ z: T) {
+    public init(_ x: Float, _ y: Float, _ z: Float) {
         self.x = x
         self.y = y
         self.z = z
     }
 }
 #else
-public struct Size3<T: Numeric>: Vector3 {
-    public var x: T
-    public var y: T
-    public var z: T
+public struct Size3: Vector3 {
+    public var x: Float
+    public var y: Float
+    public var z: Float
     
-    public init(_ x: T, _ y: T, _ z: T) {
+    public init(_ x: Float, _ y: Float, _ z: Float) {
         self.x = x
         self.y = y
         self.z = z
@@ -33,16 +33,16 @@ public struct Size3<T: Numeric>: Vector3 {
 #endif
 
 public extension Size3 {
-    init(width: T, height: T, depth: T) {
+    init(width: Float, height: Float, depth: Float) {
         self.x = width
         self.y = height
         self.z = depth
     }
 }
 
-extension Size3: Equatable where T: Equatable {}
-extension Size3: Hashable where T: Hashable {}
-extension Size3: Codable where T: Codable {}
+extension Size3: Equatable {}
+extension Size3: Hashable {}
+extension Size3: Codable {}
 
 public extension Size3 {
     static var one: Self {
@@ -51,7 +51,7 @@ public extension Size3 {
 }
 
 extension Size3 {
-    public var width: T {
+    public var width: Float {
         get{
             return x
         }
@@ -59,7 +59,7 @@ extension Size3 {
             x = val
         }
     }
-    public var height: T {
+    public var height: Float {
         get{
             return y
         }
@@ -67,7 +67,7 @@ extension Size3 {
             y = val
         }
     }
-    public var depth: T {
+    public var depth: Float {
         get{
             return z
         }

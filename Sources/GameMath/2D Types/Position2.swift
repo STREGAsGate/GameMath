@@ -7,31 +7,31 @@
  */
 
 #if GameMathUseSIMD
-public struct Position2<T: Numeric & SIMDScalar>: Vector2 {
-    public var x: T
-    public var y: T
-    public init(x: T, y: T) {
+public struct Position2: Vector2 {
+    public var x: Float
+    public var y: Float
+    public init(x: Float, y: Float) {
         self.x = x
         self.y = y
     }
 }
 #else
-public struct Position2<T: Numeric>: Vector2 {
-    public var x: T
-    public var y: T
-    public init(x: T, y: T) {
+public struct Position2: Vector2 {
+    public var x: Float
+    public var y: Float
+    public init(x: Float, y: Float) {
         self.x = x
         self.y = y
     }
 }
 #endif
 
-extension Position2: Equatable where T: Equatable {}
-extension Position2: Hashable where T: Hashable {}
-extension Position2: Codable where T: Codable {}
+extension Position2: Equatable {}
+extension Position2: Hashable {}
+extension Position2: Codable {}
 
 public extension Position2 {
-    init(_ x: T, _ y: T) {
+    init(_ x: Float, _ y: Float) {
         self.init(x: x, y: y)
     }
     
@@ -40,8 +40,8 @@ public extension Position2 {
     }
 }
 
-public extension Position2 where T: FloatingPoint {
-    func distance(from: Self) -> T {
+public extension Position2 {
+    func distance(from: Self) -> Float {
         let difference = self - from
         let distance = difference.dot(difference)
         return distance.squareRoot()
@@ -50,7 +50,7 @@ public extension Position2 where T: FloatingPoint {
 
 
 //Addition
-extension Position2 where T: Numeric {
+extension Position2 {
     //Self:Self
     public static func +(lhs: Self, rhs: Self) -> Self {
         return Self(lhs.x + rhs.x,
@@ -62,7 +62,7 @@ extension Position2 where T: Numeric {
 }
 
 //Subtraction
-extension Position2 where T: Numeric {
+extension Position2 {
     //Self:Self
     public static func -(lhs: Self, rhs: Self) -> Self {
         return Self(lhs.x - rhs.x,
@@ -74,7 +74,7 @@ extension Position2 where T: Numeric {
 }
 
 //Division(FloatingPoint)
-extension Position2 where T: FloatingPoint {
+extension Position2 {
     //Self:Self
     public static func /(lhs: Self, rhs: Self) -> Self {
         return Self(lhs.x / rhs.x,
@@ -85,24 +85,12 @@ extension Position2 where T: FloatingPoint {
     }
 }
 
-//Division(Integer)
-extension Position2 where T: BinaryInteger {
-    //Self:Self
-    public static func /(lhs: Self, rhs: Self) -> Self {
-        return Self(lhs.x / rhs.x,
-                    lhs.y / rhs.y)
-    }
-    public static func /=(lhs: inout Self, rhs: Self) {
-        lhs =  lhs / rhs
-    }
-}
-
-public extension Position2 where T: BinaryFloatingPoint {
+public extension Position2 {
     /** Creates a position a specified distance from self in a particular direction
     - parameter distance: The units away from `self` to create the new position.
     - parameter direction: The angle away from self to create the new position.
      */
-    func moved(_ distance: T, toward direction: Direction2<T>) -> Self {
+    func moved(_ distance: Float, toward direction: Direction2) -> Self {
         return self + (direction.normalized * distance)
     }
 
@@ -110,7 +98,7 @@ public extension Position2 where T: BinaryFloatingPoint {
     - parameter distance: The units away to move.
     - parameter direction: The angle to move.
      */
-    mutating func move(_ distance: T, toward direction: Direction2<T>) {
+    mutating func move(_ distance: Float, toward direction: Direction2) {
         self = moved(distance, toward: direction)
     }
 }

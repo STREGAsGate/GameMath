@@ -6,8 +6,8 @@
  * Find me on https://www.YouTube.com/STREGAsGate, or social media @STREGAsGate
  */
 #if GameMathUseSIMD
-public struct Transform2<T: BinaryFloatingPoint & SIMDScalar> {
-    public var position: Position2<T> {
+public struct Transform2 {
+    public var position: Position2 {
         didSet {
             assert(position.isFinite)
             guard _needsUpdate == false else {return}
@@ -16,7 +16,7 @@ public struct Transform2<T: BinaryFloatingPoint & SIMDScalar> {
             }
         }
     }
-    public var rotation: Degrees<T> {
+    public var rotation: Degrees {
         didSet {
             assert(rotation.isFinite)
             guard _needsUpdate == false else {return}
@@ -25,7 +25,7 @@ public struct Transform2<T: BinaryFloatingPoint & SIMDScalar> {
             }
         }
     }
-    public var scale: Size2<T> {
+    public var scale: Size2 {
         didSet {
             assert(scale.isFinite)
             guard _needsUpdate == false else {return}
@@ -36,13 +36,13 @@ public struct Transform2<T: BinaryFloatingPoint & SIMDScalar> {
     }
     
     private var _needsUpdate: Bool = true
-    private lazy var _matrix: Matrix4x4<T> = .identity
-    private lazy var _roationMatrix: Matrix4x4<T> = .identity
-    private lazy var _scaleMatrix: Matrix4x4<T> = .identity
+    private lazy var _matrix: Matrix4x4 = .identity
+    private lazy var _roationMatrix: Matrix4x4 = .identity
+    private lazy var _scaleMatrix: Matrix4x4 = .identity
 }
 #else
-public struct Transform2<T: BinaryFloatingPoint> {
-    public var position: Position2<T> {
+public struct Transform2 {
+    public var position: Position2 {
         didSet {
             assert(position.isFinite)
             guard _needsUpdate == false else {return}
@@ -51,7 +51,7 @@ public struct Transform2<T: BinaryFloatingPoint> {
             }
         }
     }
-    public var rotation: Degrees<T> {
+    public var rotation: Degrees {
         didSet {
             assert(rotation.isFinite)
             guard _needsUpdate == false else {return}
@@ -60,7 +60,7 @@ public struct Transform2<T: BinaryFloatingPoint> {
             }
         }
     }
-    public var scale: Size2<T> {
+    public var scale: Size2 {
         didSet {
             assert(scale.isFinite)
             guard _needsUpdate == false else {return}
@@ -71,14 +71,14 @@ public struct Transform2<T: BinaryFloatingPoint> {
     }
     
     private var _needsUpdate: Bool = true
-    private lazy var _matrix: Matrix4x4<T> = .identity
-    private lazy var _roationMatrix: Matrix4x4<T> = .identity
-    private lazy var _scaleMatrix: Matrix4x4<T> = .identity
+    private lazy var _matrix: Matrix4x4 = .identity
+    private lazy var _roationMatrix: Matrix4x4 = .identity
+    private lazy var _scaleMatrix: Matrix4x4 = .identity
 }
 #endif
 
 public extension Transform2 {
-    init(position: Position2<T> = .zero, rotation: Degrees<T> = Degrees(0), scale: Size2<T> = .one) {
+    init(position: Position2 = .zero, rotation: Degrees = Degrees(0), scale: Size2 = .one) {
         self.position = position
         self.rotation = rotation
         self.scale = scale
@@ -89,8 +89,8 @@ public extension Transform2 {
     }
 }
 
-extension Transform2: Equatable where T: Equatable {}
-extension Transform2: Hashable where T: Hashable {}
+extension Transform2: Equatable {}
+extension Transform2: Hashable {}
 
 extension Transform2 {
     public static var zero: Self {
@@ -102,7 +102,7 @@ extension Transform2 {
 }
 
 extension Transform2 {
-    public func interpolated(to destination: Self, _ method: InterpolationMethod<T>) -> Self {
+    public func interpolated(to destination: Self, _ method: InterpolationMethod) -> Self {
         var copy = self
         copy.position.interpolate(to: destination.position, method)
         copy.rotation.interpolate(to: destination.rotation, method)
@@ -110,7 +110,7 @@ extension Transform2 {
         return copy
     }
     
-    public mutating func interpolate(to: Self, _ method: InterpolationMethod<T>) {
+    public mutating func interpolate(to: Self, _ method: InterpolationMethod) {
         self.position.interpolate(to: to.position, method)
         self.rotation.interpolate(to: to.rotation, method)
         self.scale.interpolate(to: to.scale, method)
@@ -125,7 +125,7 @@ extension Transform2 {
 }
 
 extension Transform2 {
-    public func distance(from: Self) -> T {
+    public func distance(from: Self) -> Float {
         return self.position.distance(from: from.position)
     }
 }
@@ -141,7 +141,7 @@ public extension Transform2 {
     }
 }
 
-extension Transform2: Codable where T: Codable {
+extension Transform2: Codable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         try container.encode([position.x, position.y,
@@ -151,10 +151,10 @@ extension Transform2: Codable where T: Codable {
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        let values = try container.decode(Array<T>.self)
+        let values = try container.decode(Array<Float>.self)
         
-        self.position = Position2<T>(x: values[0], y: values[1])
+        self.position = Position2(x: values[0], y: values[1])
         self.rotation = Degrees(values[2])
-        self.scale = Size2<T>(width: values[3], height: values[4])
+        self.scale = Size2(width: values[3], height: values[4])
     }
 }

@@ -9,23 +9,18 @@
 import Foundation
 
 public protocol Vector2 {
-    #if GameMathUseSIMD
-    associatedtype T: Numeric & SIMDScalar
-    #else
-    associatedtype T: Numeric
-    #endif
-    var x: T {get set}
-    var y: T {get set}
-    init(_ x: T, _ y: T)
+    var x: Float {get set}
+    var y: Float {get set}
+    init(_ x: Float, _ y: Float)
 }
 
 extension Vector2 {
     @inlinable
-    public init(_ value: T) {
+    public init(_ value: Float) {
         self.init(value, value)
     }
     
-    public init(_ values: [T]) {
+    public init(_ values: [Float]) {
         assert(values.isEmpty || values.count == 2, "values must be empty or have 2 elements. Use init(repeating:) to fill with a single value.")
         if values.isEmpty {
             self.init(0, 0)
@@ -35,26 +30,9 @@ extension Vector2 {
     }
 }
 
-//Mark: BinaryInteger
-extension Vector2 where T: BinaryInteger {
-    public init<V: Vector2>(_ value: V) where V.T: BinaryInteger {
-        self = Self(T(value.x), T(value.y))
-    }
-    public init<V: Vector2>(_ value: V) where V.T: BinaryFloatingPoint {
-        self = Self(T(value.x), T(value.y))
-    }
-    public init() {
-        self.init(0, 0)
-    }
-}
-
-//Mark: FloatingPoint
-extension Vector2 where T: BinaryFloatingPoint {
-    public init<V: Vector2>(_ value: V) where V.T: BinaryInteger {
-        self = Self(T(value.x), T(value.y))
-    }
-    public init<V: Vector2>(_ value: V) where V.T: BinaryFloatingPoint {
-        self = Self(T(value.x), T(value.y))
+extension Vector2 {
+    public init<V: Vector2>(_ value: V) {
+        self = Self(value.x, value.y)
     }
     public init() {
         self.init(0, 0)
@@ -67,14 +45,14 @@ public extension Vector2 {
     }
 }
 
-extension Vector2 where T: FloatingPoint {
+extension Vector2 {
     public var isFinite: Bool {
         return x.isFinite && y.isFinite
     }
 }
 
 extension Vector2 {
-    public subscript (_ index: Array<T>.Index) -> T {
+    public subscript (_ index: Array<Float>.Index) -> Float {
         get {
             switch index {
             case 0: return x
@@ -93,22 +71,22 @@ extension Vector2 {
         }
     }
     
-    public var squaredLength: T {
+    public var squaredLength: Float {
         return x * x + y * y
     }
     
-    public func dot<V: Vector2>(_ vector: V) -> T where V.T == T {
+    public func dot<V: Vector2>(_ vector: V) -> Float {
         return (x * vector.x) + (y * vector.y)
     }
     
     /// Returns the hypothetical Z axis
-    public func cross<V: Vector2>(_ vector: V) -> T where V.T == T {
+    public func cross<V: Vector2>(_ vector: V) -> Float {
         return self.x * vector.y - vector.x * self.y
     }
 }
 
-extension Vector2 where T: FloatingPoint {
-    public var length: T {
+extension Vector2 {
+    public var length: Float {
         get {
             return x + y
         }
@@ -118,7 +96,7 @@ extension Vector2 where T: FloatingPoint {
         }
     }
     
-    public var magnitude: T {
+    public var magnitude: Float {
         return squaredLength.squareRoot()
     }
     
@@ -136,57 +114,57 @@ extension Vector2 where T: FloatingPoint {
 }
 
 extension Vector2 {
-    public func interpolated<V: Vector2>(to: V, _ method: InterpolationMethod<T>) -> Self where V.T == T {
+    public func interpolated<V: Vector2>(to: V, _ method: InterpolationMethod) -> Self {
         var copy = self
         copy.x.interpolate(to: to.x, method)
         copy.y.interpolate(to: to.y, method)
         return copy
     }
-    public mutating func interpolate<V: Vector2>(to: V, _ method: InterpolationMethod<T>) where V.T == T {
+    public mutating func interpolate<V: Vector2>(to: V, _ method: InterpolationMethod) {
         self.x.interpolate(to: to.x, method)
         self.y.interpolate(to: to.y, method)
     }
 }
 
-public extension Vector2 where T: Comparable {
-    var max: T {
+public extension Vector2 {
+    var max: Float {
         return Swift.max(x, y)
     }
-    var min: T {
+    var min: Float {
         return Swift.min(x, y)
     }
 }
 
 //MARK: - SIMD
-public extension Vector2 where T: SIMDScalar {
-    var simd: SIMD2<T> {
-        return SIMD2<T>(x, y)
+public extension Vector2 {
+    var simd: SIMD2<Float> {
+        return SIMD2<Float>(x, y)
     }
 }
 
 //MARK: - Operations
-public func ceil<T: Vector2>(_ v: T) -> T where T.T: FloatingPoint {
-    return T.init(ceil(v.x), ceil(v.y))
+public func ceil<V: Vector2>(_ v: V) -> V {
+    return V.init(ceil(v.x), ceil(v.y))
 }
 
-public func floor<T: Vector2>(_ v: T) -> T where T.T: FloatingPoint {
-    return T.init(floor(v.x), floor(v.y))
+public func floor<V: Vector2>(_ v: V) -> V {
+    return V.init(floor(v.x), floor(v.y))
 }
 
-public func round<T: Vector2>(_ v: T) -> T where T.T: FloatingPoint {
-    return T.init(round(v.x), round(v.y))
+public func round<V: Vector2>(_ v: V) -> V {
+    return V.init(round(v.x), round(v.y))
 }
 
-public func abs<T: Vector2>(_ v: T) -> T where T.T: SignedNumeric & Comparable {
-    return T.init(abs(v.x), abs(v.y))
+public func abs<V: Vector2>(_ v: V) -> V {
+    return V.init(abs(v.x), abs(v.y))
 }
 
-public func min<T: Vector2>(_ lhs: T, _ rhs: T) -> T where T.T: Comparable {
-    return T.init(min(lhs.x, rhs.x), min(lhs.y, rhs.y))
+public func min<V: Vector2>(_ lhs: V, _ rhs: V) -> V {
+    return V.init(min(lhs.x, rhs.x), min(lhs.y, rhs.y))
 }
 
-public func max<T: Vector2>(_ lhs: T, _ rhs: T) -> T where T.T: Comparable {
-    return T.init(max(lhs.x, rhs.x), max(lhs.y, rhs.y))
+public func max<V: Vector2>(_ lhs: V, _ rhs: V) -> V {
+    return V.init(max(lhs.x, rhs.x), max(lhs.y, rhs.y))
 }
 
 //MARK: Operators (Self)
@@ -221,18 +199,7 @@ extension Vector2 {
         lhs.y -= rhs.y
     }
 }
-extension Vector2 where T: FloatingPoint {
-    //Division
-    public static func /(lhs: Self, rhs: Self) -> Self {
-        return Self(lhs.x / rhs.x,
-                    lhs.y / rhs.y)
-    }
-    public static func /=(lhs: inout Self, rhs: Self) {
-        lhs.x /= rhs.x
-        lhs.y /= rhs.y
-    }
-}
-extension Vector2 where T: BinaryInteger {
+extension Vector2 {
     //Division
     public static func /(lhs: Self, rhs: Self) -> Self {
         return Self(lhs.x / rhs.x,
@@ -247,81 +214,62 @@ extension Vector2 where T: BinaryInteger {
 //MARK: Operators (Integers and Floats)
 extension Vector2 {
     //Multiplication Without Casting
-    public static func *(lhs: Self, rhs: T) -> Self {
+    public static func *(lhs: Self, rhs: Float) -> Self {
         return Self(lhs.x * rhs,
                     lhs.y * rhs)
     }
-    public static func *=(lhs: inout Self, rhs: T) {
+    public static func *=(lhs: inout Self, rhs: Float) {
         lhs.x *= rhs
         lhs.y *= rhs
     }
     
     //Addition Without Casting
-    public static func +(lhs: Self, rhs: T) -> Self {
+    public static func +(lhs: Self, rhs: Float) -> Self {
         return Self(lhs.x + rhs,
                     lhs.y + rhs)
     }
-    public static func +=(lhs: inout Self, rhs: T) {
+    public static func +=(lhs: inout Self, rhs: Float) {
         lhs.x += rhs
         lhs.y += rhs
     }
     
     //Subtraction Without Casting
-    public static func -(lhs: Self, rhs: T) -> Self {
+    public static func -(lhs: Self, rhs: Float) -> Self {
         return Self(lhs.x - rhs,
                     lhs.y - rhs)
     }
-    public static func -=(lhs: inout Self, rhs: T) {
+    public static func -=(lhs: inout Self, rhs: Float) {
         lhs.x -= rhs
         lhs.y -= rhs
     }
     
-    public static func -(lhs: T, rhs: Self) -> Self {
+    public static func -(lhs: Float, rhs: Self) -> Self {
         return Self(lhs - rhs.x,
                     lhs - rhs.y)
     }
     
-    public static func -=(lhs: T, rhs: inout Self) {
+    public static func -=(lhs: Float, rhs: inout Self) {
         rhs.x = lhs - rhs.x
         rhs.y = lhs - rhs.y
     }
 }
-extension Vector2 where T: BinaryInteger {
+
+extension Vector2 {
     //Division Without Casting
-    public static func /(lhs: Self, rhs: T) -> Self {
+    public static func /(lhs: Self, rhs: Float) -> Self {
         return Self(lhs.x / rhs,
                     lhs.y / rhs)
     }
-    public static func /=(lhs: inout Self, rhs: T) {
+    public static func /=(lhs: inout Self, rhs: Float) {
         lhs.x /= rhs
         lhs.y /= rhs
     }
     
-    public static func /(lhs: T, rhs: Self) -> Self {
+    public static func /(lhs: Float, rhs: Self) -> Self {
         return Self(lhs / rhs.x,
                     lhs / rhs.y)
     }
-    public static func /=(lhs: T, rhs: inout Self) {
-        rhs.x = lhs / rhs.x
-        rhs.y = lhs / rhs.y
-    }
-}
-extension Vector2 where T: FloatingPoint {
-    //Division Without Casting
-    public static func /(lhs: Self, rhs: T) -> Self {
-        return Self(lhs.x / rhs,
-                    lhs.y / rhs)
-    }
-    public static func /=(lhs: inout Self, rhs: T) {
-        lhs.x /= rhs
-        lhs.y /= rhs
-    }
-    
-    public static func /(lhs: T, rhs: Self) -> Self {
-        return Self(lhs / rhs.x,
-                    lhs / rhs.y)
-    }
-    public static func /=(lhs: T, rhs: inout Self) {
+    public static func /=(lhs: Float, rhs: inout Self) {
         rhs.x = lhs / rhs.x
         rhs.y = lhs / rhs.y
     }
@@ -329,85 +277,75 @@ extension Vector2 where T: FloatingPoint {
 
 extension Vector2 {
     //Multiplication
-    public static func *<V: Vector2>(lhs: Self, rhs: V) -> Self where V.T == T {
+    public static func *<V: Vector2>(lhs: Self, rhs: V) -> Self {
         return Self(lhs.x * rhs.x,
                     lhs.y * rhs.y)
     }
-    public static func *=<V: Vector2>(lhs: inout Self, rhs: V) where V.T == T {
+    public static func *=<V: Vector2>(lhs: inout Self, rhs: V) {
         lhs.x *= rhs.x
         lhs.y *= rhs.y
     }
     
     //Addition
-    public static func +<V: Vector2>(lhs: Self, rhs: V) -> Self where V.T == T {
+    public static func +<V: Vector2>(lhs: Self, rhs: V) -> Self {
         return Self(lhs.x + rhs.x,
                     lhs.y + rhs.y)
     }
-    public static func +=<V: Vector2>(lhs: inout Self, rhs: V) where V.T == T {
+    public static func +=<V: Vector2>(lhs: inout Self, rhs: V) {
         lhs.x += rhs.x
         lhs.y += rhs.y
     }
     
     //Subtraction
-    public static func -<V: Vector2>(lhs: Self, rhs: V) -> Self where V.T == T {
+    public static func -<V: Vector2>(lhs: Self, rhs: V) -> Self {
         return Self(lhs.x - rhs.x,
                     lhs.y - rhs.y)
     }
-    public static func -=<V: Vector2>(lhs: inout Self, rhs: V) where V.T == T {
+    public static func -=<V: Vector2>(lhs: inout Self, rhs: V) {
         lhs.x -= rhs.x
         lhs.y -= rhs.y
     }
 }
-extension Vector2 where T: BinaryInteger {
+
+extension Vector2 {
     //Division
-    public static func /<V: Vector2>(lhs: Self, rhs: V) -> Self where V.T == T {
+    public static func /<V: Vector2>(lhs: Self, rhs: V) -> Self{
         return Self(lhs.x / rhs.x,
                     lhs.y / rhs.y)
     }
-    public static func /=<V: Vector2>(lhs: inout Self, rhs: V) where V.T == T {
-        lhs.x /= rhs.x
-        lhs.y /= rhs.y
-    }
-}
-extension Vector2 where T: FloatingPoint {
-    //Division
-    public static func /<V: Vector2>(lhs: Self, rhs: V) -> Self where V.T == T {
-        return Self(lhs.x / rhs.x,
-                    lhs.y / rhs.y)
-    }
-    public static func /=<V: Vector2>(lhs: inout Self, rhs: V) where V.T == T {
+    public static func /=<V: Vector2>(lhs: inout Self, rhs: V) {
         lhs.x /= rhs.x
         lhs.y /= rhs.y
     }
 }
 
 //MARK: Matrix4
-public extension Vector2 where T: FloatingPoint {
-    static func *(lhs: Self, rhs: Matrix4x4<T>) -> Self {
-        var x: T = lhs.x * rhs.a
+public extension Vector2 {
+    static func *(lhs: Self, rhs: Matrix4x4) -> Self {
+        var x: Float = lhs.x * rhs.a
         x += lhs.y * rhs.b
         x += rhs.d
         
-        var y: T = lhs.x * rhs.e
+        var y: Float = lhs.x * rhs.e
         y += lhs.y * rhs.f
         y += rhs.h
         
         return Self(x, y)
     }
     
-    static func *(lhs: Matrix4x4<T>, rhs: Self) -> Self {
-        var x: T = rhs.x * lhs.a
+    static func *(lhs: Matrix4x4, rhs: Self) -> Self {
+        var x: Float = rhs.x * lhs.a
         x += rhs.y * lhs.e
         x += lhs.m
         
-        var y: T = rhs.x * lhs.b
+        var y: Float = rhs.x * lhs.b
         y += rhs.y * lhs.f
         y += lhs.n
         
         return Self(x, y)
     }
     
-    static func *(lhs: Self, rhs: Matrix3x3<T>) -> Self {
+    static func *(lhs: Self, rhs: Matrix3x3) -> Self {
         var vector: Self = .zero
         
         for i in 0 ..< 2 {
@@ -419,7 +357,7 @@ public extension Vector2 where T: FloatingPoint {
     }
 }
 
-extension Vector2 where T: Codable {
+extension Vector2 {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         try container.encode([x, y])
@@ -427,11 +365,11 @@ extension Vector2 where T: Codable {
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        let values = try container.decode(Array<T>.self)
+        let values = try container.decode(Array<Float>.self)
         self.init(values[0], values[1])
     }
 }
 
 extension Vector2 {
-    public func valuesArray() -> [T] {return [x, y]}
+    public func valuesArray() -> [Float] {return [x, y]}
 }

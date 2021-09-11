@@ -10,22 +10,22 @@ import Foundation
 
 #if GameMathUseSIMD
 /// Represents an angle in radians
-public struct Radians<RawValue: BinaryFloatingPoint & SIMDScalar>: RawRepresentable {
+public struct Radians: RawRepresentable {
     /// The radians as a scalar value
-    public var rawValue: RawValue
+    public var rawValue: Float
     
     /// Creates a new angle with an intial value in radians
-    public init(rawValue: RawValue) {
+    public init(rawValue: Float) {
         self.rawValue = rawValue
     }
 }
 #else
-public struct Radians<RawValue: BinaryFloatingPoint>: RawRepresentable {
+public struct Radians: RawRepresentable {
     /// The radians as a scalar value
-    public var rawValue: RawValue
+    public var rawValue: Float
     
     /// Creates a new angle with an intial value in radians
-    public init(rawValue: RawValue) {
+    public init(rawValue: Float) {
         self.rawValue = rawValue
     }
 }
@@ -33,158 +33,154 @@ public struct Radians<RawValue: BinaryFloatingPoint>: RawRepresentable {
 
 public extension Radians {
     /// Creates a new angle with an intial value in radians
-    init(_ rawValue: RawValue) {
+    init(_ rawValue: Float) {
         self.rawValue = rawValue
     }
-    
+
     /// Converts degrees to radians
-    init<T: BinaryFloatingPoint>(_ value: Degrees<T>) {
-        self.rawValue = RawValue(value.rawValue) * (RawValue.pi / 180)
-    }
-    /// Converts degrees to radians
-    init(_ value: Degrees<RawValue>) {
-        self.rawValue = value.rawValue * (RawValue.pi / 180)
+    init(_ value: Degrees) {
+        self.rawValue = value.rawValue * (Float.pi / 180)
     }
     
     var isFinite: Bool {
         return rawValue.isFinite
     }
     
-    mutating func interpolate(to: Radians<RawValue>, _ method: InterpolationMethod<RawValue>) {
+    mutating func interpolate(to: Radians, _ method: InterpolationMethod) {
         self.rawValue.interpolate(to: to.rawValue, method)
     }
     
-    mutating func interpolated(to: Radians<RawValue>, _ method: InterpolationMethod<RawValue>) -> Radians<RawValue> {
+    mutating func interpolated(to: Radians, _ method: InterpolationMethod) -> Radians {
         return Radians(self.rawValue.interpolated(to: to.rawValue, method))
     }
     
     static func +(_ lhs: Self, _ rhs: Self) -> Self {
         return Self(lhs.rawValue + rhs.rawValue)
     }
-    static func +(_ lhs: Self, _ rhs: RawValue) -> Self {
+    static func +(_ lhs: Self, _ rhs: Float) -> Self {
         return Self(lhs.rawValue + rhs)
     }
-    static func +(_ lhs: RawValue, _ rhs: Self) -> RawValue {
+    static func +(_ lhs: Float, _ rhs: Self) -> Float {
         return lhs + rhs.rawValue
     }
     
     static func -(_ lhs: Self, _ rhs: Self) -> Self {
         return Self(lhs.rawValue - rhs.rawValue)
     }
-    static func -(_ lhs: Self, _ rhs: RawValue) -> Self {
+    static func -(_ lhs: Self, _ rhs: Float) -> Self {
         return Self(lhs.rawValue - rhs)
     }
-    static func -(_ lhs: RawValue, _ rhs: Self) -> RawValue {
+    static func -(_ lhs: Float, _ rhs: Self) -> Float {
         return lhs - rhs.rawValue
     }
     
     static func *(_ lhs: Self, _ rhs: Self) -> Self {
         return Self(lhs.rawValue * rhs.rawValue)
     }
-    static func *(_ lhs: Self, _ rhs: RawValue) -> Self {
+    static func *(_ lhs: Self, _ rhs: Float) -> Self {
         return Self(lhs.rawValue * rhs)
     }
-    static func *(_ lhs: RawValue, _ rhs: Self) -> RawValue {
+    static func *(_ lhs: Float, _ rhs: Self) -> Float {
         return lhs * rhs.rawValue
     }
     
     static func /(_ lhs: Self, _ rhs: Self) -> Self {
         return Self(lhs.rawValue / rhs.rawValue)
     }
-    static func /(_ lhs: Self, _ rhs: RawValue) -> Self {
+    static func /(_ lhs: Self, _ rhs: Float) -> Self {
         return Self(lhs.rawValue / rhs)
     }
-    static func /(_ lhs: RawValue, _ rhs: Self) -> RawValue {
+    static func /(_ lhs: Float, _ rhs: Self) -> Float {
         return lhs / rhs.rawValue
     }
 }
 
-public func min<T: BinaryFloatingPoint>(_ lhs: Radians<T>, _ rhs: Radians<T>) -> Radians<T> {
+public func min(_ lhs: Radians, _ rhs: Radians) -> Radians {
     return Radians(min(lhs.rawValue, rhs.rawValue))
 }
-public func min<T: BinaryFloatingPoint>(_ lhs: Radians<T>, _ rhs: T) -> Radians<T> {
+public func min(_ lhs: Radians, _ rhs: Float) -> Radians {
     return Radians(min(lhs.rawValue, rhs))
 }
-public func min<T: BinaryFloatingPoint>(_ lhs: T, _ rhs: Radians<T>) -> Radians<T> {
+public func min(_ lhs: Float, _ rhs: Radians) -> Radians {
     return Radians(min(lhs, rhs.rawValue))
 }
 
-public func max<T: BinaryFloatingPoint>(_ lhs: Radians<T>, _ rhs: Radians<T>) -> Radians<T> {
+public func max(_ lhs: Radians, _ rhs: Radians) -> Radians {
     return Radians(max(lhs.rawValue, rhs.rawValue))
 }
-public func max<T: BinaryFloatingPoint>(_ lhs: Radians<T>, _ rhs: T) -> Radians<T> {
+public func max(_ lhs: Radians, _ rhs: Float) -> Radians {
     return Radians(max(lhs.rawValue, rhs))
 }
-public func max<T: BinaryFloatingPoint>(_ lhs: T, _ rhs: Radians<T>) -> Radians<T> {
+public func max(_ lhs: Float, _ rhs: Radians) -> Radians {
     return Radians(max(lhs, rhs.rawValue))
 }
 
-public func abs<T: BinaryFloatingPoint>(_ value: Radians<T>) -> Radians<T> {
+public func abs(_ value: Radians) -> Radians {
     return Radians(abs(value.rawValue))
 }
-public func ceil<T: BinaryFloatingPoint>(_ value: Radians<T>) -> Radians<T> {
+public func ceil(_ value: Radians) -> Radians {
     return Radians(ceil(value.rawValue))
 }
-public func floor<T: BinaryFloatingPoint>(_ value: Radians<T>) -> Radians<T> {
+public func floor(_ value: Radians) -> Radians {
     return Radians(floor(value.rawValue))
 }
-public func round<T: BinaryFloatingPoint>(_ value: Radians<T>) -> Radians<T> {
+public func round(_ value: Radians) -> Radians {
     return Radians(round(value.rawValue))
 }
 
-extension Radians: Comparable where RawValue: Comparable {
+extension Radians: Comparable {
     public static func <(lhs: Self, rhs: Self) -> Bool {
         return lhs.rawValue < rhs.rawValue
     }
-    public static func <(lhs: Self, rhs: RawValue) -> Bool {
+    public static func <(lhs: Self, rhs: Float) -> Bool {
         return lhs.rawValue < rhs
     }
-    public static func <(lhs: RawValue, rhs: Self) -> Bool {
+    public static func <(lhs: Float, rhs: Self) -> Bool {
         return lhs < rhs.rawValue
     }
     
     public static func >(lhs: Self, rhs: Self) -> Bool {
         return lhs.rawValue > rhs.rawValue
     }
-    public static func >(lhs: Self, rhs: RawValue) -> Bool {
+    public static func >(lhs: Self, rhs: Float) -> Bool {
         return lhs.rawValue > rhs
     }
-    public static func >(lhs: RawValue, rhs: Self) -> Bool {
+    public static func >(lhs: Float, rhs: Self) -> Bool {
         return lhs > rhs.rawValue
     }
 }
 
-extension Radians: Equatable where RawValue: Equatable {
-    public static func ==(lhs: Self, rhs: RawValue) -> Bool {
+extension Radians: Equatable {
+    public static func ==(lhs: Self, rhs: Float) -> Bool {
         return lhs.rawValue == rhs
     }
-    public static func ==(lhs: RawValue, rhs: Self) -> Bool {
+    public static func ==(lhs: Float, rhs: Self) -> Bool {
         return lhs == rhs.rawValue
     }
     public static func ==(lhs: Self, rhs: Self) -> Bool {
         return lhs.rawValue == rhs.rawValue
     }
 }
-extension Radians: Hashable where RawValue: Hashable {}
-extension Radians: Codable where RawValue: Codable {}
+extension Radians: Hashable {}
+extension Radians: Codable {}
 
 
 //MARK: Degrees
 #if GameMathUseSIMD
-public struct Degrees<RawValue: BinaryFloatingPoint & SIMDScalar>: RawRepresentable {
+public struct Degrees: RawRepresentable {
     /// The degress scalar value
-    public var rawValue: RawValue
+    public var rawValue: Float
     /// Creates a new angle in degrees
-    public init(rawValue: RawValue) {
+    public init(rawValue: Float) {
         self.rawValue = rawValue
     }
 }
 #else
-public struct Degrees<RawValue: BinaryFloatingPoint>: RawRepresentable {
+public struct Degrees: RawRepresentable {
     /// The degress scalar value
-    public var rawValue: RawValue
+    public var rawValue: Float
     /// Creates a new angle in degrees
-    public init(rawValue: RawValue) {
+    public init(rawValue: Float) {
         self.rawValue = rawValue
     }
 }
@@ -192,28 +188,24 @@ public struct Degrees<RawValue: BinaryFloatingPoint>: RawRepresentable {
 
 public extension Degrees {
     /// Creates a new angle in degrees
-    init(_ rawValue: RawValue) {
+    init(_ rawValue: Float) {
         self.rawValue = rawValue
     }
-    
+
     /// Converts radians to degrees
-    init<T: BinaryFloatingPoint>(_ value: Radians<T>) {
-        self.rawValue = RawValue(value.rawValue) * (180 / RawValue.pi)
-    }
-    /// Converts radians to degrees
-    init(_ value: Radians<RawValue>) {
-        self.rawValue = value.rawValue * (180 / RawValue.pi)
+    init(_ value: Radians) {
+        self.rawValue = value.rawValue * (180 / Float.pi)
     }
     
     var isFinite: Bool {
         return rawValue.isFinite
     }
     
-    mutating func interpolate(to: Degrees<RawValue>, _ method: InterpolationMethod<RawValue>) {
+    mutating func interpolate(to: Degrees, _ method: InterpolationMethod) {
         self.rawValue.interpolate(to: to.rawValue, method)
     }
     
-    mutating func interpolated(to: Degrees<RawValue>, _ method: InterpolationMethod<RawValue>) -> Degrees<RawValue> {
+    mutating func interpolated(to: Degrees, _ method: InterpolationMethod) -> Degrees {
         if case .linear(_, shortest: true) = method {
             // Shortest distance
             let shortest = self.shortestAngle(to: to)
@@ -224,27 +216,27 @@ public extension Degrees {
 }
 
 extension Degrees: AdditiveArithmetic {
-    public static var zero: Degrees<RawValue> {
+    public static var zero: Degrees {
         return Self(0)
     }
     
     public static func +(_ lhs: Self, _ rhs: Self) -> Self {
         return Self(lhs.rawValue + rhs.rawValue)
     }
-    public static func +(_ lhs: Self, _ rhs: RawValue) -> Self {
+    public static func +(_ lhs: Self, _ rhs: Float) -> Self {
         return Self(lhs.rawValue + rhs)
     }
-    public static func +(_ lhs: RawValue, _ rhs: Self) -> RawValue {
+    public static func +(_ lhs: Float, _ rhs: Self) -> Float {
         return lhs + rhs.rawValue
     }
     
     public static func -(_ lhs: Self, _ rhs: Self) -> Self {
         return Self(lhs.rawValue - rhs.rawValue)
     }
-    public static func -(_ lhs: Self, _ rhs: RawValue) -> Self {
+    public static func -(_ lhs: Self, _ rhs: Float) -> Self {
         return Self(lhs.rawValue - rhs)
     }
-    public static func -(_ lhs: RawValue, _ rhs: Self) -> RawValue {
+    public static func -(_ lhs: Float, _ rhs: Self) -> Float {
         return lhs - rhs.rawValue
     }
 }
@@ -253,10 +245,10 @@ extension Degrees {
     public static func *(_ lhs: Self, _ rhs: Self) -> Self {
         return Self(lhs.rawValue * rhs.rawValue)
     }
-    public static func *(_ lhs: Self, _ rhs: RawValue) -> Self {
+    public static func *(_ lhs: Self, _ rhs: Float) -> Self {
         return Self(lhs.rawValue * rhs)
     }
-    public static func *(_ lhs: RawValue, _ rhs: Self) -> RawValue {
+    public static func *(_ lhs: Float, _ rhs: Self) -> Float {
         return lhs * rhs.rawValue
     }
 }
@@ -265,74 +257,74 @@ extension Degrees {
     public static func /(_ lhs: Self, _ rhs: Self) -> Self {
         return Self(lhs.rawValue / rhs.rawValue)
     }
-    public static func /(_ lhs: Self, _ rhs: RawValue) -> Self {
+    public static func /(_ lhs: Self, _ rhs: Float) -> Self {
         return Self(lhs.rawValue / rhs)
     }
-    public static func /(_ lhs: RawValue, _ rhs: Self) -> RawValue {
+    public static func /(_ lhs: Float, _ rhs: Self) -> Float {
         return lhs / rhs.rawValue
     }
 }
 
-public func min<T: BinaryFloatingPoint>(_ lhs: Degrees<T>, _ rhs: Degrees<T>) -> Degrees<T> {
+public func min(_ lhs: Degrees, _ rhs: Degrees) -> Degrees {
     return Degrees(min(lhs.rawValue, rhs.rawValue))
 }
-public func min<T: BinaryFloatingPoint>(_ lhs: Degrees<T>, _ rhs: T) -> Degrees<T> {
+public func min(_ lhs: Degrees, _ rhs: Float) -> Degrees {
     return Degrees(min(lhs.rawValue, rhs))
 }
-public func min<T: BinaryFloatingPoint>(_ lhs: T, _ rhs: Degrees<T>) -> Degrees<T> {
+public func min(_ lhs: Float, _ rhs: Degrees) -> Degrees {
     return Degrees(min(lhs, rhs.rawValue))
 }
 
-public func max<T: BinaryFloatingPoint>(_ lhs: Degrees<T>, _ rhs: Degrees<T>) -> Degrees<T> {
+public func max(_ lhs: Degrees, _ rhs: Degrees) -> Degrees {
     return Degrees(max(lhs.rawValue, rhs.rawValue))
 }
-public func max<T: BinaryFloatingPoint>(_ lhs: Degrees<T>, _ rhs: T) -> Degrees<T> {
+public func max(_ lhs: Degrees, _ rhs: Float) -> Degrees {
     return Degrees(max(lhs.rawValue, rhs))
 }
-public func max<T: BinaryFloatingPoint>(_ lhs: T, _ rhs: Degrees<T>) -> Degrees<T> {
+public func max(_ lhs: Float, _ rhs: Degrees) -> Degrees {
     return Degrees(max(lhs, rhs.rawValue))
 }
 
-public func abs<T: BinaryFloatingPoint>(_ value: Degrees<T>) -> Degrees<T> {
+public func abs(_ value: Degrees) -> Degrees {
     return Degrees(abs(value.rawValue))
 }
-public func ceil<T: BinaryFloatingPoint>(_ value: Degrees<T>) -> Degrees<T> {
+public func ceil(_ value: Degrees) -> Degrees {
     return Degrees(ceil(value.rawValue))
 }
-public func floor<T: BinaryFloatingPoint>(_ value: Degrees<T>) -> Degrees<T> {
+public func floor(_ value: Degrees) -> Degrees {
     return Degrees(floor(value.rawValue))
 }
-public func round<T: BinaryFloatingPoint>(_ value: Degrees<T>) -> Degrees<T> {
+public func round(_ value: Degrees) -> Degrees {
     return Degrees(round(value.rawValue))
 }
 
-extension Degrees: Comparable where RawValue: Comparable {
+extension Degrees: Comparable {
     public static func <(lhs: Self, rhs: Self) -> Bool {
         return lhs.rawValue < rhs.rawValue
     }
-    public static func <(lhs: Self, rhs: RawValue) -> Bool {
+    public static func <(lhs: Self, rhs: Float) -> Bool {
         return lhs.rawValue < rhs
     }
-    public static func <(lhs: RawValue, rhs: Self) -> Bool {
+    public static func <(lhs: Float, rhs: Self) -> Bool {
         return lhs < rhs.rawValue
     }
     
     public static func >(lhs: Self, rhs: Self) -> Bool {
         return lhs.rawValue > rhs.rawValue
     }
-    public static func >(lhs: Self, rhs: RawValue) -> Bool {
+    public static func >(lhs: Self, rhs: Float) -> Bool {
         return lhs.rawValue > rhs
     }
-    public static func >(lhs: RawValue, rhs: Self) -> Bool {
+    public static func >(lhs: Float, rhs: Self) -> Bool {
         return lhs > rhs.rawValue
     }
 }
 
-extension Degrees: Equatable where RawValue: Equatable {
-    public static func ==(lhs: Self, rhs: RawValue) -> Bool {
+extension Degrees: Equatable {
+    public static func ==(lhs: Self, rhs: Float) -> Bool {
         return lhs.rawValue == rhs
     }
-    public static func ==(lhs: RawValue, rhs: Self) -> Bool {
+    public static func ==(lhs: Float, rhs: Self) -> Bool {
         return lhs == rhs.rawValue
     }
     public static func ==(lhs: Self, rhs: Self) -> Bool {
@@ -340,13 +332,13 @@ extension Degrees: Equatable where RawValue: Equatable {
     }
 }
 
-extension Degrees: Hashable where RawValue: Hashable {}
-extension Degrees: Codable where RawValue: Codable {}
+extension Degrees: Hashable {}
+extension Degrees: Codable {}
 
 extension Degrees {
     /// Returns an angle equivalent to the current angle if it rolled over when exceeding 360, or rolled back to 360 when less then zero. The value is always within 0 ... 360
     public var normalized: Self {
-        let scaler: RawValue = 1000000
+        let scaler: Float = 1000000
         let degrees = ((self * scaler).rawValue.truncatingRemainder(dividingBy: (360 * scaler))) / scaler
         if self.rawValue < 0 {
             return Self(degrees + 360)

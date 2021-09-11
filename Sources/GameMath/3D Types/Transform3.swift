@@ -5,9 +5,9 @@
  *
  * Find me on https://www.YouTube.com/STREGAsGate, or social media @STREGAsGate
  */
-#if GameMathUseSIMD
-public struct Transform3<T: BinaryFloatingPoint & SIMDScalar> {
-    public var position: Position3<T> {
+
+public struct Transform3 {
+    public var position: Position3 {
         didSet {
             assert(position.isFinite)
             guard _needsUpdate == false else {return}
@@ -16,7 +16,7 @@ public struct Transform3<T: BinaryFloatingPoint & SIMDScalar> {
             }
         }
     }
-    public var rotation: Quaternion<T> {
+    public var rotation: Quaternion {
         didSet {
             assert(rotation.isFinite)
             guard _needsUpdate == false else {return}
@@ -25,7 +25,7 @@ public struct Transform3<T: BinaryFloatingPoint & SIMDScalar> {
             }
         }
     }
-    public var scale: Size3<T> {
+    public var scale: Size3 {
         didSet {
             assert(scale.isFinite)
             guard _needsUpdate == false else {return}
@@ -36,49 +36,13 @@ public struct Transform3<T: BinaryFloatingPoint & SIMDScalar> {
     }
     
     private var _needsUpdate: Bool = true
-    private lazy var _matrix: Matrix4x4<T> = .identity
-    private lazy var _roationMatrix: Matrix4x4<T> = .identity
-    private lazy var _scaleMatrix: Matrix4x4<T> = .identity
+    private lazy var _matrix: Matrix4x4 = .identity
+    private lazy var _roationMatrix: Matrix4x4 = .identity
+    private lazy var _scaleMatrix: Matrix4x4 = .identity
 }
-#else
-public struct Transform3<T: BinaryFloatingPoint> {
-    public var position: Position3<T> {
-        didSet {
-            assert(position.isFinite)
-            guard _needsUpdate == false else {return}
-            if oldValue != position {
-                _needsUpdate = true
-            }
-        }
-    }
-    public var rotation: Quaternion<T> {
-        didSet {
-            assert(rotation.isFinite)
-            guard _needsUpdate == false else {return}
-            if oldValue != rotation {
-                _needsUpdate = true
-            }
-        }
-    }
-    public var scale: Size3<T> {
-        didSet {
-            assert(scale.isFinite)
-            guard _needsUpdate == false else {return}
-            if oldValue != scale {
-                _needsUpdate = true
-            }
-        }
-    }
-    
-    private var _needsUpdate: Bool = true
-    private lazy var _matrix: Matrix4x4<T> = .identity
-    private lazy var _roationMatrix: Matrix4x4<T> = .identity
-    private lazy var _scaleMatrix: Matrix4x4<T> = .identity
-}
-#endif
 
 public extension Transform3 {
-    init(position: Position3<T> = .zero, rotation: Quaternion<T> = .zero, scale: Size3<T> = .one) {
+    init(position: Position3 = .zero, rotation: Quaternion = .zero, scale: Size3 = .one) {
         self.position = position
         self.rotation = rotation
         self.scale = scale
@@ -89,9 +53,9 @@ public extension Transform3 {
     }
 }
 
-public extension Transform3 where T == Float {
+public extension Transform3 {
     ///Returns a cached matrix, creating the cache if needed.
-    mutating func matrix() -> Matrix4x4<T> {
+    mutating func matrix() -> Matrix4x4 {
         if _needsUpdate {
             _matrix = self.createMatrix()
             _needsUpdate = false
@@ -100,39 +64,20 @@ public extension Transform3 where T == Float {
     }
     
     ///Creates and returns a new matrix.
-    func createMatrix() -> Matrix4x4<T> {
-        var matrix = Matrix4x4<T>(position: self.position)
-        matrix *= Matrix4x4<T>(rotation: self.rotation)
-        matrix *= Matrix4x4<T>(scale: self.scale)
+    func createMatrix() -> Matrix4x4 {
+        var matrix = Matrix4x4(position: self.position)
+        matrix *= Matrix4x4(rotation: self.rotation)
+        matrix *= Matrix4x4(scale: self.scale)
         return matrix
     }
 }
 
-public extension Transform3 where T == Double {
-    ///Returns a cached matrix, creating the cache if needed.
-    mutating func matrix() -> Matrix4x4<T> {
-        if _needsUpdate {
-            _matrix = self.createMatrix()
-            _needsUpdate = false
-        }
-        return _matrix
-    }
-    
-    ///Creates and returns a new matrix.
-    func createMatrix() -> Matrix4x4<T> {
-        var matrix = Matrix4x4<T>(position: self.position)
-        matrix *= Matrix4x4<T>(rotation: self.rotation)
-        matrix *= Matrix4x4<T>(scale: self.scale)
-        return matrix
-    }
-}
-
-extension Transform3: Equatable where T: Equatable {}
-extension Transform3: Hashable where T: Hashable {}
+extension Transform3: Equatable {}
+extension Transform3: Hashable {}
 
 extension Transform3 {
-    public mutating func rotate(_ degrees: Degrees<T>, direction: Direction3<T>) {
-        self.rotation = Quaternion<T>(degrees, axis: direction) * self.rotation
+    public mutating func rotate(_ degrees: Degrees, direction: Direction3) {
+        self.rotation = Quaternion(degrees, axis: direction) * self.rotation
     }
 }
 
@@ -146,7 +91,7 @@ extension Transform3 {
 }
 
 extension Transform3 {
-    public func interpolated(to destination: Self, _ method: InterpolationMethod<T>) -> Self {
+    public func interpolated(to destination: Self, _ method: InterpolationMethod) -> Self {
         var copy = self
         copy.position.interpolate(to: destination.position, method)
         copy.rotation.interpolate(to: destination.rotation, method)
@@ -154,7 +99,7 @@ extension Transform3 {
         return copy
     }
     
-    public mutating func interpolate(to: Self, _ method: InterpolationMethod<T>) {
+    public mutating func interpolate(to: Self, _ method: InterpolationMethod) {
         self.position.interpolate(to: to.position, method)
         self.rotation.interpolate(to: to.rotation, method)
         self.scale.interpolate(to: to.scale, method)
@@ -169,7 +114,7 @@ extension Transform3 {
 }
 
 extension Transform3 {
-    public func distance(from: Self) -> T {
+    public func distance(from: Self) -> Float {
         return self.position.distance(from: from.position)
     }
 }
@@ -186,7 +131,7 @@ public extension Transform3 {
     }
 }
 
-extension Transform3: Codable where T: Codable {
+extension Transform3: Codable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         try container.encode([position.x, position.y, position.z,
@@ -196,10 +141,10 @@ extension Transform3: Codable where T: Codable {
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        let values = try container.decode(Array<T>.self)
+        let values = try container.decode(Array<Float>.self)
         
-        self.position = Position3<T>(x: values[0], y: values[1], z: values[2])
-        self.rotation = Quaternion<T>(w: values[3], x: values[4], y: values[5], z: values[6])
-        self.scale = Size3<T>(width: values[7], height: values[8], depth: values[9])
+        self.position = Position3(x: values[0], y: values[1], z: values[2])
+        self.rotation = Quaternion(w: values[3], x: values[4], y: values[5], z: values[6])
+        self.scale = Size3(width: values[7], height: values[8], depth: values[9])
     }
 }
