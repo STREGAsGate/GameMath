@@ -107,7 +107,8 @@ extension Vector3 {
     public var magnitude: Float {
         return squaredLength.squareRoot()
     }
-    
+
+    #if !GameMathUseFastInverseSquareRoot
     @_transparent
     public var normalized: Self {
         return self / self.magnitude
@@ -117,6 +118,7 @@ extension Vector3 {
     public mutating func normalize() {
         self /= magnitude
     }
+    #endif
     
     @_transparent
     public func squareRoot() -> Self {

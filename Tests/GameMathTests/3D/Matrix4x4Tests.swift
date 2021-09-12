@@ -20,13 +20,13 @@ final class Matrix4x4Tests: XCTestCase {
             XCTAssertEqual(matrix.array(), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])
         }
         do {
-            let matrix = Matrix4x4<Float>(Matrix4x4<Double>(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16))
+            let matrix = Matrix4x4(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16)
             XCTAssertEqual(matrix.array(), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])
         }
     }
 
     func testIdentity() {
-        let identity = Matrix4x4<Float>(a: 1, b: 0, c: 0, d: 0,
+        let identity = Matrix4x4(a: 1, b: 0, c: 0, d: 0,
                                         e: 0, f: 1, g: 0, h: 0,
                                         i: 0, j: 0, k: 1, l: 0,
                                         m: 0, n: 0, o: 0, p: 1)
@@ -34,14 +34,14 @@ final class Matrix4x4Tests: XCTestCase {
     }
 
     func testBecomeIdentity() {
-        var mtx = Matrix4x4<Float>(repeating: 100)
+        var mtx = Matrix4x4(repeating: 100)
         mtx.becomeIdentity()
         XCTAssertEqual(mtx, .identity)
     }
 
     func testInverse() {
-        let mtx = Matrix4x4<Float>(position: Position3(1, 2, 3))
-        let expected = Matrix4x4<Float>(a: 1.0, b: 0.0, c: 0.0, d: -1.0,
+        let mtx = Matrix4x4(position: Position3(1, 2, 3))
+        let expected = Matrix4x4(a: 1.0, b: 0.0, c: 0.0, d: -1.0,
                                         e: 0.0, f: 1.0, g: 0.0, h: -2.0,
                                         i: 0.0, j: 0.0, k: 1.0, l: -3.0,
                                         m: 0.0, n: 0.0, o: 0.0, p: 1.0)
@@ -50,7 +50,7 @@ final class Matrix4x4Tests: XCTestCase {
 
     func testSubscript() {
         do {
-            var matrix = Matrix4x4<Float>(repeating: 0)
+            var matrix = Matrix4x4(repeating: 0)
             matrix[0] = 1
             XCTAssertEqual(matrix[0], 1)
             matrix[1] = 2
@@ -85,7 +85,7 @@ final class Matrix4x4Tests: XCTestCase {
             XCTAssertEqual(matrix[15], 16)
         }
         do {
-            var matrix = Matrix4x4<Float>(repeating: 0)
+            var matrix = Matrix4x4(repeating: 0)
             matrix[0] = [1, 2, 3, 4]
             XCTAssertEqual(matrix[0], [1, 2, 3, 4])
             matrix[1] = [5, 6, 7, 8]
@@ -98,14 +98,14 @@ final class Matrix4x4Tests: XCTestCase {
     }
 
     func testTransform() {
-        var matrix = Matrix4x4<Float>(position: Position3(1, 2, 3))
+        var matrix = Matrix4x4(position: Position3(1, 2, 3))
         XCTAssertEqual(matrix.transform.position, Position3(1, 2, 3))
         matrix.position = Position3(3,2,1)
         XCTAssertEqual(matrix.position, Position3(3, 2, 1))
     }
 
     func testQuaternion() {
-        let qat = Quaternion<Float>(Degrees(90), axis: .right)
+        let qat = Quaternion(Degrees(90), axis: .right)
         let mtx = Matrix4x4(rotation: qat)
         XCTAssertEqual(mtx.rotation.unitNormalized.w, qat.unitNormalized.w, accuracy: 0.01)
         XCTAssertEqual(mtx.rotation.unitNormalized.x, qat.unitNormalized.x, accuracy: 0.01)
@@ -114,23 +114,23 @@ final class Matrix4x4Tests: XCTestCase {
     }
 
     func testMultiplicationPerformance() {
-        let m1 = Transform3<Float>(position: Position3(128, 128, 128),
+        let m1 = Transform3(position: Position3(128, 128, 128),
                                    rotation: Quaternion(Degrees(128), axis: .up),
                                    scale: .one).createMatrix()
-        let m2 = Transform3<Float>(position: Position3(0, 1, 2),
+        let m2 = Transform3(position: Position3(0, 1, 2),
                                    rotation: Quaternion(Degrees(90), axis: .up),
                                    scale: Size3(-100, -15, -1)).createMatrix()
-        let m3 = Transform3<Float>(position: Position3(-128, -128, -128),
+        let m3 = Transform3(position: Position3(-128, -128, -128),
                                    rotation: Quaternion(Degrees(-65), axis: .up),
                                    scale: Size3(100, 15, 1)).createMatrix()
 
         func doMath() {
-            var mtx: Matrix4x4<Float> = .identity
+            var mtx: Matrix4x4 = .identity
             mtx *= m1 * m2 * m3
             mtx *= m1 * m2 * m3
             mtx *= m1 * m2 * m3
             mtx *= m1 * m2 * m3
-            func more() -> Matrix4x4<Float> {
+            func more() -> Matrix4x4 {
                 return m1 * m2 * m3
             }
             for _ in 1 ..< 5000 {

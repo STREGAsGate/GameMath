@@ -6,6 +6,7 @@
  * Find me on https://www.YouTube.com/STREGAsGate, or social media @STREGAsGate
  */
 
+import Foundation
 #if GameMathUseSIMD
 import Dispatch
 
@@ -645,7 +646,7 @@ extension Matrix4x4 {
 
 //MARK: - Operators
 #if GameMathUseSIMD
-#if canImport(simd) && false
+#if canImport(simd) && true
 import simd
 
 public extension Matrix4x4 {
@@ -662,7 +663,7 @@ public extension Matrix4x4 {
         return Self(storage: [r[0], r[1], r[2], r[3]])
     }
 }
-#elseif true //Unreasonably slow
+#elseif false //Unreasonably slow
 public extension Matrix4x4 {
     @_transparent
     static func *=(lhs: inout Self, rhs: Self) {

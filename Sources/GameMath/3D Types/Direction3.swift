@@ -6,7 +6,8 @@
  * Find me on https://www.YouTube.com/STREGAsGate, or social media @STREGAsGate
  */
 
-#if GameMathUseSIMD
+import Foundation
+
 public struct Direction3: Vector3 {
     public var x: Float
     public var y: Float
@@ -18,19 +19,6 @@ public struct Direction3: Vector3 {
         self.z = z
     }
 }
-#else
-public struct Direction3: Vector3 {
-    public var x: Float
-    public var y: Float
-    public var z: Float
-    
-    public init(x: Float, y: Float, z: Float) {
-        self.x = x
-        self.y = y
-        self.z = z
-    }
-}
-#endif
 
 public extension Direction3 {
     init(_ x: Float, _ y: Float, _ z: Float) {

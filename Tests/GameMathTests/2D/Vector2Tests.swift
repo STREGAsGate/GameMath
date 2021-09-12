@@ -1,22 +1,22 @@
 import XCTest
 @testable import GameMath
 
-extension Vector2Tests.Imposter: Codable where T: Codable {}
+extension Vector2Tests.Imposter: Codable {}
 
 final class Vector2Tests: XCTestCase {
-    struct Imposter<T: Numeric & SIMDScalar>: Vector2, Equatable {
-        var x: T
-        var y: T
-        init(_ x: T, _ y: T) {
+    struct Imposter: Vector2, Equatable {
+        var x: Float
+        var y: Float
+        init(_ x: Float, _ y: Float) {
             self.x = x
             self.y = y
         }
     }
     
-    struct Other<T: Numeric & SIMDScalar>: Vector2, Equatable {
-        var x: T
-        var y: T
-        init(_ x: T, _ y: T) {
+    struct Other: Vector2, Equatable {
+        var x: Float
+        var y: Float
+        init(_ x: Float, _ y: Float) {
             self.x = x
             self.y = y
         }
@@ -24,68 +24,68 @@ final class Vector2Tests: XCTestCase {
 
     func testInit() {
         do {//Repeating
-            let vec = Imposter<Float>(repeating: 1)
+            let vec = Imposter(1)
             XCTAssertEqual(vec.x, 1)
             XCTAssertEqual(vec.y, 1)
         }
         do {//Float
-            let vec = Imposter<Float>()
+            let vec = Imposter()
             XCTAssertEqual(vec.x, 0)
             XCTAssertEqual(vec.y, 0)
         }
         do {//Int
-            let vec = Imposter<Int>()
+            let vec = Imposter()
             XCTAssertEqual(vec.x, 0)
             XCTAssertEqual(vec.y, 0)
         }
     }
     
     func testCastIntToInt() {
-        let vec1 = Imposter<Int>(1, 2)
-        let vec2 = Imposter<Int>(vec1)
+        let vec1 = Imposter(1, 2)
+        let vec2 = Imposter(vec1)
         XCTAssertEqual(vec2.x, 1)
         XCTAssertEqual(vec2.y, 2)
     }
     
     func testCastIntToFloat() {
-        let vec1 = Imposter<Int>(1, 2)
-        let vec2 = Imposter<Float>(vec1)
+        let vec1 = Imposter(1, 2)
+        let vec2 = Imposter(vec1)
         XCTAssertEqual(vec2.x, 1)
         XCTAssertEqual(vec2.y, 2)
     }
     
     func testCastFloatToFloat() {
-        let vec1 = Imposter<Float>(1.1, 2.2)
-        let vec2 = Imposter<Float>(vec1)
+        let vec1 = Imposter(1.1, 2.2)
+        let vec2 = Imposter(vec1)
         XCTAssertEqual(vec2.x, 1.1)
         XCTAssertEqual(vec2.y, 2.2)
     }
     
     func testCastFloatToInt() {
-        let vec1 = Imposter<Float>(1.1, 2.2)
-        let vec2 = Imposter<Int>(vec1)
+        let vec1 = Imposter(1.1, 2.2)
+        let vec2 = Imposter(vec1)
         XCTAssertEqual(vec2.x, 1)
         XCTAssertEqual(vec2.y, 2)
     }
     
     func testSquaredLength() {
-        let vec = Imposter<Float>(1, 2)
+        let vec = Imposter(1, 2)
         XCTAssertEqual(vec.squaredLength, 5)
     }
     
     func testDot() {
-        let vec1 = Imposter<Float>(1, 2)
-        let vec2 = Imposter<Float>(3, 4)
+        let vec1 = Imposter(1, 2)
+        let vec2 = Imposter(3, 4)
         XCTAssertEqual(vec1.dot(vec2), 11)
     }
     
     func testMagnitude() {
-        let vec = Imposter<Float>(1, 2)
+        let vec = Imposter(1, 2)
         XCTAssertEqual(vec.magnitude, 2.236068, accuracy: 0.000001)
     }
 
     func testLength() {
-        var vec = Imposter<Float>(1, 2)
+        var vec = Imposter(1, 2)
         XCTAssertEqual(vec.length, 3)
         
         vec.length = 4
@@ -93,30 +93,30 @@ final class Vector2Tests: XCTestCase {
     }
     
     func testNormalized() {
-        let vec = Imposter<Float>(2, 2).normalized
+        let vec = Imposter(2, 2).normalized
         XCTAssertEqual(vec.x, 0.70710677, accuracy: 0.000001)
         XCTAssertEqual(vec.y, 0.70710677, accuracy: 0.000001)
     }
     
     func testNormalize() {
-        var vec = Imposter<Float>(2, 2)
+        var vec = Imposter(2, 2)
         vec.normalize()
         XCTAssertEqual(vec.x, 0.70710677, accuracy: 0.000001)
         XCTAssertEqual(vec.y, 0.70710677, accuracy: 0.000001)
     }
     
     func testIsFinite() {
-        XCTAssert(Imposter<Float>().isFinite)
-        XCTAssertFalse(Imposter<Float>(.nan, 0).isFinite)
-        XCTAssertFalse(Imposter<Float>(0, .infinity).isFinite)
+        XCTAssert(Imposter().isFinite)
+        XCTAssertFalse(Imposter(.nan, 0).isFinite)
+        XCTAssertFalse(Imposter(0, .infinity).isFinite)
     }
     
     func testZero() {
-        XCTAssertEqual(Imposter<Float>(0, 0), .zero)
+        XCTAssertEqual(Imposter(0, 0), .zero)
     }
     
     func testSubscript() {
-        var vec: Imposter<Float> = .zero
+        var vec: Imposter = .zero
         vec[0] = 1
         XCTAssertEqual(vec[0], 1)
         vec[1] = 2
@@ -124,19 +124,19 @@ final class Vector2Tests: XCTestCase {
     }
     
     func testCross() {
-        let vec1 = Imposter<Float>(1, 2)
-        let vec2 = Imposter<Float>(3, 4)
+        let vec1 = Imposter(1, 2)
+        let vec2 = Imposter(3, 4)
         XCTAssertEqual(vec1.cross(vec2), -2)
     }
     
     func testSquareRoot() {
-        let vec = Imposter<Float>(16, 64)
+        let vec = Imposter(16, 64)
         XCTAssertEqual(vec.squareRoot(), Imposter(4, 8))
     }
     
     func testInterpolatedToLinear() {
-        let start = Imposter<Float>(-1, -1)
-        let end = Imposter<Float>(1, 1)
+        let start = Imposter(-1, -1)
+        let end = Imposter(1, 1)
         // Start value
         XCTAssertEqual(start.interpolated(to: end, .linear(0.0)), start)
         // Halfway
@@ -146,8 +146,8 @@ final class Vector2Tests: XCTestCase {
     }
     
     func testInterpolateToLinear() {
-        let start = Imposter<Float>(-1, -1)
-        let end = Imposter<Float>(1, 1)
+        let start = Imposter(-1, -1)
+        let end = Imposter(1, 1)
         // Start value
         var val = start
         val.interpolate(to: end, .linear(0.0))
@@ -163,55 +163,55 @@ final class Vector2Tests: XCTestCase {
     }
     
     func testMinMax() {
-        let vec = Imposter<Float>(-1, 1)
+        let vec = Imposter(-1, 1)
         XCTAssertEqual(vec.min, vec.x)
         XCTAssertEqual(vec.max, vec.y)
     }
     
     func testSIMD() {
-        let vec = Imposter<Float>(1, 2)
+        let vec = Imposter(1, 2)
         XCTAssertEqual(vec.simd, SIMD2(1, 2))
     }
     
     func testCeil() {
-        let vec = ceil(Imposter<Float>(0.4, 0.6))
-        XCTAssertEqual(vec, Imposter<Float>(1, 1))
+        let vec = ceil(Imposter(0.4, 0.6))
+        XCTAssertEqual(vec, Imposter(1, 1))
     }
     
     func testFloor() {
-        let vec = floor(Imposter<Float>(0.4, 0.6))
-        XCTAssertEqual(vec, Imposter<Float>(0, 0))
+        let vec = floor(Imposter(0.4, 0.6))
+        XCTAssertEqual(vec, Imposter(0, 0))
     }
     
     func testRound() {
-        let vec = round(Imposter<Float>(0.4, 0.6))
-        XCTAssertEqual(vec, Imposter<Float>(0, 1))
+        let vec = round(Imposter(0.4, 0.6))
+        XCTAssertEqual(vec, Imposter(0, 1))
     }
     
     func testAbs() {
-        let vec = abs(Imposter<Float>(-0.4, 0.6))
-        XCTAssertEqual(vec, Imposter<Float>(0.4, 0.6))
+        let vec = abs(Imposter(-0.4, 0.6))
+        XCTAssertEqual(vec, Imposter(0.4, 0.6))
     }
     
     func testSelfMulSelf() {
-        var vec1 = Imposter<Float>(1, 2)
-        let vec2 = Imposter<Float>(3, 4)
+        var vec1 = Imposter(1, 2)
+        let vec2 = Imposter(3, 4)
         XCTAssertEqual(vec1 * vec2, Imposter(3, 8))
         vec1 *= vec2
         XCTAssertEqual(vec1, Imposter(3, 8))
     }
     
     func testSelfAddSelf() {
-        var vec1 = Imposter<Float>(1, 2)
-        let vec2 = Imposter<Float>(3, 4)
+        var vec1 = Imposter(1, 2)
+        let vec2 = Imposter(3, 4)
         XCTAssertEqual(vec1 + vec2, Imposter(4, 6))
         vec1 += vec2
         XCTAssertEqual(vec1, Imposter(4, 6))
     }
     
     func testSelfMinusSelf() {
-        var vec1 = Imposter<Float>(1, 2)
-        let vec2 = Imposter<Float>(3, 4)
+        var vec1 = Imposter(1, 2)
+        let vec2 = Imposter(3, 4)
         XCTAssertEqual(vec1 - vec2, Imposter(-2, -2))
         vec1 -= vec2
         XCTAssertEqual(vec1, Imposter(-2, -2))
@@ -219,15 +219,15 @@ final class Vector2Tests: XCTestCase {
     
     func testSelfDivSelf() {
         do {
-            var vec1 = Imposter<Int>(12, 4)
-            let vec2 = Imposter<Int>(3, 2)
+            var vec1 = Imposter(12, 4)
+            let vec2 = Imposter(3, 2)
             XCTAssertEqual(vec1 / vec2, Imposter(4, 2))
             vec1 /= vec2
             XCTAssertEqual(vec1, Imposter(4, 2))
         }
         do {
-            var vec1 = Imposter<Float>(12, 4)
-            let vec2 = Imposter<Float>(3, 2)
+            var vec1 = Imposter(12, 4)
+            let vec2 = Imposter(3, 2)
             XCTAssertEqual(vec1 / vec2, Imposter(4, 2))
             vec1 /= vec2
             XCTAssertEqual(vec1, Imposter(4, 2))
@@ -235,7 +235,7 @@ final class Vector2Tests: XCTestCase {
     }
     
     func testSelfMulT() {
-        var vec1 = Imposter<Float>(1, 2)
+        var vec1 = Imposter(1, 2)
         let t: Float = 2
         XCTAssertEqual(vec1 * t, Imposter(2, 4))
         vec1 *= t
@@ -243,7 +243,7 @@ final class Vector2Tests: XCTestCase {
     }
     
     func testSelfAddT() {
-        var vec1 = Imposter<Float>(1, 2)
+        var vec1 = Imposter(1, 2)
         let t: Float = 2
         XCTAssertEqual(vec1 + t, Imposter(3, 4))
         vec1 += t
@@ -251,7 +251,7 @@ final class Vector2Tests: XCTestCase {
     }
     
     func testSelfMinusT() {
-        var vec1 = Imposter<Float>(1, 2)
+        var vec1 = Imposter(1, 2)
         let t: Float = 2
         XCTAssertEqual(vec1 - t, Imposter(-1, 0))
         vec1 -= t
@@ -260,7 +260,7 @@ final class Vector2Tests: XCTestCase {
     
     func testTMinusSelf() {
         let t: Float = 2
-        var vec = Imposter<Float>(1, 2)
+        var vec = Imposter(1, 2)
         XCTAssertEqual(t - vec, Imposter(1, 0))
         t -= vec
         XCTAssertEqual(vec, Imposter(1, 0))
@@ -268,14 +268,7 @@ final class Vector2Tests: XCTestCase {
     
     func testSelfDivT() {
         do {
-            var vec1 = Imposter<Int>(12, 4)
-            let t: Int = 2
-            XCTAssertEqual(vec1 / t, Imposter(6, 2))
-            vec1 /= t
-            XCTAssertEqual(vec1, Imposter(6, 2))
-        }
-        do {
-            var vec1 = Imposter<Float>(12, 4)
+            var vec1 = Imposter(12, 4)
             let t: Float = 2
             XCTAssertEqual(vec1 / t, Imposter(6, 2))
             vec1 /= t
@@ -285,14 +278,7 @@ final class Vector2Tests: XCTestCase {
     
     func testTDivSelf() {
         do {
-            var vec1 = Imposter<Int>(3, 2)
-            let t: Int = 12
-            XCTAssertEqual(t / vec1, Imposter(4, 6))
-            t /= vec1
-            XCTAssertEqual(vec1, Imposter(4, 6))
-        }
-        do {
-            var vec1 = Imposter<Float>(3, 2)
+            var vec1 = Imposter(3, 2)
             let t: Float = 12
             XCTAssertEqual(t / vec1, Imposter(4, 6))
             t /= vec1
@@ -301,24 +287,24 @@ final class Vector2Tests: XCTestCase {
     }
     
     func testSelfMulV() {
-        var vec1 = Imposter<Float>(1, 2)
-        let vec2 = Other<Float>(3, 4)
+        var vec1 = Imposter(1, 2)
+        let vec2 = Other(3, 4)
         XCTAssertEqual(vec1 * vec2, Imposter(3, 8))
         vec1 *= vec2
         XCTAssertEqual(vec1, Imposter(3, 8))
     }
     
     func testSelfAddV() {
-        var vec1 = Imposter<Float>(1, 2)
-        let vec2 = Other<Float>(3, 4)
+        var vec1 = Imposter(1, 2)
+        let vec2 = Other(3, 4)
         XCTAssertEqual(vec1 + vec2, Imposter(4, 6))
         vec1 += vec2
         XCTAssertEqual(vec1, Imposter(4, 6))
     }
     
     func testSelfMinusV() {
-        var vec1 = Imposter<Float>(1, 2)
-        let vec2 = Other<Float>(3, 4)
+        var vec1 = Imposter(1, 2)
+        let vec2 = Other(3, 4)
         XCTAssertEqual(vec1 - vec2, Imposter(-2, -2))
         vec1 -= vec2
         XCTAssertEqual(vec1, Imposter(-2, -2))
@@ -326,15 +312,15 @@ final class Vector2Tests: XCTestCase {
     
     func testSelfDivV() {
         do {
-            var vec1 = Imposter<Int>(12, 4)
-            let vec2 = Other<Int>(3, 2)
+            var vec1 = Imposter(12, 4)
+            let vec2 = Other(3, 2)
             XCTAssertEqual(vec1 / vec2, Imposter(4, 2))
             vec1 /= vec2
             XCTAssertEqual(vec1, Imposter(4, 2))
         }
         do {
-            var vec1 = Imposter<Float>(12, 4)
-            let vec2 = Other<Float>(3, 2)
+            var vec1 = Imposter(12, 4)
+            let vec2 = Other(3, 2)
             XCTAssertEqual(vec1 / vec2, Imposter(4, 2))
             vec1 /= vec2
             XCTAssertEqual(vec1, Imposter(4, 2))
@@ -342,28 +328,28 @@ final class Vector2Tests: XCTestCase {
     }
     
     func testSelfMulMatrix4x4() {
-        let vec = Imposter<Float>(1, 2)
-        let mtx = Matrix4x4<Float>(position: Position3(x: 2, y: 2, z: 0))
+        let vec = Imposter(1, 2)
+        let mtx = Matrix4x4(position: Position3(x: 2, y: 2, z: 0))
         XCTAssertEqual(vec * mtx, Imposter(3, 4))
     }
     
     func testMatrix4x4MulSelf() {
-        let vec = Imposter<Float>(1, 2)
-        let mtx = Matrix4x4<Float>(position: Position3(x: 2, y: 2, z: 0))
+        let vec = Imposter(1, 2)
+        let mtx = Matrix4x4(position: Position3(x: 2, y: 2, z: 0))
         XCTAssertEqual(mtx * vec, Imposter(1, 2))
     }
     
     func testSelfMulMatrix3x3() {
-        let vec = Imposter<Float>(1, 2)
-        let mtx = Matrix3x3<Float>(direction: .forward)
+        let vec = Imposter(1, 2)
+        let mtx = Matrix3x3(direction: .forward)
         XCTAssertEqual(vec * mtx, Imposter(-1, 2))
     }
     
     func testCodableJSON() {
-        let vec = Imposter<Float>(-.ulpOfOne, 9999999)
+        let vec = Imposter(-.ulpOfOne, 9999999)
         do {
             let data = try JSONEncoder().encode(vec)
-            let val = try JSONDecoder().decode(Imposter<Float>.self, from: data)
+            let val = try JSONDecoder().decode(Imposter.self, from: data)
             XCTAssertEqual(vec, val)
         }catch{
             XCTFail()
@@ -371,7 +357,7 @@ final class Vector2Tests: XCTestCase {
     }
     
     func testValuesArray() {
-        let vec = Imposter<Float>(1, 2)
+        let vec = Imposter(1, 2)
         XCTAssertEqual(vec.valuesArray(), [1, 2])
     }
 }

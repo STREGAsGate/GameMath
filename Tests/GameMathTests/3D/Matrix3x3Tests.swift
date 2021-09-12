@@ -4,7 +4,7 @@ import XCTest
 final class Matrix3x3Tests: XCTestCase {
     func testInit() {
         do {
-            let matrix = Matrix3x3<Float>(1, 2, 3, 4, 5, 6, 7, 8, 9)
+            let matrix = Matrix3x3(1, 2, 3, 4, 5, 6, 7, 8, 9)
             XCTAssertEqual(matrix.a, 1)
             XCTAssertEqual(matrix.b, 2)
             XCTAssertEqual(matrix.c, 3)
@@ -16,7 +16,7 @@ final class Matrix3x3Tests: XCTestCase {
             XCTAssertEqual(matrix.k, 9)
         }
         do {
-            let matrix = Matrix3x3<Float>(a: 1, b: 2, c: 3, e: 4, f: 5, g: 6, i: 7, j: 8, k: 9)
+            let matrix = Matrix3x3(a: 1, b: 2, c: 3, e: 4, f: 5, g: 6, i: 7, j: 8, k: 9)
             XCTAssertEqual(matrix.a, 1)
             XCTAssertEqual(matrix.b, 2)
             XCTAssertEqual(matrix.c, 3)
@@ -28,18 +28,18 @@ final class Matrix3x3Tests: XCTestCase {
             XCTAssertEqual(matrix.k, 9)
         }
         do {
-            let matrix = Matrix3x3<Float>()
+            let matrix = Matrix3x3()
             XCTAssertEqual(matrix, Matrix3x3(0, 0, 0, 0, 0, 0, 0, 0, 0))
         }
         do {
-            let matrix = Matrix3x3(Matrix4x4<Float>(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16))
+            let matrix = Matrix3x3(Matrix4x4(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16))
             XCTAssertEqual(matrix, Matrix3x3(1, 2, 3, 5, 6, 7, 9, 10, 11))
         }
     }
     
     func testSubscript() {
         do {
-            var matrix = Matrix3x3<Float>()
+            var matrix = Matrix3x3()
             matrix[0] = 1
             XCTAssertEqual(matrix[0], 1)
             matrix[1] = 2
@@ -60,7 +60,7 @@ final class Matrix3x3Tests: XCTestCase {
             XCTAssertEqual(matrix[8], 9)
         }
         do {
-            var matrix = Matrix3x3<Float>()
+            var matrix = Matrix3x3()
             matrix[0] = [1, 2, 3]
             XCTAssertEqual(matrix[0], [1, 2, 3])
             matrix[1] = [4, 5, 6]
@@ -72,19 +72,19 @@ final class Matrix3x3Tests: XCTestCase {
     
     func testInitDirectionUpRight() {
         do {
-            let matrix = Matrix3x3<Float>(direction: .left, up: .up, right: .right)
-            let direction: Direction3<Float> = .left
+            let matrix = Matrix3x3(direction: .left, up: .up, right: .right)
+            let direction: Direction3 = .left
             XCTAssertEqual(direction * matrix, .forward)
         }
         do {
-            let matrix = Matrix3x3<Float>(direction: .up, up: .up, right: .right)
-            let direction: Direction3<Float> = .up
+            let matrix = Matrix3x3(direction: .up, up: .up, right: .right)
+            let direction: Direction3 = .up
             XCTAssertEqual(direction * matrix, .forward)
         }
     }
 
     func testRotation() {
-        var matrix = Matrix3x3<Float>()
+        var matrix = Matrix3x3()
         matrix.rotation = Quaternion(Degrees(720), axis: .right)
         XCTAssertEqual(matrix.rotation.unitNormalized.x, Quaternion.zero.x, accuracy: 0.0001)
         XCTAssertEqual(matrix.rotation.unitNormalized.y, Quaternion.zero.y, accuracy: 0.0001)
@@ -94,20 +94,20 @@ final class Matrix3x3Tests: XCTestCase {
     }
     
     func testTransposedArray() {
-        let matrix = Matrix3x3<Float>(1, 2, 3, 4, 5, 6, 7, 8, 9)
+        let matrix = Matrix3x3(1, 2, 3, 4, 5, 6, 7, 8, 9)
         XCTAssertEqual(matrix.transposedArray(), [1.0, 4.0, 7.0, 2.0, 5.0, 8.0, 3.0, 6.0, 9.0])
     }
     
     func testArray() {
-        let matrix = Matrix3x3<Float>(1, 2, 3, 4, 5, 6, 7, 8, 9)
+        let matrix = Matrix3x3(1, 2, 3, 4, 5, 6, 7, 8, 9)
         XCTAssertEqual(matrix.array(), [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0])
     }
     
     func testCodableJSON() {
-        let matrix = Matrix3x3<Float>(1, 2, 3, 4, 5, 6, 7, 8, 9)
+        let matrix = Matrix3x3(1, 2, 3, 4, 5, 6, 7, 8, 9)
         do {
             let data = try JSONEncoder().encode(matrix)
-            let val = try JSONDecoder().decode(Matrix3x3<Float>.self, from: data)
+            let val = try JSONDecoder().decode(Matrix3x3.self, from: data)
             XCTAssertEqual(matrix, val)
 
         }catch{

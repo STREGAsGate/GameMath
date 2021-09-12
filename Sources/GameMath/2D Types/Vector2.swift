@@ -99,18 +99,21 @@ extension Vector2 {
     public var magnitude: Float {
         return squaredLength.squareRoot()
     }
-    
+
+    #if !GameMathUseFastInverseSquareRoot
     public var normalized: Self {
         return self / self.magnitude
     }
-    
+
     public mutating func normalize() {
         self /= magnitude
     }
+    #endif
     
     public func squareRoot() -> Self {
         return Self(x.squareRoot(), y.squareRoot())
     }
+
 }
 
 extension Vector2 {

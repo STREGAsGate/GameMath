@@ -6,7 +6,7 @@ import PackageDescription
 var settings: [SwiftSetting]? {
     var array: [SwiftSetting] = []
     
-    #if false
+    #if true
     // A little bit faster, but less accurate
     array.append(.define("GameMathUseFastInverseSquareRoot"))
     #endif
@@ -15,7 +15,7 @@ var settings: [SwiftSetting]? {
     //These settings will be turned on in a future commit when using them is benefitical.
     #if false
     array.append(.define("GameMathUseSIMD"))
-    array.append(.define("GameMathUseDispatch"))
+//    array.append(.define("GameMathUseDispatch"))
     #endif
     
     return array.isEmpty ? nil : array
