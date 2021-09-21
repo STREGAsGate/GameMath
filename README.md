@@ -1,5 +1,8 @@
 # GameMath 
-[![Windows](https://github.com/STREGAsGate/GameMath/actions/workflows/Windows.yml/badge.svg)](https://github.com/STREGAsGate/GameMath/actions/workflows/Windows.yml) [![macOS](https://github.com/STREGAsGate/GameMath/actions/workflows/macOS.yml/badge.svg)](https://github.com/STREGAsGate/GameMath/actions/workflows/macOS.yml) [![Linux](https://github.com/STREGAsGate/GameMath/actions/workflows/Linux.yml/badge.svg)](https://github.com/STREGAsGate/GameMath/actions/workflows/Linux.yml) [![WebAssembly](https://github.com/STREGAsGate/GameMath/actions/workflows/SwiftWasm.yml/badge.svg)](https://github.com/STREGAsGate/GameMath/actions/workflows/SwiftWasm.yml)
+[![Windows](https://github.com/STREGAsGate/GameMath/actions/workflows/Windows.yml/badge.svg)](https://github.com/STREGAsGate/GameMath/actions/workflows/Windows.yml) 
+[![macOS](https://github.com/STREGAsGate/GameMath/actions/workflows/macOS.yml/badge.svg)](https://github.com/STREGAsGate/GameMath/actions/workflows/macOS.yml) 
+[![Linux](https://github.com/STREGAsGate/GameMath/actions/workflows/Linux.yml/badge.svg)](https://github.com/STREGAsGate/GameMath/actions/workflows/Linux.yml) 
+[![WebAssembly](https://github.com/STREGAsGate/GameMath/actions/workflows/SwiftWasm.yml/badge.svg)](https://github.com/STREGAsGate/GameMath/actions/workflows/SwiftWasm.yml)
 
 [![Twitter](https://img.shields.io/twitter/follow/stregasgate?style=social)](https://twitter.com/stregasgate)
 [![YouTube](https://img.shields.io/youtube/channel/subscribers/UCBXFkK2B4w9856wBJfCGufg?label=Subscribe&style=social)](https://youtube.com/stregasgate)
