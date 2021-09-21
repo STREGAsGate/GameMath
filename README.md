@@ -1,4 +1,11 @@
-# GameMath [![Windows](https://github.com/STREGAsGate/GameMath/actions/workflows/Windows.yml/badge.svg)](https://github.com/STREGAsGate/GameMath/actions/workflows/Windows.yml) [![macOS](https://github.com/STREGAsGate/GameMath/actions/workflows/macOS.yml/badge.svg)](https://github.com/STREGAsGate/GameMath/actions/workflows/macOS.yml) [![Linux](https://github.com/STREGAsGate/GameMath/actions/workflows/Linux.yml/badge.svg)](https://github.com/STREGAsGate/GameMath/actions/workflows/Linux.yml) [![WebAssembly](https://github.com/STREGAsGate/GameMath/actions/workflows/SwiftWasm.yml/badge.svg)](https://github.com/STREGAsGate/GameMath/actions/workflows/SwiftWasm.yml)
+# GameMath 
+[![Windows](https://github.com/STREGAsGate/GameMath/actions/workflows/Windows.yml/badge.svg)](https://github.com/STREGAsGate/GameMath/actions/workflows/Windows.yml) [![macOS](https://github.com/STREGAsGate/GameMath/actions/workflows/macOS.yml/badge.svg)](https://github.com/STREGAsGate/GameMath/actions/workflows/macOS.yml) [![Linux](https://github.com/STREGAsGate/GameMath/actions/workflows/Linux.yml/badge.svg)](https://github.com/STREGAsGate/GameMath/actions/workflows/Linux.yml) [![WebAssembly](https://github.com/STREGAsGate/GameMath/actions/workflows/SwiftWasm.yml/badge.svg)](https://github.com/STREGAsGate/GameMath/actions/workflows/SwiftWasm.yml)
+
+[![Twitter](https://img.shields.io/twitter/follow/stregasgate?style=social)](https://twitter.com/stregasgate)
+[![YouTube](https://img.shields.io/youtube/channel/subscribers/UCBXFkK2B4w9856wBJfCGufg?label=Subscribe&style=social)](https://youtube.com/stregasgate)
+[![Reddit](https://img.shields.io/reddit/subreddit-subscribers/stregasgate?style=social)](https://www.reddit.com/r/stregasgate/)
+[![Discord](https://img.shields.io/discord/641809158051725322?label=Hang%20Out&logo=Discord&style=social)](https://discord.gg/5JdRJhD)
+
 GameMath provides common types, related functions, and operators commonly used for interactive realtime simulations (games).
 You can use this library to create simple games, or use it as a cornerstone for a more complex engine.
 
