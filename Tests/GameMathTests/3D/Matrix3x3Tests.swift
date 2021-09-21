@@ -74,22 +74,30 @@ final class Matrix3x3Tests: XCTestCase {
         do {
             let matrix = Matrix3x3(direction: .left, up: .up, right: .right)
             let direction: Direction3 = .left
-            XCTAssertEqual(direction * matrix, .forward)
+            let expression1 = direction * matrix
+            let expression2 = Direction3.forward
+            XCTAssertEqual(expression1.x, expression2.x, accuracy: 0.0025)
+            XCTAssertEqual(expression1.y, expression2.y, accuracy: 0.0025)
+            XCTAssertEqual(expression1.z, expression2.z, accuracy: 0.0025)
         }
         do {
             let matrix = Matrix3x3(direction: .up, up: .up, right: .right)
             let direction: Direction3 = .up
-            XCTAssertEqual(direction * matrix, .forward)
+            let expression1 = direction * matrix
+            let expression2 = Direction3.forward
+            XCTAssertEqual(expression1.x, expression2.x, accuracy: 0.0025)
+            XCTAssertEqual(expression1.y, expression2.y, accuracy: 0.0025)
+            XCTAssertEqual(expression1.z, expression2.z, accuracy: 0.0025)
         }
     }
 
     func testRotation() {
         var matrix = Matrix3x3()
         matrix.rotation = Quaternion(Degrees(720), axis: .right)
-        XCTAssertEqual(matrix.rotation.unitNormalized.x, Quaternion.zero.x, accuracy: 0.0001)
-        XCTAssertEqual(matrix.rotation.unitNormalized.y, Quaternion.zero.y, accuracy: 0.0001)
-        XCTAssertEqual(matrix.rotation.unitNormalized.z, Quaternion.zero.z, accuracy: 0.0001)
-        XCTAssertEqual(matrix.rotation.unitNormalized.w, Quaternion.zero.w, accuracy: 0.0001)
+        XCTAssertEqual(matrix.rotation.unitNormalized.x, Quaternion.zero.x, accuracy: 0.0025)
+        XCTAssertEqual(matrix.rotation.unitNormalized.y, Quaternion.zero.y, accuracy: 0.0025)
+        XCTAssertEqual(matrix.rotation.unitNormalized.z, Quaternion.zero.z, accuracy: 0.0025)
+        XCTAssertEqual(matrix.rotation.unitNormalized.w, Quaternion.zero.w, accuracy: 0.0025)
         XCTAssertEqual(matrix.rotation.magnitude, 1)
     }
     

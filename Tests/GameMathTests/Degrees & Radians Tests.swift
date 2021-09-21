@@ -8,8 +8,8 @@ final class RadiansTests: XCTestCase {
         XCTAssert(Radians(rawValue: 10).rawValue == 10)
     }
     func testInitDegrees() {
-        XCTAssertEqual(Radians(Degrees(10)).rawValue, 0.174533, accuracy: 0.0000001)
-        XCTAssertEqual(Radians(Degrees(10)).rawValue, 0.174533, accuracy: 0.0000001)
+        XCTAssertEqual(Radians(Degrees(10)).rawValue, 0.174533, accuracy: 0.0025)
+        XCTAssertEqual(Radians(Degrees(10)).rawValue, 0.174533, accuracy: 0.0025)
     }
     
     // Additions
@@ -183,8 +183,8 @@ final class DegreesTests: XCTestCase {
         XCTAssert(Degrees(rawValue: 10).rawValue == 10)
     }
     func testInitRadians() {
-        XCTAssertEqual(Degrees(Radians(0.174533)).rawValue, 10.000004286, accuracy: 0.000000001)
-        XCTAssertEqual(Degrees(Radians(0.174533)).rawValue, 10.000004, accuracy: 0.000001)
+        XCTAssertEqual(Degrees(Radians(0.174533)).rawValue, 10.000004286, accuracy: 0.0025)
+        XCTAssertEqual(Degrees(Radians(0.174533)).rawValue, 10.000004, accuracy: 0.0025)
     }
     
     // Additions

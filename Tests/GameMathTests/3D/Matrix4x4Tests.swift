@@ -105,12 +105,11 @@ final class Matrix4x4Tests: XCTestCase {
     }
 
     func testQuaternion() {
-        let qat = Quaternion(Degrees(90), axis: .right)
-        let mtx = Matrix4x4(rotation: qat)
-        XCTAssertEqual(mtx.rotation.unitNormalized.w, qat.unitNormalized.w, accuracy: 0.01)
-        XCTAssertEqual(mtx.rotation.unitNormalized.x, qat.unitNormalized.x, accuracy: 0.01)
-        XCTAssertEqual(mtx.rotation.unitNormalized.y, qat.unitNormalized.y, accuracy: 0.01)
-        XCTAssertEqual(mtx.rotation.unitNormalized.z, qat.unitNormalized.z, accuracy: 0.01)
+        let quat1 = Quaternion(Degrees(90), axis: .right)
+        let quat2 = Matrix4x4(rotation: quat1).rotation
+        let angle1 = quat1.forward.angle(to: .right).rawValue
+        let angle2 = quat2.forward.angle(to: .right).rawValue
+        XCTAssertEqual(angle1, angle2, accuracy: 0.0025)
     }
 
     func testMultiplicationPerformance() {

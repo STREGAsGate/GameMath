@@ -69,28 +69,28 @@ final class InterpolationTests: XCTestCase {
         do {// Start value
             let value = start.interpolated(to: end, .linear(0.0, shortest: false))
             let expected = start
-            XCTAssertEqual(value.w, expected.w, accuracy: 0.000001)
-            XCTAssertEqual(value.x, expected.x, accuracy: 0.000001)
-            XCTAssertEqual(value.y, expected.y, accuracy: 0.000001)
-            XCTAssertEqual(value.z, expected.z, accuracy: 0.000001)
+            XCTAssertEqual(value.w, expected.w, accuracy: 0.0025)
+            XCTAssertEqual(value.x, expected.x, accuracy: 0.0025)
+            XCTAssertEqual(value.y, expected.y, accuracy: 0.0025)
+            XCTAssertEqual(value.z, expected.z, accuracy: 0.0025)
         }
         
         do {// Halfway
             let value = start.interpolated(to: end, .linear(0.5, shortest: false))
             let expected = Quaternion(Degrees(45), axis: .right)
-            XCTAssertEqual(value.w, expected.w, accuracy: 0.000001)
-            XCTAssertEqual(value.x, expected.x, accuracy: 0.000001)
-            XCTAssertEqual(value.y, expected.y, accuracy: 0.000001)
-            XCTAssertEqual(value.z, expected.z, accuracy: 0.000001)
+            XCTAssertEqual(value.w, expected.w, accuracy: 0.0025)
+            XCTAssertEqual(value.x, expected.x, accuracy: 0.0025)
+            XCTAssertEqual(value.y, expected.y, accuracy: 0.0025)
+            XCTAssertEqual(value.z, expected.z, accuracy: 0.0025)
         }
         
         do {// End value
             let value = start.interpolated(to: end, .linear(1.0, shortest: false))
             let expected = end
-            XCTAssertEqual(value.w, expected.w, accuracy: 0.000001)
-            XCTAssertEqual(value.x, expected.x, accuracy: 0.000001)
-            XCTAssertEqual(value.y, expected.y, accuracy: 0.000001)
-            XCTAssertEqual(value.z, expected.z, accuracy: 0.000001)
+            XCTAssertEqual(value.w, expected.w, accuracy: 0.0025)
+            XCTAssertEqual(value.x, expected.x, accuracy: 0.0025)
+            XCTAssertEqual(value.y, expected.y, accuracy: 0.0025)
+            XCTAssertEqual(value.z, expected.z, accuracy: 0.0025)
         }
     }
     
@@ -103,28 +103,28 @@ final class InterpolationTests: XCTestCase {
         do {// Start value
             let value = start.interpolated(to: end, .linear(0.0, shortest: true)).unitNormalized
             let expected = start.unitNormalized
-            XCTAssertEqual(value.w, expected.w, accuracy: 0.000001)
-            XCTAssertEqual(value.x, expected.x, accuracy: 0.000001)
-            XCTAssertEqual(value.y, expected.y, accuracy: 0.000001)
-            XCTAssertEqual(value.z, expected.z, accuracy: 0.000001)
+            XCTAssertEqual(value.w, expected.w, accuracy: 0.0025)
+            XCTAssertEqual(value.x, expected.x, accuracy: 0.0025)
+            XCTAssertEqual(value.y, expected.y, accuracy: 0.0025)
+            XCTAssertEqual(value.z, expected.z, accuracy: 0.0025)
         }
         
         do {// Halfway
             let value = start.interpolated(to: end, .linear(0.5, shortest: true)).unitNormalized
             let expected = Quaternion(Degrees(0), axis: .right).unitNormalized
-            XCTAssertEqual(value.w, expected.w, accuracy: 0.01)
-            XCTAssertEqual(value.x, expected.x, accuracy: 0.01)
-            XCTAssertEqual(value.y, expected.y, accuracy: 0.01)
-            XCTAssertEqual(value.z, expected.z, accuracy: 0.01)
+            XCTAssertEqual(value.w, expected.w, accuracy: 0.0025)
+            XCTAssertEqual(value.x, expected.x, accuracy: 0.0025)
+            XCTAssertEqual(value.y, expected.y, accuracy: 0.0025)
+            XCTAssertEqual(value.z, expected.z, accuracy: 0.0025)
         }
         
         do {// End value
             let value = start.interpolated(to: end, .linear(1.0, shortest: true)).unitNormalized
             let expected = end.unitNormalized
-            XCTAssertEqual(value.w, expected.w, accuracy: 0.000001)
-            XCTAssertEqual(value.x, expected.x, accuracy: 0.000001)
-            XCTAssertEqual(value.y, expected.y, accuracy: 0.000001)
-            XCTAssertEqual(value.z, expected.z, accuracy: 0.000001)
+            XCTAssertEqual(value.w, expected.w, accuracy: 0.0025)
+            XCTAssertEqual(value.x, expected.x, accuracy: 0.0025)
+            XCTAssertEqual(value.y, expected.y, accuracy: 0.0025)
+            XCTAssertEqual(value.z, expected.z, accuracy: 0.0025)
         }
     }
 }

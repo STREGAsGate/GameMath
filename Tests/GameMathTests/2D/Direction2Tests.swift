@@ -12,22 +12,34 @@ final class Direction2Tests: XCTestCase {
         do {//Up
             let src = Position2(x: 0, y: 0)
             let dst = Position2(x: 0, y: 1)
-            XCTAssertEqual(Direction2(from: src, to: dst), .up)
+            let expression1 = Direction2(from: src, to: dst)
+            let expression2 = Direction2.up
+            XCTAssertEqual(expression1.x, expression2.x, accuracy: 0.0025)
+            XCTAssertEqual(expression1.y, expression2.y, accuracy: 0.0025)
         }
         do {//Down
-            let src = Position2(x: 0, y: 1)
-            let dst = Position2(x: 0, y: 0)
-            XCTAssertEqual(Direction2(from: src, to: dst), .down)
+            let src = Position2(x: 0, y: 0)
+            let dst = Position2(x: 0, y: -1)
+            let expression1 = Direction2(from: src, to: dst)
+            let expression2 = Direction2.down
+            XCTAssertEqual(expression1.x, expression2.x, accuracy: 0.0025)
+            XCTAssertEqual(expression1.y, expression2.y, accuracy: 0.0025)
         }
         do {//Left
             let src = Position2(x: 0, y: 0)
             let dst = Position2(x: -1, y: 0)
-            XCTAssertEqual(Direction2(from: src, to: dst), .left)
+            let expression1 = Direction2(from: src, to: dst)
+            let expression2 = Direction2.left
+            XCTAssertEqual(expression1.x, expression2.x, accuracy: 0.0025)
+            XCTAssertEqual(expression1.y, expression2.y, accuracy: 0.0025)
         }
         do {//Right
             let src = Position2(x: 0, y: 0)
             let dst = Position2(x: 1, y: 0)
-            XCTAssertEqual(Direction2(from: src, to: dst), .right)
+            let expression1 = Direction2(from: src, to: dst)
+            let expression2 = Direction2.right
+            XCTAssertEqual(expression1.x, expression2.x, accuracy: 0.0025)
+            XCTAssertEqual(expression1.y, expression2.y, accuracy: 0.0025)
         }
     }
     
@@ -36,7 +48,7 @@ final class Direction2Tests: XCTestCase {
         let dst: Direction2 = .right
         let value = src.angle(to: dst).rawValue
         let expected = Radians(Degrees(90)).rawValue
-        XCTAssertEqual(value, expected, accuracy: 0.000001)
+        XCTAssertEqual(value, expected, accuracy: 0.0025)
     }
     
     func testAngleAroundZ() {

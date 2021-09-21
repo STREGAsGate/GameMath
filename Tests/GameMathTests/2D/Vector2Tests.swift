@@ -40,34 +40,6 @@ final class Vector2Tests: XCTestCase {
         }
     }
     
-    func testCastIntToInt() {
-        let vec1 = Imposter(1, 2)
-        let vec2 = Imposter(vec1)
-        XCTAssertEqual(vec2.x, 1)
-        XCTAssertEqual(vec2.y, 2)
-    }
-    
-    func testCastIntToFloat() {
-        let vec1 = Imposter(1, 2)
-        let vec2 = Imposter(vec1)
-        XCTAssertEqual(vec2.x, 1)
-        XCTAssertEqual(vec2.y, 2)
-    }
-    
-    func testCastFloatToFloat() {
-        let vec1 = Imposter(1.1, 2.2)
-        let vec2 = Imposter(vec1)
-        XCTAssertEqual(vec2.x, 1.1)
-        XCTAssertEqual(vec2.y, 2.2)
-    }
-    
-    func testCastFloatToInt() {
-        let vec1 = Imposter(1.1, 2.2)
-        let vec2 = Imposter(vec1)
-        XCTAssertEqual(vec2.x, 1)
-        XCTAssertEqual(vec2.y, 2)
-    }
-    
     func testSquaredLength() {
         let vec = Imposter(1, 2)
         XCTAssertEqual(vec.squaredLength, 5)
@@ -81,7 +53,7 @@ final class Vector2Tests: XCTestCase {
     
     func testMagnitude() {
         let vec = Imposter(1, 2)
-        XCTAssertEqual(vec.magnitude, 2.236068, accuracy: 0.000001)
+        XCTAssertEqual(vec.magnitude, 2.236068, accuracy: 0.0025)
     }
 
     func testLength() {
@@ -94,15 +66,15 @@ final class Vector2Tests: XCTestCase {
     
     func testNormalized() {
         let vec = Imposter(2, 2).normalized
-        XCTAssertEqual(vec.x, 0.70710677, accuracy: 0.000001)
-        XCTAssertEqual(vec.y, 0.70710677, accuracy: 0.000001)
+        XCTAssertEqual(vec.x, 0.70710677, accuracy: 0.0025)
+        XCTAssertEqual(vec.y, 0.70710677, accuracy: 0.0025)
     }
     
     func testNormalize() {
         var vec = Imposter(2, 2)
         vec.normalize()
-        XCTAssertEqual(vec.x, 0.70710677, accuracy: 0.000001)
-        XCTAssertEqual(vec.y, 0.70710677, accuracy: 0.000001)
+        XCTAssertEqual(vec.x, 0.70710677, accuracy: 0.0025)
+        XCTAssertEqual(vec.y, 0.70710677, accuracy: 0.0025)
     }
     
     func testIsFinite() {
@@ -342,7 +314,10 @@ final class Vector2Tests: XCTestCase {
     func testSelfMulMatrix3x3() {
         let vec = Imposter(1, 2)
         let mtx = Matrix3x3(direction: .forward)
-        XCTAssertEqual(vec * mtx, Imposter(-1, 2))
+        let expression1 = vec * mtx
+        let expression2 = Imposter(-1, 2)
+        XCTAssertEqual(expression1.x, expression2.x, accuracy: 0.009)
+        XCTAssertEqual(expression1.y, expression2.y, accuracy: 0.009)
     }
     
     func testCodableJSON() {
