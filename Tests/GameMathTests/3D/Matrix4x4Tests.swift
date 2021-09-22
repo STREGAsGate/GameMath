@@ -112,6 +112,7 @@ final class Matrix4x4Tests: XCTestCase {
         XCTAssertEqual(angle1, angle2, accuracy: 0.0025)
     }
 
+    #if false
     func testMultiplicationPerformance() {
         let m1 = Transform3(position: Position3(128, 128, 128),
                                    rotation: Quaternion(Degrees(128), axis: .up),
@@ -144,4 +145,5 @@ final class Matrix4x4Tests: XCTestCase {
             doMath()
         }
     }
+    #endif
 }
