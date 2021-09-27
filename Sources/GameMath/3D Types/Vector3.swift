@@ -402,6 +402,18 @@ extension Vector3 {
     }
 }
 
+extension Vector3 {
+    @_transparent
+    public static prefix func -(rhs: Self) -> Self {
+        return Self(-rhs.x, -rhs.y, -rhs.z)
+    }
+
+    @_transparent
+    public static prefix func +(rhs: Self) -> Self {
+        return Self(+rhs.x, +rhs.y, +rhs.z)
+    }
+}
+
 //MARK: Matrix4
 public extension Vector3 {
     @_transparent

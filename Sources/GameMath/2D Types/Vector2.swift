@@ -361,6 +361,18 @@ public extension Vector2 {
 }
 
 extension Vector2 {
+    @_transparent
+    public static prefix func -(rhs: Self) -> Self {
+        return Self(-rhs.x, -rhs.y)
+    }
+
+    @_transparent
+    public static prefix func +(rhs: Self) -> Self {
+        return Self(+rhs.x, +rhs.y)
+    }
+}
+
+extension Vector2 {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         try container.encode([x, y])
