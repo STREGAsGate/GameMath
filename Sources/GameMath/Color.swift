@@ -140,6 +140,48 @@ public extension Color {
     }
 }
 
+public extension Color {
+    static func +(lhs: Color, rhs: Float) -> Color {
+        return Color(lhs.red + rhs, lhs.green + rhs, lhs.blue + rhs, lhs.alpha + rhs)
+    }
+    static func +=(lhs: inout Color, rhs: Float) {
+        lhs.red += rhs
+        lhs.green += rhs
+        lhs.blue += rhs
+        lhs.alpha += rhs
+    }
+
+    static func -(lhs: Color, rhs: Float) -> Color {
+        return Color(lhs.red - rhs, lhs.green - rhs, lhs.blue - rhs, lhs.alpha - rhs)
+    }
+    static func -=(lhs: inout Color, rhs: Float) {
+        lhs.red -= rhs
+        lhs.green -= rhs
+        lhs.blue -= rhs
+        lhs.alpha -= rhs
+    }
+
+    static func *(lhs: Color, rhs: Float) -> Color {
+        return Color(lhs.red * rhs, lhs.green * rhs, lhs.blue * rhs, lhs.alpha * rhs)
+    }
+    static func *=(lhs: inout Color, rhs: Float) {
+        lhs.red *= rhs
+        lhs.green *= rhs
+        lhs.blue *= rhs
+        lhs.alpha *= rhs
+    }
+
+    static func /(lhs: Color, rhs: Float) -> Color {
+        return Color(lhs.red / rhs, lhs.green / rhs, lhs.blue / rhs, lhs.alpha / rhs)
+    }
+    static func /=(lhs: inout Color, rhs: Float) {
+        lhs.red /= rhs
+        lhs.green /= rhs
+        lhs.blue /= rhs
+        lhs.alpha /= rhs
+    }
+}
+
 public func min(_ lhs: Color, _ rhs: Color) -> Color {
     return Color(min(lhs.red, rhs.red), min(lhs.green, rhs.green), min(lhs.blue, rhs.blue), min(lhs.alpha, rhs.alpha))
 }
