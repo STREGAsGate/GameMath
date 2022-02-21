@@ -61,20 +61,6 @@ extension Quaternion {
     public init(_ degrees: Degrees, axis: Direction3) {
         self.init(Radians(degrees), axis: axis)
     }
-    
-    public init(pitch: Degrees, yaw: Degrees, roll: Degrees) {
-        let cy = cos(roll * 0.5)
-        let sy = sin(roll * 0.5)
-        let cp = cos(yaw * 0.5)
-        let sp = sin(yaw * 0.5)
-        let cr = cos(pitch * 0.5)
-        let sr = sin(pitch * 0.5)
-
-        self.x = sr * cp * cy - cr * sp * sy
-        self.y = cr * sp * cy + sr * cp * sy
-        self.z = cr * cp * sy - sr * sp * cy
-        self.w = cr * cp * cy + sr * sp * sy
-    }
 }
 
 extension Quaternion {
