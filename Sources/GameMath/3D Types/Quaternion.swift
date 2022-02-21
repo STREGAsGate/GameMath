@@ -63,12 +63,15 @@ extension Quaternion {
     }
     
     public init(pitch: Degrees, yaw: Degrees, roll: Degrees) {
-        let cy = cos(roll.rawValue * 0.5)
-        let sy = sin(roll.rawValue * 0.5)
-        let cp = cos(yaw.rawValue * 0.5)
-        let sp = sin(yaw.rawValue * 0.5)
-        let cr = cos(pitch.rawValue * 0.5)
-        let sr = sin(pitch.rawValue * 0.5)
+        let _pitch = Radians(pitch)
+        let _yaw = Radians(yaw)
+        let _roll = Radians(roll)
+        let cy = cos(_roll.rawValue * 0.5)
+        let sy = sin(_roll.rawValue * 0.5)
+        let cp = cos(_yaw.rawValue * 0.5)
+        let sp = sin(_yaw.rawValue * 0.5)
+        let cr = cos(_pitch.rawValue * 0.5)
+        let sr = sin(_pitch.rawValue * 0.5)
 
         self.x = sr * cp * cy - cr * sp * sy
         self.y = cr * sp * cy + sr * cp * sy
