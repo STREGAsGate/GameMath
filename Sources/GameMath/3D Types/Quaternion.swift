@@ -61,6 +61,23 @@ extension Quaternion {
     public init(_ degrees: Degrees, axis: Direction3) {
         self.init(Radians(degrees), axis: axis)
     }
+<<<<<<< Updated upstream
+=======
+    
+    public init(pitch: Degrees, yaw: Degrees, roll: Degrees) {
+        let cy = cos(roll.rawValue * 0.5)
+        let sy = sin(roll.rawValue * 0.5)
+        let cp = cos(yaw.rawValue * 0.5)
+        let sp = sin(yaw.rawValue * 0.5)
+        let cr = cos(pitch.rawValue * 0.5)
+        let sr = sin(pitch.rawValue * 0.5)
+
+        self.x = sr * cp * cy - cr * sp * sy
+        self.y = cr * sp * cy + sr * cp * sy
+        self.z = cr * cp * sy - sr * sp * cy
+        self.w = cr * cp * cy + sr * sp * sy
+    }
+>>>>>>> Stashed changes
 }
 
 extension Quaternion {
