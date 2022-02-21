@@ -61,8 +61,6 @@ extension Quaternion {
     public init(_ degrees: Degrees, axis: Direction3) {
         self.init(Radians(degrees), axis: axis)
     }
-<<<<<<< Updated upstream
-=======
     
     public init(pitch: Degrees, yaw: Degrees, roll: Degrees) {
         let cy = cos(roll.rawValue * 0.5)
@@ -77,7 +75,6 @@ extension Quaternion {
         self.z = cr * cp * sy - sr * sp * cy
         self.w = cr * cp * cy + sr * sp * sy
     }
->>>>>>> Stashed changes
 }
 
 extension Quaternion {
@@ -327,6 +324,7 @@ public extension Quaternion {
     var conjugate: Self {
         return Self(w: w, x: -x, y: -y, z: -z)
     }
+    @inlinable
 }
 
 public extension Quaternion {
