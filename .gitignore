@@ -1,6 +1,7 @@
 
 #Swift
 .build
+.swiftpm
 Package.resolved
 
 #Apple
@@ -16,3 +17,4 @@ Package.resolved
 
 #Visual Studio Code
 .vscode
+
