@@ -328,6 +328,9 @@ public extension Quaternion {
         return Self(w: w, x: -x, y: -y, z: -z)
     }
     @inlinable
+    var transposed: Self {
+        return Matrix4x4(rotation: self).transposed().rotation
+    }
 }
 
 public extension Quaternion {
