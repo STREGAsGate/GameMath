@@ -18,14 +18,11 @@ GameMath uses protocols and generics to promote clear type intention. Vector typ
 Operators such as multiplication, division, addition, and subtraction, can be used across types so long as they use the same generic constraint. The type returned will be the logical result of the operation, usually the left side.
 ```swift
 //Success
-let pos: Position3<Float> = Position3(0, 1, 0) * Size3(1, 1, 1)
+let pos: Position3 = Position3(0, 1, 0) * Size3(1, 1, 1)
 
 //Error: Size3 cannot be converted to Position3
-let pos: Position3<Float> = Size3(1, 1, 1) * Position3(0, 1, 0) 
+let pos: Position3 = Size3(1, 1, 1) * Position3(0, 1, 0) 
 ```
-Most types work with <a href="https://docs.swift.org/swift-book/LanguageGuide/Generics.html#" target="_blank">Swift Generics</a>. Some types have restrictions on generics. Using `Size3<Int>` instead of `Size3<Float>` makes sense and could be used for any number of reasons.
-
-However a `Direction3<Int>` does not make sense because a normalized direction vector should have a length of 1, so `Int` cannot represent very many angles. While `Direction3<Int>(0, 1, 0)` is valid, it's usefulness is questionable so FloatingPoint is a requirement for `Direction3<T: FloatingPoint>`.
 
 ## Easy To Understand
 GameMath is intended to make doing gamming math easier for everyone. An example is interpolation.
