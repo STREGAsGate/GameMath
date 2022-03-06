@@ -37,6 +37,7 @@ public struct Matrix3x3 {
 #endif
  
 public extension Matrix3x3 {
+    @_transparent
     init(a: Float, b: Float, c: Float,
                 e: Float, f: Float, g: Float,
                 i: Float, j: Float, k: Float) {
@@ -240,11 +241,13 @@ public extension Matrix3x3 {
 }
 
 public extension Matrix3x3 {
+    @_transparent
     func transposedArray() -> [Float] {
         return [a, e, i,
                 b, f, j,
                 c, g, k]
     }
+    @_transparent
     func array() -> [Float] {
         return [a, b, c,
                 e, f, g,

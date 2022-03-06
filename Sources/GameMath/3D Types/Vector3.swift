@@ -16,7 +16,7 @@ public protocol Vector3 {
 }
 
 extension Vector3 {
-    @inlinable
+    @_transparent
     public init(_ value: Float) {
         self.init(value, value, value)
     }
@@ -33,11 +33,11 @@ extension Vector3 {
 
 //Mark: Integer Casting
 extension Vector3 {
-    @inlinable
+    @_transparent
     public init<V: Vector3>(_ value: V) {
         self = Self(value.x, value.y, value.z)
     }
-    @inlinable
+    @_transparent
     public init() {
         self.init(0, 0, 0)
     }
@@ -98,29 +98,29 @@ extension Vector3 {
 }
 
 extension Vector3 {
-    @_transparent
+    @inlinable
     public var length: Float {
         return x + y + z
     }
     
-    @_transparent
+    @inlinable
     public var magnitude: Float {
         return squaredLength.squareRoot()
     }
 
     #if !GameMathUseFastInverseSquareRoot
-    @_transparent
+    @inlinable
     public var normalized: Self {
         return self / self.magnitude
     }
     
-    @_transparent
+    @inlinable
     public mutating func normalize() {
         self /= magnitude
     }
     #endif
     
-    @_transparent
+    @inlinable
     public func squareRoot() -> Self {
         return Self(x.squareRoot(), y.squareRoot(), z.squareRoot())
     }
@@ -144,11 +144,11 @@ extension Vector3 {
 }
 
 public extension Vector3 {
-    @inlinable
+    @_transparent
     var max: Float {
         return Swift.max(x, Swift.max(y, z))
     }
-    @inlinable
+    @_transparent
     var min: Float {
         return Swift.min(x, Swift.min(y, z))
     }
@@ -156,39 +156,39 @@ public extension Vector3 {
 
 //MARK: - SIMD
 public extension Vector3 {
-    @inlinable
+    @_transparent
     var simd: SIMD3<Float> {
         return SIMD3<Float>(x, y, z)
     }
 }
 
 //MARK: - Operations
-@inlinable
+@_transparent
 public func ceil<V: Vector3>(_ v: V) -> V {
     return V.init(ceil(v.x), ceil(v.y), ceil(v.z))
 }
 
-@inlinable
+@_transparent
 public func floor<V: Vector3>(_ v: V) -> V {
     return V.init(floor(v.x), floor(v.y), floor(v.z))
 }
 
-@inlinable
+@_transparent
 public func round<V: Vector3>(_ v: V) -> V {
     return V.init(round(v.x), round(v.y), round(v.z))
 }
 
-@inlinable
+@_transparent
 public func abs<V: Vector3>(_ v: V) -> V {
     return V.init(abs(v.x), abs(v.y), abs(v.z))
 }
 
-@inlinable
+@_transparent
 public func min<V: Vector3>(_ lhs: V, _ rhs: V) -> V {
     return V.init(min(lhs.x, rhs.x), min(lhs.y, rhs.y), min(lhs.z, rhs.z))
 }
 
-@inlinable
+@_transparent
 public func max<V: Vector3>(_ lhs: V, _ rhs: V) -> V {
     return V.init(max(lhs.x, rhs.x), max(lhs.y, rhs.y), max(lhs.z, rhs.z))
 }

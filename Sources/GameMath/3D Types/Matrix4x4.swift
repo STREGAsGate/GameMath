@@ -90,7 +90,7 @@ public extension Matrix4x4 {
 }
 
 public extension Matrix4x4 {
-    @inlinable
+    @_transparent
     static var identity: Self {Self(a: 1, b: 0, c: 0, d: 0,
                                     e: 0, f: 1, g: 0, h: 0,
                                     i: 0, j: 0, k: 1, l: 0,
@@ -104,7 +104,6 @@ public extension Matrix4x4 {
         m = 0; n = 0; o = 0; p = 1
     }
     
-    @_transparent
     var inverse: Self {
         var a: Float = self.f * self.k * self.p
         a -= self.f * self.l * self.o
@@ -351,7 +350,7 @@ public extension Matrix4x4 {
                   0, 0, 0, 1)
     }
     
-    @inlinable
+    @_transparent
     var position: Position3 {
         get {
             return Position3(x: d, y: h, z: l)
@@ -436,7 +435,7 @@ public extension Matrix4x4 {
                   0,           0,          0,          1)
     }
     
-    @inlinable
+    @_transparent
     var rotation: Quaternion {
         get {
             return Quaternion(rotationMatrix: self.rotationMatrix)
@@ -586,14 +585,14 @@ public extension Matrix4x4 {
 
 //MARK: - Graphics
 extension Matrix4x4 {
-    @inlinable
+    @_transparent
     public var simd: SIMD16<Float> {
         return SIMD16<Float>(a, b, c, d,
                          e, f, g, h,
                          i, j, k, l,
                          m, n, o, p)
     }
-    @inlinable
+    @_transparent
     public var transposedSIMD: SIMD16<Float>  {
         return SIMD16<Float>(a, e, i, m,
                          b, f, j, n,
@@ -603,7 +602,7 @@ extension Matrix4x4 {
 }
 
 extension Matrix4x4 {
-    @inlinable
+    @_transparent
     public func transposedArray() -> [Float] {
         return [a, e, i, m,
                 b, f, j, n,
@@ -611,7 +610,7 @@ extension Matrix4x4 {
                 d, h, l, p]
     }
     
-    @inlinable
+    @_transparent
     public func array() -> [Float] {
         return [a, b, c, d,
                 e, f, g, h,
@@ -628,14 +627,14 @@ extension Matrix4x4 {
                   m: value[3], n: value[7], o: value[11], p: value[15])
     }
     
-    @inlinable
+    @_transparent
     public func transposed() -> Self {
         return Self(self.transposedArray())
     }
 }
 
 extension Matrix4x4 {
-    @inlinable
+    @_transparent
     public var isFinite: Bool {
         for value in self.array() {
             guard value.isFinite else {return false}
@@ -704,12 +703,12 @@ public extension Matrix4x4 {
 #if GameMathUseDispatch && canImport(Dispatch) && false
 import Dispatch
 public extension Matrix4x4 {
-    @inlinable
+    @_transparent
     static func *=(lhs: inout Self, rhs: Self) {
         lhs = lhs * rhs
     }
     
-    @inlinable
+    @_transparent
     static func *(lhs: Self, rhs: Self) -> Self {
         var out: Matrix4x4 = .identity
         DispatchQueue.concurrentPerform(iterations: 16) {

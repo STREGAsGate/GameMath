@@ -229,10 +229,12 @@ extension Quaternion {
 }
 
 public extension Quaternion {
+    @inlinable
     var isFinite: Bool {
         return x.isFinite && y.isFinite && z.isFinite && w.isFinite
     }
     
+    @inlinable
     var squaredLength: Float {
         var value: Float = x * x
         value += y * y
@@ -241,21 +243,25 @@ public extension Quaternion {
         return value
     }
     
+    @inlinable
     var magnitude: Float {
         return squaredLength.squareRoot()
     }
     
+    @inlinable
     var normalized: Self {
         let magnitude: Float = self.magnitude
         return Self(w: w / magnitude, x: x / magnitude, y: y / magnitude, z: z / magnitude)
     }
     
+    @inlinable
     mutating func normalize() {
         self = self.normalized
     }
 }
 
 public extension Quaternion {
+    @inlinable
     var unitNormalized: Self {
         let angle: Float = w
         let degrees: Float = cos(angle * 0.5)
@@ -265,7 +271,7 @@ public extension Quaternion {
 }
 
 public extension Quaternion {
-    @inlinable
+    @_transparent
     var direction: Direction3 {
         get {
             return Direction3(x: x, y: y, z: z)
@@ -277,38 +283,39 @@ public extension Quaternion {
         }
     }
     
-    @inlinable
+    @_transparent
     var forward: Direction3 {
         return Direction3.forward.rotated(by: self)
     }
-    @inlinable
+    @_transparent
     var backward: Direction3 {
         return Direction3.backward.rotated(by: self)
     }
-    @inlinable
+    @_transparent
     var up: Direction3 {
         return Direction3.up.rotated(by: self)
     }
-    @inlinable
+    @_transparent
     var down: Direction3 {
         return Direction3.down.rotated(by: self)
     }
-    @inlinable
+    @_transparent
     var left: Direction3 {
         return Direction3.left.rotated(by: self)
     }
-    @inlinable
+    @_transparent
     var right: Direction3 {
         return Direction3.right.rotated(by: self)
     }
 }
 
 public extension Quaternion {
-    @inlinable
+    @_transparent
     static var zero: Self {
         return Self(Radians(0), axis: .forward)
     }
     
+    @inlinable
     var inverse: Self {
         var absoluteValue: Float = magnitude
         absoluteValue *= absoluteValue
@@ -334,23 +341,26 @@ public extension Quaternion {
 }
 
 public extension Quaternion {
+    @inline(__always)
     func interpolated(to: Self, _ method: InterpolationMethod) -> Self {
         switch method {
         case let .linear(factor, shortest):
             if shortest {
-                return self.slerped(to: to, factor: factor)
+                return self.slerped(to: to, factor: factor).normalized
             }else{
-                return self.lerped(to: to, factor: factor)
+                return self.lerped(to: to, factor: factor).normalized
             }
         }
     }
     
+    @_transparent
     mutating func interpolate(to: Self, _ method: InterpolationMethod) {
         self = self.interpolated(to: to, method)
     }
 }
 
 private extension Quaternion {
+    @_transparent
     func lerped(to q2: Self, factor t: Float) -> Self {
         var qr: Quaternion = .zero
         
@@ -363,10 +373,12 @@ private extension Quaternion {
         return qr.normalized
     }
     
+    @_transparent
     mutating func lerp(to q2: Self, factor: Float) {
         self = self.lerped(to: q2, factor: factor)
     }
     
+    @_transparent
     func slerped(to qb: Self, factor t: Float) -> Self {
         let qa = self
         var qb = qb
@@ -411,18 +423,22 @@ private extension Quaternion {
         return qm
     }
     
+    @_transparent
     mutating func slerp(to qb: Self, factor: Float) {
         self = self.slerped(to: qb, factor: factor)
     }
 }
 
 public extension Quaternion {
+    @_transparent
     static func *(lhs: Self, rhs: Float) -> Self {
         return Self(w: lhs.w * rhs, x: lhs.x * rhs, y: lhs.y * rhs, z: lhs.z * rhs)
     }
+    @_transparent
     static func *=(lhs: inout Self, rhs: Self) {
         lhs = lhs * rhs
     }
+    @_transparent
     static func *(lhs: Self, rhs: Self) -> Self {
         var w: Float = lhs.w * rhs.w
         w -= lhs.x * rhs.x
@@ -443,10 +459,11 @@ public extension Quaternion {
         
         return Self(w: w, x: x, y: y, z: z)
     }
-    
+    @_transparent
     static func *=<V: Vector2>(lhs: inout Self, rhs: V) {
         lhs = (lhs * rhs).normalized
     }
+    @_transparent
     static func *<V: Vector2>(lhs: Self, rhs: V) -> Self {
         var w: Float = -lhs.x * rhs.x
         w -= lhs.y * rhs.y
@@ -462,10 +479,11 @@ public extension Quaternion {
         z -= lhs.y * rhs.x
         return Self(w: w, x: x, y: y, z: z)
     }
-    
+    @_transparent
     static func *=<V: Vector3>(lhs: inout Self, rhs: V) {
         lhs = (lhs * rhs).normalized
     }
+    @_transparent
     static func *<V: Vector3>(lhs: Self, rhs: V) -> Self {
         var w: Float = -lhs.x * rhs.x
         w -= lhs.y * rhs.y
@@ -481,23 +499,27 @@ public extension Quaternion {
         z -= lhs.y * rhs.x
         return Self(w: w, x: x, y: y, z: z)
     }
-    
+    @_transparent
     static func /(lhs: Self, rhs: Float) -> Self {
         return Self(w: lhs.w / rhs, x: lhs.x / rhs, y: lhs.y / rhs, z: lhs.z / rhs)
     }
+    @_transparent
     static func /=(lhs: inout Self, rhs: Float) {
         lhs = lhs / rhs
     }
-    
+    @_transparent
     static func +=(lhs: inout Self, rhs: Self) {
         lhs = lhs + rhs
     }
+    @_transparent
     static func +(lhs: Self, rhs: Self) -> Self {
         return Self(w: lhs.w + rhs.w, x: lhs.x + rhs.x, y: lhs.y + rhs.y, z: lhs.z + rhs.z)
     }
+    @_transparent
     static func -=(lhs: inout Self, rhs: Self) {
         lhs = lhs - rhs
     }
+    @_transparent
     static func -(lhs: Self, rhs: Self) -> Self {
         return Self(w: lhs.w - rhs.w, x: lhs.x - rhs.x, y: lhs.y - rhs.y, z: lhs.z - rhs.z)
     }

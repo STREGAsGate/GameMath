@@ -31,174 +31,222 @@ public extension Radians {
         self.rawValue = value.rawValue * (RawValue.pi / 180)
     }
     
+    @_transparent
     var isFinite: Bool {
         return rawValue.isFinite
     }
     
+    @inlinable
     mutating func interpolate(to: Self, _ method: InterpolationMethod) {
         self.rawValue.interpolate(to: to.rawValue, method)
     }
     
-    mutating func interpolated(to: Self, _ method: InterpolationMethod) -> Self {
+    @inlinable
+    func interpolated(to: Self, _ method: InterpolationMethod) -> Self {
         return Radians(self.rawValue.interpolated(to: to.rawValue, method))
     }
     
+    @inlinable
     mutating func interpolate(to: Degrees, _ method: InterpolationMethod) {
         self.interpolate(to: Self(to), method)
     }
     
-    mutating func interpolated(to: Degrees, _ method: InterpolationMethod) -> Self {
+    @inlinable
+    func interpolated(to: Degrees, _ method: InterpolationMethod) -> Self {
         return self.interpolated(to: Self(to), method)
     }
     
+    @_transparent
     static var zero: Self {
         return Self(rawValue: 0)
     }
 }
 
 extension Radians: AdditiveArithmetic {
+    @_transparent
     public static func +(_ lhs: Self, _ rhs: Self) -> Self {
         return Self(lhs.rawValue + rhs.rawValue)
     }
+    @_transparent
     public static func +(_ lhs: Self, _ rhs: Degrees) -> Self {
         return Self(lhs.rawValue + Self(rhs).rawValue)
     }
+    @_transparent
     public static func +(_ lhs: Self, _ rhs: RawValue) -> Self {
         return Self(lhs.rawValue + rhs)
     }
+    @_transparent
     public static func +(_ lhs: RawValue, _ rhs: Self) -> RawValue {
         return lhs + rhs.rawValue
     }
     
+    @_transparent
     public static func -(_ lhs: Self, _ rhs: Self) -> Self {
         return Self(lhs.rawValue - rhs.rawValue)
     }
+    @_transparent
     public static func -(_ lhs: Self, _ rhs: Degrees) -> Self {
         return Self(lhs.rawValue - Self(rhs).rawValue)
     }
+    @_transparent
     public static func -(_ lhs: Self, _ rhs: RawValue) -> Self {
         return Self(lhs.rawValue - rhs)
     }
+    @_transparent
     public static func -(_ lhs: RawValue, _ rhs: Self) -> RawValue {
         return lhs - rhs.rawValue
     }
 }
 
 extension Radians {
+    @_transparent
     public static func *(_ lhs: Self, _ rhs: Self) -> Self {
         return Self(lhs.rawValue * rhs.rawValue)
     }
+    @_transparent
     public static func *=(_ lhs: inout Self, _ rhs: Self) {
         lhs.rawValue *= rhs.rawValue
     }
 
+    @_transparent
     public static func *(_ lhs: Self, _ rhs: RawValue) -> Self {
         return Self(lhs.rawValue * rhs)
     }
+    @_transparent
     public static func *(_ lhs: RawValue, _ rhs: Self) -> RawValue {
         return lhs * rhs.rawValue
     }
+    @_transparent
     public static func *=(_ lhs: inout Self, _ rhs: RawValue) {
         lhs.rawValue *= rhs
     }
     
+    @_transparent
     public static func *(_ lhs: Self, _ rhs: Degrees) -> Self {
         return Self(lhs.rawValue * Self(rhs).rawValue)
     }
+    @_transparent
     public static func *= (lhs: inout Self, rhs: Degrees) {
         lhs.rawValue *= Self(rhs).rawValue
     }
 }
 
 extension Radians {
+    @_transparent
     public static func /(_ lhs: Self, _ rhs: Self) -> Self {
         return Self(lhs.rawValue / rhs.rawValue)
     }
+    @_transparent
     public static func /(_ lhs: Self, _ rhs: Degrees) -> Self {
         return Self(lhs.rawValue / Self(rhs).rawValue)
     }
+    @_transparent
     public static func /(_ lhs: Self, _ rhs: RawValue) -> Self {
         return Self(lhs.rawValue / rhs)
     }
+    @_transparent
     public static func /(_ lhs: RawValue, _ rhs: Self) -> RawValue {
         return lhs / rhs.rawValue
     }
 }
 
+@_transparent
 public func min(_ lhs: Radians, _ rhs: Radians) -> Radians {
     return Radians(min(lhs.rawValue, rhs.rawValue))
 }
+@_transparent
 public func min(_ lhs: Radians, _ rhs: Degrees) -> Radians {
     return Radians(min(lhs.rawValue, Radians(rhs).rawValue))
 }
+@_transparent
 public func min(_ lhs: Radians, _ rhs: Float) -> Radians {
     return Radians(min(lhs.rawValue, rhs))
 }
+@_transparent
 public func min(_ lhs: Float, _ rhs: Radians) -> Radians {
     return Radians(min(lhs, rhs.rawValue))
 }
 
+@_transparent
 public func max(_ lhs: Radians, _ rhs: Radians) -> Radians {
     return Radians(max(lhs.rawValue, rhs.rawValue))
 }
+@_transparent
 public func max(_ lhs: Radians, _ rhs: Degrees) -> Radians {
     return Radians(max(lhs.rawValue, Radians(rhs).rawValue))
 }
+@_transparent
 public func max(_ lhs: Radians, _ rhs: Float) -> Radians {
     return Radians(max(lhs.rawValue, rhs))
 }
+@_transparent
 public func max(_ lhs: Float, _ rhs: Radians) -> Radians {
     return Radians(max(lhs, rhs.rawValue))
 }
 
+@_transparent
 public func abs(_ value: Radians) -> Radians {
     return Radians(abs(value.rawValue))
 }
+@_transparent
 public func ceil(_ value: Radians) -> Radians {
     return Radians(ceil(value.rawValue))
 }
+@_transparent
 public func floor(_ value: Radians) -> Radians {
     return Radians(floor(value.rawValue))
 }
+@_transparent
 public func round(_ value: Radians) -> Radians {
     return Radians(round(value.rawValue))
 }
 
 extension Radians: Comparable {
+    @_transparent
     public static func <(lhs: Self, rhs: Self) -> Bool {
         return lhs.rawValue < rhs.rawValue
     }
+    @_transparent
     public static func <(lhs: Self, rhs: Degrees) -> Bool {
         return lhs.rawValue < Radians(rhs).rawValue
     }
+    @_transparent
     public static func <(lhs: Self, rhs: Float) -> Bool {
         return lhs.rawValue < rhs
     }
+    @_transparent
     public static func <(lhs: Float, rhs: Self) -> Bool {
         return lhs < rhs.rawValue
     }
     
+    @_transparent
     public static func >(lhs: Self, rhs: Self) -> Bool {
         return lhs.rawValue > rhs.rawValue
     }
+    @_transparent
     public static func >(lhs: Self, rhs: Degrees) -> Bool {
         return lhs.rawValue > Radians(rhs).rawValue
     }
+    @_transparent
     public static func >(lhs: Self, rhs: Float) -> Bool {
         return lhs.rawValue > rhs
     }
+    @_transparent
     public static func >(lhs: Float, rhs: Self) -> Bool {
         return lhs > rhs.rawValue
     }
 }
 
 extension Radians: Equatable {
+    @_transparent
     public static func ==(lhs: Self, rhs: Float) -> Bool {
         return lhs.rawValue == rhs
     }
+    @_transparent
     public static func ==(lhs: Float, rhs: Self) -> Bool {
         return lhs == rhs.rawValue
     }
+    @_transparent
     public static func ==(lhs: Self, rhs: Self) -> Bool {
         return lhs.rawValue == rhs.rawValue
     }
@@ -230,10 +278,12 @@ public extension Degrees {
         self.rawValue = value.rawValue * (180 / RawValue.pi)
     }
     
+    @_transparent
     var isFinite: Bool {
         return rawValue.isFinite
     }
     
+    @inlinable
     mutating func interpolate(to: Self, _ method: InterpolationMethod) {
         self.rawValue.interpolate(to: to.rawValue, method)
     }
@@ -247,156 +297,199 @@ public extension Degrees {
         return Self(self.rawValue.interpolated(to: to.rawValue, method))
     }
     
+    @_transparent
     mutating func interpolate(to: Radians, _ method: InterpolationMethod) {
         self.interpolate(to: Self(to), method)
     }
     
+    @_transparent
     func interpolated(to: Radians, _ method: InterpolationMethod) -> Self {
         return self.interpolated(to: Self(to), method)
     }
     
+    @_transparent
     static var zero: Self {
         return Self(0)
     }
 }
 
 extension Degrees: AdditiveArithmetic {
+    @_transparent
     public static func +(_ lhs: Self, _ rhs: Self) -> Self {
         return Self(lhs.rawValue + rhs.rawValue)
     }
+    @_transparent
     public static func +(_ lhs: Self, _ rhs: Radians) -> Self {
         return Self(lhs.rawValue + Self(rhs).rawValue)
     }
+    @_transparent
     public static func +(_ lhs: Self, _ rhs: RawValue) -> Self {
         return Self(lhs.rawValue + rhs)
     }
+    @_transparent
     public static func +(_ lhs: RawValue, _ rhs: Self) -> RawValue {
         return lhs + rhs.rawValue
     }
     
+    @_transparent
     public static func -(_ lhs: Self, _ rhs: Self) -> Self {
         return Self(lhs.rawValue - rhs.rawValue)
     }
+    @_transparent
     public static func -(_ lhs: Self, _ rhs: Radians) -> Self {
         return Self(lhs.rawValue - Self(rhs).rawValue)
     }
+    @_transparent
     public static func -(_ lhs: Self, _ rhs: RawValue) -> Self {
         return Self(lhs.rawValue - rhs)
     }
+    @_transparent
     public static func -(_ lhs: RawValue, _ rhs: Self) -> RawValue {
         return lhs - rhs.rawValue
     }
 }
 
 extension Degrees {
+    @_transparent
     public static func *(_ lhs: Self, _ rhs: Self) -> Self {
         return Self(lhs.rawValue * rhs.rawValue)
     }
+    @_transparent
     public static func *=(_ lhs: inout Self, _ rhs: Self) {
         lhs.rawValue *= rhs.rawValue
     }
 
+    @_transparent
     public static func *(_ lhs: Self, _ rhs: RawValue) -> Self {
         return Self(lhs.rawValue * rhs)
     }
+    @_transparent
     public static func *(_ lhs: RawValue, _ rhs: Self) -> RawValue {
         return lhs * rhs.rawValue
     }
+    @_transparent
     public static func *=(_ lhs: inout Self, _ rhs: RawValue) {
         lhs.rawValue *= rhs
     }
     
+    @_transparent
     public static func *(_ lhs: Self, _ rhs: Radians) -> Self {
         return Self(lhs.rawValue * Self(rhs).rawValue)
     }
+    @_transparent
     public static func *= (lhs: inout Self, rhs: Radians) {
         lhs.rawValue *= Self(rhs).rawValue
     }
 }
 
 extension Degrees {
+    @_transparent
     public static func /(_ lhs: Self, _ rhs: Self) -> Self {
         return Self(lhs.rawValue / rhs.rawValue)
     }
+    @_transparent
     public static func /(_ lhs: Self, _ rhs: Radians) -> Self {
         return Self(lhs.rawValue / Self(rhs).rawValue)
     }
+    @_transparent
     public static func /(_ lhs: Self, _ rhs: RawValue) -> Self {
         return Self(lhs.rawValue / rhs)
     }
+    @_transparent
     public static func /(_ lhs: RawValue, _ rhs: Self) -> RawValue {
         return lhs / rhs.rawValue
     }
 }
 
+@_transparent
 public func min(_ lhs: Degrees, _ rhs: Degrees) -> Degrees {
     return Degrees(min(lhs.rawValue, rhs.rawValue))
 }
+@_transparent
 public func min(_ lhs: Degrees, _ rhs: Radians) -> Degrees {
     return Degrees(min(lhs.rawValue, Degrees(rhs).rawValue))
 }
+@_transparent
 public func min(_ lhs: Degrees, _ rhs: Float) -> Degrees {
     return Degrees(min(lhs.rawValue, rhs))
 }
+@_transparent
 public func min(_ lhs: Float, _ rhs: Degrees) -> Degrees {
     return Degrees(min(lhs, rhs.rawValue))
 }
 
+@_transparent
 public func max(_ lhs: Degrees, _ rhs: Degrees) -> Degrees {
     return Degrees(max(lhs.rawValue, rhs.rawValue))
 }
+@_transparent
 public func max(_ lhs: Degrees, _ rhs: Radians) -> Degrees {
     return Degrees(max(lhs.rawValue, Degrees(rhs).rawValue))
 }
+@_transparent
 public func max(_ lhs: Degrees, _ rhs: Float) -> Degrees {
     return Degrees(max(lhs.rawValue, rhs))
 }
+@_transparent
 public func max(_ lhs: Float, _ rhs: Degrees) -> Degrees {
     return Degrees(max(lhs, rhs.rawValue))
 }
 
+@_transparent
 public func abs(_ value: Degrees) -> Degrees {
     return Degrees(abs(value.rawValue))
 }
+@_transparent
 public func ceil(_ value: Degrees) -> Degrees {
     return Degrees(ceil(value.rawValue))
 }
+@_transparent
 public func floor(_ value: Degrees) -> Degrees {
     return Degrees(floor(value.rawValue))
 }
+@_transparent
 public func round(_ value: Degrees) -> Degrees {
     return Degrees(round(value.rawValue))
 }
 
 extension Degrees: Comparable {
+    @_transparent
     public static func <(lhs: Self, rhs: Self) -> Bool {
         return lhs.rawValue < rhs.rawValue
     }
+    @_transparent
     public static func <(lhs: Self, rhs: RawValue) -> Bool {
         return lhs.rawValue < rhs
     }
+    @_transparent
     public static func <(lhs: RawValue, rhs: Self) -> Bool {
         return lhs < rhs.rawValue
     }
     
+    @_transparent
     public static func >(lhs: Self, rhs: Self) -> Bool {
         return lhs.rawValue > rhs.rawValue
     }
+    @_transparent
     public static func >(lhs: Self, rhs: RawValue) -> Bool {
         return lhs.rawValue > rhs
     }
+    @_transparent
     public static func >(lhs: RawValue, rhs: Self) -> Bool {
         return lhs > rhs.rawValue
     }
 }
 
 extension Degrees: Equatable {
+    @_transparent
     public static func ==(lhs: Self, rhs: RawValue) -> Bool {
         return lhs.rawValue == rhs
     }
+    @_transparent
     public static func ==(lhs: RawValue, rhs: Self) -> Bool {
         return lhs == rhs.rawValue
     }
+    @_transparent
     public static func ==(lhs: Self, rhs: Self) -> Bool {
         return lhs.rawValue == rhs.rawValue
     }

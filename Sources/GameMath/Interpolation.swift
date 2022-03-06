@@ -16,6 +16,7 @@ public enum InterpolationMethod {
 
 public extension Float {
     /// Interpolates toward `to` by using `method `
+    @inline(__always)
     func interpolated(to: Float, _ method: InterpolationMethod) -> Float {
         switch method {
         case let .linear(factor, _):
@@ -24,6 +25,7 @@ public extension Float {
     }
     
     /// Interpolates toward `to` by using `method `
+    @inline(__always)
     mutating func interpolate(to: Float, _ method: InterpolationMethod) {
         switch method {
         case let .linear(factor, _):
@@ -33,9 +35,11 @@ public extension Float {
 }
 
 fileprivate extension Float {
+    @_transparent
     func lerped(to: Float, factor: Float) -> Float {
         return self + (to - self) * factor
     }
+    @_transparent
     mutating func lerp(to: Float, factor: Float) {
         self = self.lerped(to: to, factor: factor)
     }

@@ -48,6 +48,7 @@ public extension Transform3 {
         self.scale = scale
     }
     
+    @inlinable
     var isFinite: Bool {
         return position.isFinite && scale.isFinite && rotation.isFinite
     }
@@ -64,6 +65,7 @@ public extension Transform3 {
     }
     
     ///Creates and returns a new matrix.
+    @inlinable
     func createMatrix() -> Matrix4x4 {
         var matrix = Matrix4x4(position: self.position)
         matrix *= Matrix4x4(rotation: self.rotation)
@@ -76,21 +78,25 @@ extension Transform3: Equatable {}
 extension Transform3: Hashable {}
 
 extension Transform3 {
+    @inlinable
     public mutating func rotate(_ degrees: Degrees, direction: Direction3) {
         self.rotation = Quaternion(degrees, axis: direction) * self.rotation
     }
 }
 
 extension Transform3 {
+    @inlinable
     public static var zero: Self {
         return Self(position: .zero, rotation: .zero, scale: .zero)
     }
+    @inlinable
     public static var empty: Self {
         return Self(position: .zero, rotation: .zero, scale: .one)
     }
 }
 
 extension Transform3 {
+    @inlinable
     public func interpolated(to destination: Self, _ method: InterpolationMethod) -> Self {
         var copy = self
         copy.position.interpolate(to: destination.position, method)
@@ -99,12 +105,14 @@ extension Transform3 {
         return copy
     }
     
+    @inlinable
     public mutating func interpolate(to: Self, _ method: InterpolationMethod) {
         self.position.interpolate(to: to.position, method)
         self.rotation.interpolate(to: to.rotation, method)
         self.scale.interpolate(to: to.scale, method)
     }
     
+    @inlinable
     public func difference(removing: Self) -> Self {
         var transform: Self = .empty
         transform.position = self.position - removing.position
@@ -114,18 +122,21 @@ extension Transform3 {
 }
 
 extension Transform3 {
+    @inlinable
     public func distance(from: Self) -> Float {
         return self.position.distance(from: from.position)
     }
 }
 
 public extension Transform3 {
+    @inlinable
     static func +=(lhs: inout Self, rhs: Self) {
         lhs.position += rhs.position
         lhs.rotation = rhs.rotation * lhs.rotation
         lhs.rotation.normalize()
         lhs.scale += rhs.scale
     }
+    @inlinable
     static func +(lhs: Self, rhs: Self) -> Self {
         return Self(position: lhs.position + rhs.position, rotation: (rhs.rotation * lhs.rotation).normalized, scale: lhs.scale + rhs.scale)
     }
