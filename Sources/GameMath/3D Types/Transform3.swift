@@ -86,8 +86,7 @@ extension Transform3 {
 
 extension Transform3 {
     @inlinable
-    @inlinable
-    public static var empty: Self {
+    public static var `default`: Self {
         return Self(position: .zero, rotation: .zero, scale: .one)
     }
 }
@@ -111,7 +110,7 @@ extension Transform3 {
     
     @inlinable
     public func difference(removing: Self) -> Self {
-        var transform: Self = .empty
+        var transform: Self = .default
         transform.position = self.position - removing.position
         transform.rotation = self.rotation * removing.rotation.inverse
         return transform
