@@ -86,9 +86,6 @@ extension Transform3 {
 
 extension Transform3 {
     @inlinable
-    public static var zero: Self {
-        return Self(position: .zero, rotation: .zero, scale: .zero)
-    }
     @inlinable
     public static var empty: Self {
         return Self(position: .zero, rotation: .zero, scale: .one)
