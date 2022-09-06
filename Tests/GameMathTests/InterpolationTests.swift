@@ -63,68 +63,72 @@ final class InterpolationTests: XCTestCase {
     }
     
     func testQuaternionLinear() {
-        let start = Quaternion(Degrees(0), axis: .right)
-        let end = Quaternion(Degrees(90), axis: .right)
+        let start = Quaternion(Degrees(0), axis: .right).normalized
+        let end = Quaternion(Degrees(180), axis: .right).normalized
         
         do {// Start value
-            let value = start.interpolated(to: end, .linear(0.0, shortest: false))
+            let value = start.interpolated(to: end, .linear(0.0, shortest: false)).normalized
             let expected = start
-            XCTAssertEqual(value.w, expected.w, accuracy: 0.0025)
-            XCTAssertEqual(value.x, expected.x, accuracy: 0.0025)
-            XCTAssertEqual(value.y, expected.y, accuracy: 0.0025)
-            XCTAssertEqual(value.z, expected.z, accuracy: 0.0025)
+            XCTAssertEqual(value.w, expected.w, accuracy: .ulpOfOne)
+            XCTAssertEqual(value.x, expected.x, accuracy: .ulpOfOne)
+            XCTAssertEqual(value.y, expected.y, accuracy: .ulpOfOne)
+            XCTAssertEqual(value.z, expected.z, accuracy: .ulpOfOne)
         }
         
         do {// Halfway
-            let value = start.interpolated(to: end, .linear(0.5, shortest: false))
-            let expected = Quaternion(Degrees(45), axis: .right)
-            XCTAssertEqual(value.w, expected.w, accuracy: 0.0025)
-            XCTAssertEqual(value.x, expected.x, accuracy: 0.0025)
-            XCTAssertEqual(value.y, expected.y, accuracy: 0.0025)
-            XCTAssertEqual(value.z, expected.z, accuracy: 0.0025)
+            let value = start.interpolated(to: end, .linear(1/2, shortest: false)).normalized
+            let expected = Quaternion(Degrees(90), axis: .right).normalized
+            let angleAroundX = expected.forward.angleAroundX
+            let angleAroundY = expected.forward.angleAroundY
+            let angleAroundZ = expected.forward.angleAroundZ
+            XCTAssertEqual(value.forward.angleAroundX.rawValue, angleAroundX.rawValue, accuracy: .ulpOfOne)
+            XCTAssertEqual(value.forward.angleAroundY.rawValue, angleAroundY.rawValue, accuracy: .ulpOfOne)
+            XCTAssertEqual(value.forward.angleAroundZ.rawValue, angleAroundZ.rawValue, accuracy: .ulpOfOne)
         }
         
         do {// End value
-            let value = start.interpolated(to: end, .linear(1.0, shortest: false))
+            let value = start.interpolated(to: end, .linear(1.0, shortest: false)).normalized
             let expected = end
-            XCTAssertEqual(value.w, expected.w, accuracy: 0.0025)
-            XCTAssertEqual(value.x, expected.x, accuracy: 0.0025)
-            XCTAssertEqual(value.y, expected.y, accuracy: 0.0025)
-            XCTAssertEqual(value.z, expected.z, accuracy: 0.0025)
+            XCTAssertEqual(value.w, expected.w, accuracy: .ulpOfOne)
+            XCTAssertEqual(value.x, expected.x, accuracy: .ulpOfOne)
+            XCTAssertEqual(value.y, expected.y, accuracy: .ulpOfOne)
+            XCTAssertEqual(value.z, expected.z, accuracy: .ulpOfOne)
         }
     }
     
     func testQuaternionShortest() {
         // This test is diffcult to perform accuraualy. To help, results are unitNormaized to bring them as close to the same format as possible before comparison. Because results are modified this a poor test, but good enough for regetion chcking.
         
-        let start = Quaternion(Degrees(45), axis: .right)
-        let end = Quaternion(Degrees(405), axis: .right)
+        let start = Quaternion(Degrees(45), axis: .right).normalized
+        let end = Quaternion(Degrees(-45), axis: .right).normalized
         
         do {// Start value
-            let value = start.interpolated(to: end, .linear(0.0, shortest: true)).unitNormalized
-            let expected = start.unitNormalized
-            XCTAssertEqual(value.w, expected.w, accuracy: 0.0025)
-            XCTAssertEqual(value.x, expected.x, accuracy: 0.0025)
-            XCTAssertEqual(value.y, expected.y, accuracy: 0.0025)
-            XCTAssertEqual(value.z, expected.z, accuracy: 0.0025)
+            let value = start.interpolated(to: end, .linear(0.0, shortest: true)).normalized
+            let expected = start
+            XCTAssertEqual(value.w, expected.w, accuracy: .ulpOfOne)
+            XCTAssertEqual(value.x, expected.x, accuracy: .ulpOfOne)
+            XCTAssertEqual(value.y, expected.y, accuracy: .ulpOfOne)
+            XCTAssertEqual(value.z, expected.z, accuracy: .ulpOfOne)
         }
         
         do {// Halfway
-            let value = start.interpolated(to: end, .linear(0.5, shortest: true)).unitNormalized
-            let expected = Quaternion(Degrees(0), axis: .right).unitNormalized
-            XCTAssertEqual(value.w, expected.w, accuracy: 0.0025)
-            XCTAssertEqual(value.x, expected.x, accuracy: 0.0025)
-            XCTAssertEqual(value.y, expected.y, accuracy: 0.0025)
-            XCTAssertEqual(value.z, expected.z, accuracy: 0.0025)
+            let value = start.interpolated(to: end, .linear(1/2, shortest: true)).normalized
+            let expected = Quaternion(Degrees(0), axis: .right).normalized
+            let angleAroundX = expected.forward.angleAroundX
+            let angleAroundY = expected.forward.angleAroundY
+            let angleAroundZ = expected.forward.angleAroundZ
+            XCTAssertEqual(value.forward.angleAroundX.rawValue, angleAroundX.rawValue, accuracy: .ulpOfOne)
+            XCTAssertEqual(value.forward.angleAroundY.rawValue, angleAroundY.rawValue, accuracy: .ulpOfOne)
+            XCTAssertEqual(value.forward.angleAroundZ.rawValue, angleAroundZ.rawValue, accuracy: .ulpOfOne)
         }
         
         do {// End value
-            let value = start.interpolated(to: end, .linear(1.0, shortest: true)).unitNormalized
-            let expected = end.unitNormalized
-            XCTAssertEqual(value.w, expected.w, accuracy: 0.0025)
-            XCTAssertEqual(value.x, expected.x, accuracy: 0.0025)
-            XCTAssertEqual(value.y, expected.y, accuracy: 0.0025)
-            XCTAssertEqual(value.z, expected.z, accuracy: 0.0025)
+            let value = start.interpolated(to: end, .linear(1.0, shortest: true)).normalized
+            let expected = end
+            XCTAssertEqual(value.w, expected.w, accuracy: .ulpOfOne)
+            XCTAssertEqual(value.x, expected.x, accuracy: .ulpOfOne)
+            XCTAssertEqual(value.y, expected.y, accuracy: .ulpOfOne)
+            XCTAssertEqual(value.z, expected.z, accuracy: .ulpOfOne)
         }
     }
 }
