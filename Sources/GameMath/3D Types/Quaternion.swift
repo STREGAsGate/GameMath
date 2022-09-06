@@ -379,7 +379,52 @@ private extension Quaternion {
     }
     
     @_transparent
-    func slerped(to qb: Self, factor t: Float) -> Self {
+    func slerped(to destination: Self, factor t: Float) -> Self {
+        // Adapted from javagl.JglTF
+        
+        let a = self
+        let b = destination
+        
+        let aw = a.w
+        let ax = a.x
+        let ay = a.y
+        let az = a.z
+        
+        var bw = b.w
+        var bx = b.x
+        var by = b.y
+        var bz = b.z
+        
+        var dot = ax * bx + ay * by + az * bz + aw * bw
+        if dot < 0 {
+            bx = -bx
+            by = -by
+            bz = -bz
+            bw = -bw
+            dot = -dot
+        }
+        var s0: Float
+        var s1: Float
+        if (1.0 - dot) > .ulpOfOne {
+            let omega = acos(dot)
+            let invSinOmega = 1.0 / sin(omega)
+            s0 = sin((1.0 - t) * omega) * invSinOmega
+            s1 = sin(t * omega) * invSinOmega
+        }else{
+            s0 = 1.0 - t
+            s1 = t
+        }
+        
+        let rx = s0 * ax + s1 * bx
+        let ry = s0 * ay + s1 * by
+        let rz = s0 * az + s1 * bz
+        let rw = s0 * aw + s1 * bw
+
+        return Quaternion(w: rw, x: rx, y: ry, z: rz)
+    }
+    
+    @_transparent
+    func _slerped(to qb: Self, factor t: Float) -> Self {
         let qa = self
         var qb = qb
         // Calculate angle between them.
