@@ -34,7 +34,7 @@ public struct Quaternion {
 
 extension Quaternion {
     public init(direction: Direction3, up: Direction3 = .up, right: Direction3 = .right) {
-        self = Matrix3x3(direction: direction.normalized).rotation.normalized
+        self = Matrix3x3(direction: direction).rotation
     }
     
     public init(between v1: Direction3, and v2: Direction3) {
@@ -182,7 +182,7 @@ extension Quaternion {
             z = axis.z * s
             w = cos(halfAngle)
         }
-        self = self.normalized.conjugate
+        self = self.conjugate
     }
 }
 
@@ -346,9 +346,9 @@ public extension Quaternion {
         switch method {
         case let .linear(factor, shortest):
             if shortest {
-                return self.slerped(to: to, factor: factor).normalized
+                return self.slerped(to: to, factor: factor)
             }else{
-                return self.lerped(to: to, factor: factor).normalized
+                return self.lerped(to: to, factor: factor)
             }
         }
     }
@@ -370,7 +370,7 @@ private extension Quaternion {
         qr.z = t_ * self.z + t * q2.z
         qr.w = t_ * self.w + t * q2.w
         
-        return qr.normalized
+        return qr
     }
     
     @_transparent
@@ -461,7 +461,7 @@ public extension Quaternion {
     }
     @_transparent
     static func *=<V: Vector2>(lhs: inout Self, rhs: V) {
-        lhs = (lhs * rhs).normalized
+        lhs = (lhs * rhs)
     }
     @_transparent
     static func *<V: Vector2>(lhs: Self, rhs: V) -> Self {
@@ -481,7 +481,7 @@ public extension Quaternion {
     }
     @_transparent
     static func *=<V: Vector3>(lhs: inout Self, rhs: V) {
-        lhs = (lhs * rhs).normalized
+        lhs = (lhs * rhs)
     }
     @_transparent
     static func *<V: Vector3>(lhs: Self, rhs: V) -> Self {
