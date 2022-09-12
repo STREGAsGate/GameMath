@@ -3,7 +3,7 @@
 
 import PackageDescription
 
-let libraryType: Product.Library.LibraryType? = nil
+var libraryType: Product.Library.LibraryType? = nil
 #if os(Windows)
 libraryType = .dynamic
 #endif
