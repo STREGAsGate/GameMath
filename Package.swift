@@ -3,6 +3,11 @@
 
 import PackageDescription
 
+let libraryType: Product.Library.LibraryType? = nil
+#if os(Windows)
+libraryType = .dynamic
+#endif
+
 var settings: [SwiftSetting]? {
     var array: [SwiftSetting] = []
     
@@ -24,7 +29,7 @@ var settings: [SwiftSetting]? {
 let package = Package(
     name: "GameMath",
     products: [
-        .library(name: "GameMath", targets: ["GameMath"]),
+        .library(name: "GameMath", type: libraryType, targets: ["GameMath"]),
     ],
     targets: [
         .target(name: "GameMath", swiftSettings: settings),
