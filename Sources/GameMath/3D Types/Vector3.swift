@@ -48,6 +48,10 @@ public extension Vector3 {
     static var zero: Self {
         return Self(0)
     }
+    @_transparent
+    static var almostZero: Self {
+        return Self(.ulpOfOne)
+    }
 }
 
 extension Vector3 {
