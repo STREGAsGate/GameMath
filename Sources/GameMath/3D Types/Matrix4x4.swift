@@ -212,9 +212,9 @@ public extension Matrix4x4 {
         det += self.c * inv.i
         det += self.d * inv.m
         
-        assert(det != 0, "If this is a Perspective Matrix check that clippingPlane.near is at least ClippingPlane.minPerspectiveNear")
-        
-        det = 1 / det
+        if det != 0 {
+            det = 1 / det
+        }
         
         for i in 0 ..< 16 {
             inv[i] *= det
