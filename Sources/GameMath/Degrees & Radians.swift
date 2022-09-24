@@ -96,6 +96,10 @@ extension Radians: AdditiveArithmetic {
     public static func -(_ lhs: RawValue, _ rhs: Self) -> RawValue {
         return lhs - rhs.rawValue
     }
+    @_transparent
+    public static prefix func -(_ rhs: Self) -> Self {
+        return Self(rawValue: -rhs.rawValue)
+    }
 }
 
 extension Radians {
@@ -346,6 +350,10 @@ extension Degrees: AdditiveArithmetic {
     @_transparent
     public static func -(_ lhs: RawValue, _ rhs: Self) -> RawValue {
         return lhs - rhs.rawValue
+    }
+    @_transparent
+    public static prefix func -(_ rhs: Self) -> Self {
+        return Self(rawValue: -rhs.rawValue)
     }
 }
 
