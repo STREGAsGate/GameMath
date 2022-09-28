@@ -74,8 +74,18 @@ public extension Transform3 {
     }
 }
 
-extension Transform3: Equatable {}
-extension Transform3: Hashable {}
+extension Transform3: Equatable {
+    public static func ==(lhs: Self, rhs: Self) -> Bool {
+        return lhs.position == rhs.position && lhs.rotation == rhs.rotation && lhs.scale == rhs.scale
+    }
+}
+extension Transform3: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(position)
+        hasher.combine(rotation)
+        hasher.combine(scale)
+    }
+}
 
 extension Transform3 {
     @inlinable
