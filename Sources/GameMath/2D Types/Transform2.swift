@@ -89,8 +89,18 @@ public extension Transform2 {
     }
 }
 
-extension Transform2: Equatable {}
-extension Transform2: Hashable {}
+extension Transform2: Equatable {
+    public static func ==(lhs: Self, rhs: Self) -> Bool {
+        return lhs.position == rhs.position && lhs.rotation == rhs.rotation && lhs.scale == rhs.scale
+    }
+}
+extension Transform2: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(position)
+        hasher.combine(rotation)
+        hasher.combine(scale)
+    }
+}
 
 extension Transform2 {
     public static var zero: Self {
