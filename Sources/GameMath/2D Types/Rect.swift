@@ -194,6 +194,17 @@ public extension Rect {
     }
 }
 
+public extension Rect {
+    func inset(by insets: Insets) -> Rect {
+        var copy = self
+        copy.x += insets.leading
+        copy.y += insets.top
+        copy.width -= insets.leading + insets.trailing
+        copy.height -= insets.top + insets.bottom
+        return copy
+    }
+}
+
 extension Rect {
     public static var zero: Self {Self(x: 0, y: 0, width: 0, height: 0)}
 }
