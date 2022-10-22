@@ -102,3 +102,20 @@ public extension Position2 {
         self = moved(distance, toward: direction)
     }
 }
+
+public extension Position2 {
+    @inlinable
+    mutating func clamp(within rect: Rect) {
+        self.x = .maximum(self.x, rect.x)
+        self.x = .minimum(self.x, rect.maxX)
+        self.y = .maximum(self.y, rect.y)
+        self.y = .minimum(self.y, rect.maxY)
+    }
+    
+    @inlinable
+    func clamped(within rect: Rect) -> Position2 {
+        var copy = self
+        copy.clamp(within: rect)
+        return copy
+    }
+}
