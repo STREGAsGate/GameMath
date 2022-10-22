@@ -11,8 +11,8 @@ libraryType = .dynamic
 var settings: [SwiftSetting]? {
     var array: [SwiftSetting] = []
     
-    #if true
-    // A little bit faster, but less accurate
+    #if false
+    // A little bit faster on old hardware, but less accurate
     array.append(.define("GameMathUseFastInverseSquareRoot"))
     #endif
     
