@@ -82,6 +82,7 @@ extension Vector2 {
 }
 
 extension Vector2 {
+    @inlinable
     public var length: Float {
         return x + y
     }
@@ -91,15 +92,18 @@ extension Vector2 {
         return x * x + y * y
     }
     
+    @inlinable
     public var magnitude: Float {
         return squaredLength.squareRoot()
     }
 
     #if !GameMathUseFastInverseSquareRoot
+    @inlinable
     public var normalized: Self {
         return self / self.magnitude
     }
 
+    @inlinable
     public mutating func normalize() {
         self /= magnitude
     }
