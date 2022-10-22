@@ -34,6 +34,9 @@ public extension Rect {
     init(x: Float, y: Float, width: Float, height: Float) {
         self.init(position: Position2(x: x, y: y), size: Size2(width: width, height: height))
     }
+    init(_ x: Float, _ y: Float, _ width: Float, _ height: Float) {
+        self.init(position: Position2(x: x, y: y), size: Size2(width: width, height: height))
+    }
 }
 
 extension Rect: Equatable {}
