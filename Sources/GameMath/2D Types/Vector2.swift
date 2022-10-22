@@ -83,13 +83,7 @@ extension Vector2 {
 
 extension Vector2 {
     public var length: Float {
-        get {
-            return x + y
-        }
-        set(val) {
-            x = val / 2
-            y = val / 2
-        }
+        return x + y
     }
     
     @inlinable
