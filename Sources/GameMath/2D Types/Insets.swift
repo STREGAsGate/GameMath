@@ -6,12 +6,13 @@
  * http://stregasgate.com
  */
 
-#if GameMathUseSIMD
 public struct Insets {
     public var top: Float
     public var leading: Float
     public var bottom: Float
     public var trailing: Float
+    
+    }
     
     public init(top: Float, leading: Float, bottom: Float, trailing: Float) {
         self.top = top
@@ -20,21 +21,6 @@ public struct Insets {
         self.trailing = trailing
     }
 }
-#else
-public struct Insets {
-    public var top: Float
-    public var leading: Float
-    public var bottom: Float
-    public var trailing: Float
-    
-    public init(top: Float, leading: Float, bottom: Float, trailing: Float) {
-        self.top = top
-        self.leading = leading
-        self.bottom = bottom
-        self.trailing = trailing
-    }
-}
-#endif
 
 extension Insets: Equatable {}
 extension Insets: Hashable {}
