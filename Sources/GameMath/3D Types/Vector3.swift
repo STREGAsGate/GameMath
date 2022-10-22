@@ -115,12 +115,20 @@ extension Vector3 {
     #if !GameMathUseFastInverseSquareRoot
     @inlinable
     public var normalized: Self {
-        return self / self.magnitude
+        var copy = self
+        copy.normalize()
+        return copy
     }
     
     @inlinable
     public mutating func normalize() {
-        self /= magnitude
+        let magnitude = self.magnitude
+        guard magnitude != 0 else {return}
+
+        let factor = 1 / magnitude
+        self.x *= factor
+        self.y *= factor
+        self.z *= factor
     }
     #endif
     
