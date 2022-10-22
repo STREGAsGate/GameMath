@@ -8,11 +8,30 @@
 
 #if GameMathUseSIMD
 public struct Position2: Vector2 {
-    public var x: Float
-    public var y: Float
+    @usableFromInline
+    var storage: SIMD2<Float>
     public init(x: Float, y: Float) {
-        self.x = x
-        self.y = y
+        self.storage = SIMD2(x: x, y: y)
+    }
+    
+    @inlinable
+    public var x: Float {
+        get {
+            return storage.x
+        }
+        set {
+            storage.x = newValue
+        }
+    }
+    
+    @inlinable
+    public var y: Float {
+        get {
+            return storage.y
+        }
+        set {
+            storage.y = newValue
+        }
     }
 }
 #else
@@ -79,7 +98,7 @@ extension Position2 {
     }
 }
 
-//Division(FloatingPoint)
+//Division
 extension Position2 {
     //Self:Self
     @inlinable
