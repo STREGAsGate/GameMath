@@ -12,6 +12,11 @@ public struct Insets {
     public var bottom: Float
     public var trailing: Float
     
+    public init(_ value: Float) {
+        self.top = value
+        self.leading = value
+        self.bottom = value
+        self.trailing = value
     }
     
     public init(top: Float, leading: Float, bottom: Float, trailing: Float) {
