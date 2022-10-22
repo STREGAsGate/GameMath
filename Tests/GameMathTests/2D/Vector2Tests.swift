@@ -57,11 +57,8 @@ final class Vector2Tests: XCTestCase {
     }
 
     func testLength() {
-        var vec = Imposter(1, 2)
+        let vec = Imposter(1, 2)
         XCTAssertEqual(vec.length, 3)
-        
-        vec.length = 4
-        XCTAssertEqual(vec, Imposter(2, 2))
     }
     
     func testNormalized() {
