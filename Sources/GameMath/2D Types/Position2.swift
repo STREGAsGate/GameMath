@@ -35,12 +35,14 @@ public extension Position2 {
         self.init(x: x, y: y)
     }
     
+    @inlinable
     static var zero: Self {
         return Self(x: 0, y: 0)
     }
 }
 
 public extension Position2 {
+    @inlinable
     func distance(from: Self) -> Float {
         let difference = self - from
         let distance = difference.dot(difference)
@@ -52,36 +54,42 @@ public extension Position2 {
 //Addition
 extension Position2 {
     //Self:Self
+    @inlinable
     public static func +(lhs: Self, rhs: Self) -> Self {
         return Self(lhs.x + rhs.x,
                     lhs.y + rhs.y)
     }
+    @inlinable
     public static func +=(lhs: inout Self, rhs: Self) {
-        lhs =  lhs + rhs
+        lhs = lhs + rhs
     }
 }
 
 //Subtraction
 extension Position2 {
     //Self:Self
+    @inlinable
     public static func -(lhs: Self, rhs: Self) -> Self {
         return Self(lhs.x - rhs.x,
                     lhs.y - rhs.y)
     }
+    @inlinable
     public static func -=(lhs: inout Self, rhs: Self) {
-        lhs =  lhs - rhs
+        lhs = lhs - rhs
     }
 }
 
 //Division(FloatingPoint)
 extension Position2 {
     //Self:Self
+    @inlinable
     public static func /(lhs: Self, rhs: Self) -> Self {
         return Self(lhs.x / rhs.x,
                     lhs.y / rhs.y)
     }
+    @inlinable
     public static func /=(lhs: inout Self, rhs: Self) {
-        lhs =  lhs / rhs
+        lhs = lhs / rhs
     }
 }
 
@@ -90,14 +98,16 @@ public extension Position2 {
     - parameter distance: The units away from `self` to create the new position.
     - parameter direction: The angle away from self to create the new position.
      */
+    @inlinable
     func moved(_ distance: Float, toward direction: Direction2) -> Self {
-        return self + (direction.normalized * distance)
+        return self + (direction * distance)
     }
 
     /** Moves `self` by a specified distance from in a particular direction
     - parameter distance: The units away to move.
     - parameter direction: The angle to move.
      */
+    @inlinable
     mutating func move(_ distance: Float, toward direction: Direction2) {
         self = moved(distance, toward: direction)
     }
