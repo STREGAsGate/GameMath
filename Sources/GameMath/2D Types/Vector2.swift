@@ -71,10 +71,6 @@ extension Vector2 {
         }
     }
     
-    public var squaredLength: Float {
-        return x * x + y * y
-    }
-    
     public func dot<V: Vector2>(_ vector: V) -> Float {
         return (x * vector.x) + (y * vector.y)
     }
@@ -96,6 +92,11 @@ extension Vector2 {
         }
     }
     
+    @inlinable
+    public var squaredLength: Float {
+        return x * x + y * y
+    }
+    
     public var magnitude: Float {
         return squaredLength.squareRoot()
     }
@@ -113,7 +114,6 @@ extension Vector2 {
     public func squareRoot() -> Self {
         return Self(x.squareRoot(), y.squareRoot())
     }
-
 }
 
 extension Vector2 {

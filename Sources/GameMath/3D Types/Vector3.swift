@@ -84,11 +84,6 @@ extension Vector3 {
     }
     
     @inlinable
-    public var squaredLength: Float {
-        return x * x + y * y + z * z
-    }
-    
-    @inlinable
     public func dot<V: Vector3>(_ vector: V) -> Float {
         return (x * vector.x) + (y * vector.y) + (z * vector.z)
     }
@@ -105,6 +100,11 @@ extension Vector3 {
     @inlinable
     public var length: Float {
         return x + y + z
+    }
+    
+    @inlinable
+    public var squaredLength: Float {
+        return x * x + y * y + z * z
     }
     
     @inlinable
