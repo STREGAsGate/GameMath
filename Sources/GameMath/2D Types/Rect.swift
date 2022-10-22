@@ -205,4 +205,11 @@ extension Rect {
     public static func *(lhs: Self, rhs: Float) -> Self {
         return Rect(position: lhs.position * rhs, size: lhs.size * rhs)
     }
+    
+    public static func /=(lhs: inout Self, rhs: Float) {
+        lhs = lhs / rhs
+    }
+    public static func /(lhs: Self, rhs: Float) -> Self {
+        return Rect(position: lhs.position / rhs, size: lhs.size / rhs)
+    }
 }
