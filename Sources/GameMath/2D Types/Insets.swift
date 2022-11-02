@@ -32,24 +32,26 @@ extension Insets: Hashable {}
 extension Insets: Codable {}
 
 public extension Insets {
-    static var zero: Self {
-        return Insets(top: 0, leading: 0, bottom: 0, trailing: 0)
-    }
+    static let zero = Insets(top: 0, leading: 0, bottom: 0, trailing: 0)
 }
 
 public extension Insets {
+    @inline(__always)
     static func *(lhs: Self, rhs: Float) -> Self {
         return Insets(top: lhs.top * rhs, leading: lhs.leading * rhs, bottom: lhs.bottom * rhs, trailing: lhs.trailing * rhs)
     }
+    @inline(__always)
     static func *=(lhs: inout Self, rhs: Float) {
         lhs = lhs * rhs
     }
 }
 
 public extension Insets {
+    @inline(__always)
     static func /(lhs: Self, rhs: Float) -> Self {
         return Insets(top: lhs.top / rhs, leading: lhs.leading / rhs, bottom: lhs.bottom / rhs, trailing: lhs.trailing / rhs)
     }
+    @inline(__always)
     static func /=(lhs: inout Self, rhs: Float) {
         lhs = lhs / rhs
     }

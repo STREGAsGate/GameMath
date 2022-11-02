@@ -34,12 +34,12 @@ public extension Float {
     }
 }
 
-fileprivate extension Float {
-    @_transparent
+internal extension Float {
+    @usableFromInline
     func lerped(to: Float, factor: Float) -> Float {
         return self + (to - self) * factor
     }
-    @_transparent
+    @usableFromInline
     mutating func lerp(to: Float, factor: Float) {
         self = self.lerped(to: to, factor: factor)
     }

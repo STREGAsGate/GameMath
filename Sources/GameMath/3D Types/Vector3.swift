@@ -13,10 +13,12 @@ public protocol Vector3 {
     var y: Float {get set}
     var z: Float {get set}
     init(_ x: Float, _ y: Float, _ z: Float)
+    
+    static var zero: Self {get}
 }
 
 extension Vector3 {
-    @_transparent
+    @inline(__always)
     public init(_ value: Float) {
         self.init(value, value, value)
     }
@@ -33,29 +35,18 @@ extension Vector3 {
 
 //Mark: Integer Casting
 extension Vector3 {
-    @_transparent
+    @inline(__always)
     public init<V: Vector3>(_ value: V) {
         self = Self(value.x, value.y, value.z)
     }
-    @_transparent
+    @inline(__always)
     public init() {
         self.init(0, 0, 0)
     }
 }
 
-public extension Vector3 {
-    @_transparent
-    static var zero: Self {
-        return Self(0)
-    }
-    @_transparent
-    static var almostZero: Self {
-        return Self(.ulpOfOne)
-    }
-}
-
 extension Vector3 {
-    @inlinable
+    @inline(__always)
     public var isFinite: Bool {
         return x.isFinite && y.isFinite && z.isFinite
     }
@@ -83,12 +74,12 @@ extension Vector3 {
         }
     }
     
-    @inlinable
+    @inline(__always)
     public func dot<V: Vector3>(_ vector: V) -> Float {
         return (x * vector.x) + (y * vector.y) + (z * vector.z)
     }
     
-    @inlinable
+    @inline(__always)
     public func cross<V: Vector3>(_ vector: V) -> Self {
         return Self(y * vector.z - z * vector.y,
                     z * vector.x - x * vector.z,
@@ -97,30 +88,30 @@ extension Vector3 {
 }
 
 extension Vector3 {
-    @inlinable
+    @inline(__always)
     public var length: Float {
         return x + y + z
     }
     
-    @inlinable
+    @inline(__always)
     public var squaredLength: Float {
         return x * x + y * y + z * z
     }
     
-    @inlinable
+    @inline(__always)
     public var magnitude: Float {
         return squaredLength.squareRoot()
     }
 
     #if !GameMathUseFastInverseSquareRoot
-    @inlinable
+    @inline(__always)
     public var normalized: Self {
         var copy = self
         copy.normalize()
         return copy
     }
     
-    @inlinable
+    @inline(__always)
     public mutating func normalize() {
         let magnitude = self.magnitude
         guard magnitude != 0 else {return}
@@ -132,14 +123,14 @@ extension Vector3 {
     }
     #endif
     
-    @inlinable
+    @inline(__always)
     public func squareRoot() -> Self {
         return Self(x.squareRoot(), y.squareRoot(), z.squareRoot())
     }
 }
 
 extension Vector3 {
-    @inlinable
+    @inline(__always)
     public func interpolated<V: Vector3>(to: V, _ method: InterpolationMethod) -> Self {
         var copy = self
         copy.x.interpolate(to: to.x, method)
@@ -147,7 +138,7 @@ extension Vector3 {
         copy.z.interpolate(to: to.z, method)
         return copy
     }
-    @inlinable
+    @inline(__always)
     public mutating func interpolate<V: Vector3>(to: V, _ method: InterpolationMethod) {
         self.x.interpolate(to: to.x, method)
         self.y.interpolate(to: to.y, method)
@@ -156,11 +147,11 @@ extension Vector3 {
 }
 
 public extension Vector3 {
-    @_transparent
+    @inline(__always)
     var max: Float {
         return Swift.max(x, Swift.max(y, z))
     }
-    @_transparent
+    @inline(__always)
     var min: Float {
         return Swift.min(x, Swift.min(y, z))
     }
@@ -168,39 +159,39 @@ public extension Vector3 {
 
 //MARK: - SIMD
 public extension Vector3 {
-    @_transparent
+    @inline(__always)
     var simd: SIMD3<Float> {
         return SIMD3<Float>(x, y, z)
     }
 }
 
 //MARK: - Operations
-@_transparent
+@inline(__always)
 public func ceil<V: Vector3>(_ v: V) -> V {
     return V.init(ceil(v.x), ceil(v.y), ceil(v.z))
 }
 
-@_transparent
+@inline(__always)
 public func floor<V: Vector3>(_ v: V) -> V {
     return V.init(floor(v.x), floor(v.y), floor(v.z))
 }
 
-@_transparent
+@inline(__always)
 public func round<V: Vector3>(_ v: V) -> V {
     return V.init(round(v.x), round(v.y), round(v.z))
 }
 
-@_transparent
+@inline(__always)
 public func abs<V: Vector3>(_ v: V) -> V {
     return V.init(abs(v.x), abs(v.y), abs(v.z))
 }
 
-@_transparent
+@inline(__always)
 public func min<V: Vector3>(_ lhs: V, _ rhs: V) -> V {
     return V.init(min(lhs.x, rhs.x), min(lhs.y, rhs.y), min(lhs.z, rhs.z))
 }
 
-@_transparent
+@inline(__always)
 public func max<V: Vector3>(_ lhs: V, _ rhs: V) -> V {
     return V.init(max(lhs.x, rhs.x), max(lhs.y, rhs.y), max(lhs.z, rhs.z))
 }
@@ -209,13 +200,13 @@ public func max<V: Vector3>(_ lhs: V, _ rhs: V) -> V {
 //MARK: Operators (Self)
 extension Vector3 {
     //Multiplication
-    @_transparent
+    @inline(__always)
     public static func *(lhs: Self, rhs: Self) -> Self {
         return Self(lhs.x * rhs.x,
                     lhs.y * rhs.y,
                     lhs.z * rhs.z)
     }
-    @_transparent
+    @inline(__always)
     public static func *=(lhs: inout Self, rhs: Self) {
         lhs.x *= rhs.x
         lhs.y *= rhs.y
@@ -223,13 +214,13 @@ extension Vector3 {
     }
     
     //Addition
-    @_transparent
+    @inline(__always)
     public static func +(lhs: Self, rhs: Self) -> Self {
         return Self(lhs.x + rhs.x,
                     lhs.y + rhs.y,
                     lhs.z + rhs.z)
     }
-    @_transparent
+    @inline(__always)
     public static func +=(lhs: inout Self, rhs: Self) {
         lhs.x += rhs.x
         lhs.y += rhs.y
@@ -237,13 +228,13 @@ extension Vector3 {
     }
     
     //Subtraction
-    @_transparent
+    @inline(__always)
     public static func -(lhs: Self, rhs: Self) -> Self {
         return Self(lhs.x - rhs.x,
                     lhs.y - rhs.y,
                     lhs.z - rhs.z)
     }
-    @_transparent
+    @inline(__always)
     public static func -=(lhs: inout Self, rhs: Self) {
         lhs.x -= rhs.x
         lhs.y -= rhs.y
@@ -252,13 +243,13 @@ extension Vector3 {
 }
 extension Vector3 {
     //Division
-    @_transparent
+    @inline(__always)
     public static func /(lhs: Self, rhs: Self) -> Self {
         return Self(lhs.x / rhs.x,
                     lhs.y / rhs.y,
                     lhs.z / rhs.z)
     }
-    @_transparent
+    @inline(__always)
     public static func /=(lhs: inout Self, rhs: Self) {
         lhs.x /= rhs.x
         lhs.y /= rhs.y
@@ -269,13 +260,13 @@ extension Vector3 {
 //MARK: Operators (Integers and Floats)
 extension Vector3 {
     //Multiplication Without Casting
-    @_transparent
+    @inline(__always)
     public static func *(lhs: Self, rhs: Float) -> Self {
         return Self(lhs.x * rhs,
                     lhs.y * rhs,
                     lhs.z * rhs)
     }
-    @_transparent
+    @inline(__always)
     public static func *=(lhs: inout Self, rhs: Float) {
         lhs.x *= rhs
         lhs.y *= rhs
@@ -283,13 +274,13 @@ extension Vector3 {
     }
     
     //Addition Without Casting
-    @_transparent
+    @inline(__always)
     public static func +(lhs: Self, rhs: Float) -> Self {
         return Self(lhs.x + rhs,
                     lhs.y + rhs,
                     lhs.z + rhs)
     }
-    @_transparent
+    @inline(__always)
     public static func +=(lhs: inout Self, rhs: Float) {
         lhs.x += rhs
         lhs.y += rhs
@@ -297,27 +288,27 @@ extension Vector3 {
     }
     
     //Subtraction Without Casting
-    @_transparent
+    @inline(__always)
     public static func -(lhs: Self, rhs: Float) -> Self {
         return Self(lhs.x - rhs,
                     lhs.y - rhs,
                     lhs.z - rhs)
     }
-    @_transparent
+    @inline(__always)
     public static func -=(lhs: inout Self, rhs: Float) {
         lhs.x -= rhs
         lhs.y -= rhs
         lhs.z -= rhs
     }
     
-    @_transparent
+    @inline(__always)
     public static func -(lhs: Float, rhs: Self) -> Self {
         return Self(lhs - rhs.x,
                     lhs - rhs.y,
                     lhs - rhs.z)
     }
     
-    @_transparent
+    @inline(__always)
     public static func -=(lhs: Float, rhs: inout Self) {
         rhs.x = lhs - rhs.x
         rhs.y = lhs - rhs.y
@@ -327,26 +318,26 @@ extension Vector3 {
 
 extension Vector3 {
     //Division Without Casting
-    @_transparent
+    @inline(__always)
     public static func /(lhs: Self, rhs: Float) -> Self {
         return Self(lhs.x / rhs,
                     lhs.y / rhs,
                     lhs.z / rhs)
     }
-    @_transparent
+    @inline(__always)
     public static func /=(lhs: inout Self, rhs: Float) {
         lhs.x /= rhs
         lhs.y /= rhs
         lhs.z /= rhs
     }
     
-    @_transparent
+    @inline(__always)
     public static func /(lhs: Float, rhs: Self) -> Self {
         return Self(lhs / rhs.x,
                     lhs / rhs.y,
                     lhs / rhs.z)
     }
-    @_transparent
+    @inline(__always)
     public static func /=(lhs: Float, rhs: inout Self) {
         rhs.x = lhs / rhs.x
         rhs.y = lhs / rhs.y
@@ -356,13 +347,13 @@ extension Vector3 {
 
 extension Vector3 {
     //Multiplication
-    @_transparent
+    @inline(__always)
     public static func *<V: Vector3>(lhs: Self, rhs: V) -> Self {
         return Self(lhs.x * rhs.x,
                     lhs.y * rhs.y,
                     lhs.z * rhs.z)
     }
-    @_transparent
+    @inline(__always)
     public static func *=<V: Vector3>(lhs: inout Self, rhs: V) {
         lhs.x *= rhs.x
         lhs.y *= rhs.y
@@ -370,13 +361,13 @@ extension Vector3 {
     }
     
     //Addition
-    @_transparent
+    @inline(__always)
     public static func +<V: Vector3>(lhs: Self, rhs: V) -> Self {
         return Self(lhs.x + rhs.x,
                     lhs.y + rhs.y,
                     lhs.z + rhs.z)
     }
-    @_transparent
+    @inline(__always)
     public static func +=<V: Vector3>(lhs: inout Self, rhs: V) {
         lhs.x += rhs.x
         lhs.y += rhs.y
@@ -384,13 +375,13 @@ extension Vector3 {
     }
     
     //Subtraction
-    @_transparent
+    @inline(__always)
     public static func -<V: Vector3>(lhs: Self, rhs: V) -> Self {
         return Self(lhs.x - rhs.x,
                     lhs.y - rhs.y,
                     lhs.z - rhs.z)
     }
-    @_transparent
+    @inline(__always)
     public static func -=<V: Vector3>(lhs: inout Self, rhs: V) {
         lhs.x -= rhs.x
         lhs.y -= rhs.y
@@ -400,13 +391,13 @@ extension Vector3 {
 
 extension Vector3 {
     //Division
-    @_transparent
+    @inline(__always)
     public static func /<V: Vector3>(lhs: Self, rhs: V) -> Self {
         return Self(lhs.x / rhs.x,
                     lhs.y / rhs.y,
                     lhs.z / rhs.z)
     }
-    @_transparent
+    @inline(__always)
     public static func /=<V: Vector3>(lhs: inout Self, rhs: V) {
         lhs.x /= rhs.x
         lhs.y /= rhs.y
@@ -415,12 +406,12 @@ extension Vector3 {
 }
 
 extension Vector3 {
-    @_transparent
+    @inline(__always)
     public static prefix func -(rhs: Self) -> Self {
         return Self(-rhs.x, -rhs.y, -rhs.z)
     }
 
-    @_transparent
+    @inline(__always)
     public static prefix func +(rhs: Self) -> Self {
         return Self(+rhs.x, +rhs.y, +rhs.z)
     }
@@ -428,7 +419,7 @@ extension Vector3 {
 
 //MARK: Matrix4
 public extension Vector3 {
-    @_transparent
+    @inline(__always)
     static func *(lhs: Self, rhs: Matrix4x4) -> Self {
         var x: Float = lhs.x * rhs.a
         x += lhs.y * rhs.b
@@ -448,7 +439,7 @@ public extension Vector3 {
         return Self(x, y, z)
     }
     
-    @_transparent
+    @inline(__always)
     static func *(lhs: Matrix4x4, rhs: Self) -> Self {
         var x: Float = rhs.x * lhs.a
         x += rhs.y * lhs.e
@@ -468,7 +459,7 @@ public extension Vector3 {
         return Self(x, y, z)
     }
     
-    @_transparent
+    @inline(__always)
     static func *(lhs: Self, rhs: Matrix3x3) -> Self {
         var vector: Self = .zero
         
@@ -495,6 +486,6 @@ extension Vector3 {
 }
 
 extension Vector3 {
-    @inlinable
+    @inline(__always)
     public func valuesArray() -> [Float] {return [x, y, z]}
 }

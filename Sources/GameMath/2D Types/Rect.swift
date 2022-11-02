@@ -180,17 +180,20 @@ extension Rect {
 }
 
 public extension Rect {
+    @inline(__always)
     var isFinite: Bool {
         return position.isFinite && size.isFinite
     }
 }
 
 public extension Rect {
+    @inline(__always)
     func interpolated(to: Self, _ method: InterpolationMethod) -> Self {
         var copy = self
         copy.interpolate(to: to, method)
         return copy
     }
+    @inline(__always)
     mutating func interpolate(to: Self, _ method: InterpolationMethod) {
         self.position.interpolate(to: to.position, method)
         self.size.interpolate(to: to.size, method)
@@ -198,6 +201,7 @@ public extension Rect {
 }
 
 public extension Rect {
+    @inline(__always)
     func inset(by insets: Insets) -> Rect {
         var copy = self
         copy.x += insets.leading
@@ -209,20 +213,24 @@ public extension Rect {
 }
 
 extension Rect {
-    public static var zero: Self {Self(x: 0, y: 0, width: 0, height: 0)}
+    public static let zero = Self(x: 0, y: 0, width: 0, height: 0)
 }
 
 extension Rect {
+    @inline(__always)
     public static func *=(lhs: inout Self, rhs: Float) {
         lhs = lhs * rhs
     }
+    @inline(__always)
     public static func *(lhs: Self, rhs: Float) -> Self {
         return Rect(position: lhs.position * rhs, size: lhs.size * rhs)
     }
     
+    @inline(__always)
     public static func /=(lhs: inout Self, rhs: Float) {
         lhs = lhs / rhs
     }
+    @inline(__always)
     public static func /(lhs: Self, rhs: Float) -> Self {
         return Rect(position: lhs.position / rhs, size: lhs.size / rhs)
     }

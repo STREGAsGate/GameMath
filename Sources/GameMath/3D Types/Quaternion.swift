@@ -58,20 +58,21 @@ extension Quaternion {
         w = cosHalfAngle
     }
     
+    @inline(__always)
     public init(_ degrees: Degrees, axis: Direction3) {
         self.init(Radians(degrees), axis: axis)
     }
     
     public init(pitch: Degrees, yaw: Degrees, roll: Degrees) {
-        let _pitch = Radians(pitch)
-        let _yaw = Radians(yaw)
-        let _roll = Radians(roll)
-        let cy = cos(_roll.rawValue * 0.5)
-        let sy = sin(_roll.rawValue * 0.5)
-        let cp = cos(_yaw.rawValue * 0.5)
-        let sp = sin(_yaw.rawValue * 0.5)
-        let cr = cos(_pitch.rawValue * 0.5)
-        let sr = sin(_pitch.rawValue * 0.5)
+        let _pitch: Radians = Radians(pitch)
+        let _yaw: Radians = Radians(yaw)
+        let _roll: Radians = Radians(roll)
+        let cy: Float = cos(_roll.rawValue * 0.5)
+        let sy: Float = sin(_roll.rawValue * 0.5)
+        let cp: Float = cos(_yaw.rawValue * 0.5)
+        let sp: Float = sin(_yaw.rawValue * 0.5)
+        let cr: Float = cos(_pitch.rawValue * 0.5)
+        let sr: Float = sin(_pitch.rawValue * 0.5)
 
         self.x = sr * cp * cy - cr * sp * sy
         self.y = cr * sp * cy + sr * cp * sy
@@ -162,8 +163,8 @@ extension Quaternion {
 
 extension Quaternion {
     public mutating func lookAt(_ target: Position3, from source: Position3) {
-        let forwardVector = (source - target).normalized
-        let dot = Direction3.forward.dot(forwardVector)
+        let forwardVector: Position3 = (source - target).normalized
+        let dot: Float = Direction3.forward.dot(forwardVector)
         
         if abs(dot - -1) < .ulpOfOne {
             self.w = .pi
@@ -173,7 +174,7 @@ extension Quaternion {
             self.direction = .zero
         }else{
             let angle: Float = acos(dot)
-            let axis = Direction3.forward.cross(forwardVector).normalized
+            let axis: Direction3 = .forward.cross(forwardVector).normalized
             
             let halfAngle: Float = angle * 0.5
             let s: Float = sin(halfAngle)
@@ -229,49 +230,40 @@ extension Quaternion {
 }
 
 public extension Quaternion {
-    @inlinable
+    @inline(__always)
     var isFinite: Bool {
         return x.isFinite && y.isFinite && z.isFinite && w.isFinite
     }
     
-    @inlinable
+    @inline(__always)
     var squaredLength: Float {
-        var value: Float = x * x
+        var value: Float
+        value  = x * x
         value += y * y
         value += z * z
         value += w * w
         return value
     }
     
-    @inlinable
+    @inline(__always)
     var magnitude: Float {
         return squaredLength.squareRoot()
     }
     
-    @inlinable
+    @inline(__always)
     var normalized: Self {
         let magnitude: Float = self.magnitude
         return Self(w: w / magnitude, x: x / magnitude, y: y / magnitude, z: z / magnitude)
     }
     
-    @inlinable
+    @inline(__always)
     mutating func normalize() {
         self = self.normalized
     }
 }
 
 public extension Quaternion {
-    @inlinable
-    var unitNormalized: Self {
-        let angle: Float = w
-        let degrees: Float = cos(angle * 0.5)
-        let vector = self.direction * sin(angle * 0.5)
-        return Self(Degrees(degrees), axis: vector)
-    }
-}
-
-public extension Quaternion {
-    @_transparent
+    @inline(__always)
     var direction: Direction3 {
         get {
             return Direction3(x: x, y: y, z: z)
@@ -283,39 +275,36 @@ public extension Quaternion {
         }
     }
     
-    @_transparent
+    @inline(__always)
     var forward: Direction3 {
         return Direction3.forward.rotated(by: self)
     }
-    @_transparent
+    @inline(__always)
     var backward: Direction3 {
         return Direction3.backward.rotated(by: self)
     }
-    @_transparent
+    @inline(__always)
     var up: Direction3 {
         return Direction3.up.rotated(by: self)
     }
-    @_transparent
+    @inline(__always)
     var down: Direction3 {
         return Direction3.down.rotated(by: self)
     }
-    @_transparent
+    @inline(__always)
     var left: Direction3 {
         return Direction3.left.rotated(by: self)
     }
-    @_transparent
+    @inline(__always)
     var right: Direction3 {
         return Direction3.right.rotated(by: self)
     }
 }
 
 public extension Quaternion {
-    @_transparent
-    static var zero: Self {
-        return Self(Radians(0), axis: .forward)
-    }
+    static let zero = Self(Radians(0), axis: .forward)
     
-    @inlinable
+    @inline(__always)
     var inverse: Self {
         var absoluteValue: Float = magnitude
         absoluteValue *= absoluteValue
@@ -330,11 +319,11 @@ public extension Quaternion {
 }
 
 public extension Quaternion {
-    @inlinable
+    @inline(__always)
     var conjugate: Self {
         return Self(w: w, x: -x, y: -y, z: -z)
     }
-    @inlinable
+    @inline(__always)
     var transposed: Self {
         return Matrix4x4(rotation: self).transposed().rotation
     }
@@ -353,14 +342,14 @@ public extension Quaternion {
         }
     }
     
-    @_transparent
+    @inline(__always)
     mutating func interpolate(to: Self, _ method: InterpolationMethod) {
         self = self.interpolated(to: to, method)
     }
 }
 
-private extension Quaternion {
-    @_transparent
+internal extension Quaternion {
+    @inline(__always) @usableFromInline
     func lerped(to q2: Self, factor t: Float) -> Self {
         var qr: Quaternion = .zero
         
@@ -373,29 +362,29 @@ private extension Quaternion {
         return qr
     }
     
-    @_transparent
+    @inline(__always) @usableFromInline
     mutating func lerp(to q2: Self, factor: Float) {
         self = self.lerped(to: q2, factor: factor)
     }
     
-    @_transparent
+    @inline(__always) @usableFromInline
     func slerped(to destination: Self, factor t: Float) -> Self {
         // Adapted from javagl.JglTF
         
-        let a = self
-        let b = destination
+        let a: Self = self
+        let b: Self = destination
         
-        let aw = a.w
-        let ax = a.x
-        let ay = a.y
-        let az = a.z
+        let aw: Float = a.w
+        let ax: Float = a.x
+        let ay: Float = a.y
+        let az: Float = a.z
         
-        var bw = b.w
-        var bx = b.x
-        var by = b.y
-        var bz = b.z
+        var bw: Float = b.w
+        var bx: Float = b.x
+        var by: Float = b.y
+        var bz: Float = b.z
         
-        var dot = ax * bx + ay * by + az * bz + aw * bw
+        var dot: Float = ax * bx + ay * by + az * bz + aw * bw
         if dot < 0 {
             bx = -bx
             by = -by
@@ -405,13 +394,13 @@ private extension Quaternion {
         }
         var s0: Float
         var s1: Float
-        if (1.0 - dot) > .ulpOfOne {
-            let omega = acos(dot)
-            let invSinOmega = 1.0 / sin(omega)
-            s0 = sin((1.0 - t) * omega) * invSinOmega
+        if (1 - dot) > .ulpOfOne {
+            let omega: Float = acos(dot)
+            let invSinOmega = 1 / sin(omega)
+            s0 = sin((1 - t) * omega) * invSinOmega
             s1 = sin(t * omega) * invSinOmega
         }else{
-            s0 = 1.0 - t
+            s0 = 1 - t
             s1 = t
         }
         
@@ -423,12 +412,12 @@ private extension Quaternion {
         return Quaternion(w: rw, x: rx, y: ry, z: rz)
     }
     
-    @_transparent
+    @inline(__always) @usableFromInline
     func _slerped(to qb: Self, factor t: Float) -> Self {
-        let qa = self
-        var qb = qb
+        let qa: Self = self
+        var qb: Self = qb
         // Calculate angle between them.
-        var cosHalfTheta = qa.w * qb.w
+        var cosHalfTheta: Float = qa.w * qb.w
         cosHalfTheta += qa.x * qb.x
         cosHalfTheta += qa.y * qb.y
         cosHalfTheta += qa.z * qb.z
@@ -468,22 +457,22 @@ private extension Quaternion {
         return qm
     }
     
-    @_transparent
+    @inline(__always) @usableFromInline
     mutating func slerp(to qb: Self, factor: Float) {
         self = self.slerped(to: qb, factor: factor)
     }
 }
 
 public extension Quaternion {
-    @_transparent
+    @inline(__always)
     static func *(lhs: Self, rhs: Float) -> Self {
         return Self(w: lhs.w * rhs, x: lhs.x * rhs, y: lhs.y * rhs, z: lhs.z * rhs)
     }
-    @_transparent
+    @inline(__always)
     static func *=(lhs: inout Self, rhs: Self) {
         lhs = lhs * rhs
     }
-    @_transparent
+    @inline(__always)
     static func *(lhs: Self, rhs: Self) -> Self {
         var w: Float = lhs.w * rhs.w
         w -= lhs.x * rhs.x
@@ -504,11 +493,11 @@ public extension Quaternion {
         
         return Self(w: w, x: x, y: y, z: z)
     }
-    @_transparent
+    @inline(__always)
     static func *=<V: Vector2>(lhs: inout Self, rhs: V) {
         lhs = (lhs * rhs)
     }
-    @_transparent
+    @inline(__always)
     static func *<V: Vector2>(lhs: Self, rhs: V) -> Self {
         var w: Float = -lhs.x * rhs.x
         w -= lhs.y * rhs.y
@@ -524,11 +513,11 @@ public extension Quaternion {
         z -= lhs.y * rhs.x
         return Self(w: w, x: x, y: y, z: z)
     }
-    @_transparent
+    @inline(__always)
     static func *=<V: Vector3>(lhs: inout Self, rhs: V) {
         lhs = (lhs * rhs)
     }
-    @_transparent
+    @inline(__always)
     static func *<V: Vector3>(lhs: Self, rhs: V) -> Self {
         var w: Float = -lhs.x * rhs.x
         w -= lhs.y * rhs.y
@@ -544,27 +533,27 @@ public extension Quaternion {
         z -= lhs.y * rhs.x
         return Self(w: w, x: x, y: y, z: z)
     }
-    @_transparent
+    @inline(__always)
     static func /(lhs: Self, rhs: Float) -> Self {
         return Self(w: lhs.w / rhs, x: lhs.x / rhs, y: lhs.y / rhs, z: lhs.z / rhs)
     }
-    @_transparent
+    @inline(__always)
     static func /=(lhs: inout Self, rhs: Float) {
         lhs = lhs / rhs
     }
-    @_transparent
+    @inline(__always)
     static func +=(lhs: inout Self, rhs: Self) {
         lhs = lhs + rhs
     }
-    @_transparent
+    @inline(__always)
     static func +(lhs: Self, rhs: Self) -> Self {
         return Self(w: lhs.w + rhs.w, x: lhs.x + rhs.x, y: lhs.y + rhs.y, z: lhs.z + rhs.z)
     }
-    @_transparent
+    @inline(__always)
     static func -=(lhs: inout Self, rhs: Self) {
         lhs = lhs - rhs
     }
-    @_transparent
+    @inline(__always)
     static func -(lhs: Self, rhs: Self) -> Self {
         return Self(w: lhs.w - rhs.w, x: lhs.x - rhs.x, y: lhs.y - rhs.y, z: lhs.z - rhs.z)
     }

@@ -34,6 +34,7 @@ extension Size2: Codable {}
 
 //MARK: Vector2
 extension Size2 {
+    @inline(__always)
     public var x: Float {
         get {
             return width
@@ -43,6 +44,7 @@ extension Size2 {
         }
     }
     
+    @inline(__always)
     public var y: Float {
         get {
             return height
@@ -59,20 +61,24 @@ extension Size2 {
 }
 
 public extension Size2 {
-    static var zero: Self {Self(width: 0, height: 0)}
-    static var one: Self {Self(width: 1, height: 1)}
+    static let zero = Self(width: 0, height: 0)
+ 
+    static let one = Self(width: 1, height: 1)
 }
 
 public extension Size2 {
+    @inline(__always)
     var aspectRatio: Float {
         return width / height
     }
 }
 
 public extension Size2 {
+    @inline(__always)
     static func *(lhs: Size2, rhs: Float) -> Self {
         return Size2(width: lhs.width * rhs, height: lhs.height * rhs)
     }
+    @inline(__always)
     static func *=(lhs: inout Self, rhs: Float) {
         lhs = lhs * rhs
     }
@@ -82,10 +88,12 @@ public extension Size2 {
 //Addition
 public extension Size2 {
     //Self:Self
+    @inline(__always)
     static func +(lhs: Self, rhs: Self) -> Self {
         return Self(lhs.x + rhs.x,
                     lhs.y + rhs.y)
     }
+    @inline(__always)
     static func +=(lhs: inout Self, rhs: Self) {
         lhs =  lhs + rhs
     }
@@ -94,10 +102,12 @@ public extension Size2 {
 //Subtraction
 public extension Size2 {
     //Self:Self
+    @inline(__always)
     static func -(lhs: Self, rhs: Self) -> Self {
         return Self(lhs.x - rhs.x,
                     lhs.y - rhs.y)
     }
+    @inline(__always)
     static func -=(lhs: inout Self, rhs: Self) {
         lhs =  lhs - rhs
     }
@@ -106,10 +116,12 @@ public extension Size2 {
 //Division(FloatingPoint)
 public extension Size2 {
     //Self:Self
+    @inline(__always)
     static func /(lhs: Self, rhs: Self) -> Self {
         return Self(lhs.x / rhs.x,
                     lhs.y / rhs.y)
     }
+    @inline(__always)
     static func /=(lhs: inout Self, rhs: Self) {
         lhs =  lhs / rhs
     }

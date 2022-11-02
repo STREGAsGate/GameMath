@@ -48,7 +48,7 @@ public extension Transform3 {
         self.scale = scale
     }
     
-    @inlinable
+    @inline(__always)
     var isFinite: Bool {
         return position.isFinite && scale.isFinite && rotation.isFinite
     }
@@ -65,7 +65,7 @@ public extension Transform3 {
     }
     
     ///Creates and returns a new matrix.
-    @inlinable
+    @inline(__always)
     func createMatrix() -> Matrix4x4 {
         var matrix = Matrix4x4(position: self.position)
         matrix *= Matrix4x4(rotation: self.rotation)
@@ -75,6 +75,7 @@ public extension Transform3 {
 }
 
 extension Transform3: Equatable {
+    @inline(__always)
     public static func ==(lhs: Self, rhs: Self) -> Bool {
         return lhs.position == rhs.position && lhs.rotation == rhs.rotation && lhs.scale == rhs.scale
     }
@@ -88,21 +89,18 @@ extension Transform3: Hashable {
 }
 
 extension Transform3 {
-    @inlinable
+    @inline(__always)
     public mutating func rotate(_ degrees: Degrees, direction: Direction3) {
         self.rotation = Quaternion(degrees, axis: direction) * self.rotation
     }
 }
 
-extension Transform3 {
-    @inlinable
-    public static var `default`: Self {
-        return Self(position: .zero, rotation: .zero, scale: .one)
-    }
+public extension Transform3 {
+    static let `default` = Self(position: .zero, rotation: .zero, scale: .one)
 }
 
 extension Transform3 {
-    @inlinable
+    @inline(__always)
     public func interpolated(to destination: Self, _ method: InterpolationMethod) -> Self {
         var copy = self
         copy.position.interpolate(to: destination.position, method)
@@ -111,14 +109,14 @@ extension Transform3 {
         return copy
     }
     
-    @inlinable
+    @inline(__always)
     public mutating func interpolate(to: Self, _ method: InterpolationMethod) {
         self.position.interpolate(to: to.position, method)
         self.rotation.interpolate(to: to.rotation, method)
         self.scale.interpolate(to: to.scale, method)
     }
     
-    @inlinable
+    @inline(__always)
     public func difference(removing: Self) -> Self {
         var transform: Self = .default
         transform.position = self.position - removing.position
@@ -128,21 +126,21 @@ extension Transform3 {
 }
 
 extension Transform3 {
-    @inlinable
+    @inline(__always)
     public func distance(from: Self) -> Float {
         return self.position.distance(from: from.position)
     }
 }
 
 public extension Transform3 {
-    @inlinable
+    @inline(__always)
     static func +=(lhs: inout Self, rhs: Self) {
         lhs.position += rhs.position
         lhs.rotation = rhs.rotation * lhs.rotation
         lhs.rotation.normalize()
         lhs.scale += rhs.scale
     }
-    @inlinable
+    @inline(__always)
     static func +(lhs: Self, rhs: Self) -> Self {
         return Self(position: lhs.position + rhs.position, rotation: (rhs.rotation * lhs.rotation).normalized, scale: lhs.scale + rhs.scale)
     }

@@ -103,15 +103,13 @@ extension Transform2: Hashable {
 }
 
 extension Transform2 {
-    public static var zero: Self {
-        return Self(position: .zero, rotation: Degrees(0), scale: .zero)
-    }
-    public static var empty: Self {
-        return Self(position: .zero, rotation: Degrees(0), scale: .one)
-    }
+    public static let zero = Self(position: .zero, rotation: Degrees(0), scale: .zero)
+    
+    public static let `default` = Self(position: .zero, rotation: Degrees(0), scale: .one)
 }
 
 extension Transform2 {
+    @inline(__always)
     public func interpolated(to destination: Self, _ method: InterpolationMethod) -> Self {
         var copy = self
         copy.position.interpolate(to: destination.position, method)
@@ -120,14 +118,16 @@ extension Transform2 {
         return copy
     }
     
+    @inline(__always)
     public mutating func interpolate(to: Self, _ method: InterpolationMethod) {
         self.position.interpolate(to: to.position, method)
         self.rotation.interpolate(to: to.rotation, method)
         self.scale.interpolate(to: to.scale, method)
     }
     
+    @inline(__always)
     public func difference(removing: Self) -> Self {
-        var transform: Self = .empty
+        var transform: Self = .default
         transform.position = self.position - removing.position
         transform.rotation = self.rotation - removing.rotation
         return transform
@@ -135,17 +135,20 @@ extension Transform2 {
 }
 
 extension Transform2 {
+    @inline(__always)
     public func distance(from: Self) -> Float {
         return self.position.distance(from: from.position)
     }
 }
 
 public extension Transform2 {
+    @inline(__always)
     static func +=(lhs: inout Self, rhs: Self) {
         lhs.position += rhs.position
         lhs.rotation += rhs.rotation
         lhs.scale += rhs.scale
     }
+    @inline(__always)
     static func +(lhs: Self, rhs: Self) -> Self {
         return Self(position: lhs.position + rhs.position, rotation: lhs.rotation + rhs.rotation, scale: lhs.scale + rhs.scale)
     }

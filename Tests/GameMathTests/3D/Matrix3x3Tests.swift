@@ -94,11 +94,12 @@ final class Matrix3x3Tests: XCTestCase {
     func testRotation() {
         var matrix = Matrix3x3()
         matrix.rotation = Quaternion(Degrees(720), axis: .right)
-        XCTAssertEqual(matrix.rotation.unitNormalized.x, Quaternion.zero.x, accuracy: 0.0025)
-        XCTAssertEqual(matrix.rotation.unitNormalized.y, Quaternion.zero.y, accuracy: 0.0025)
-        XCTAssertEqual(matrix.rotation.unitNormalized.z, Quaternion.zero.z, accuracy: 0.0025)
-        XCTAssertEqual(matrix.rotation.unitNormalized.w, Quaternion.zero.w, accuracy: 0.0025)
-        XCTAssertEqual(matrix.rotation.magnitude, 1)
+        let nr = matrix.rotation
+        XCTAssertEqual(nr.x, Quaternion.zero.x, accuracy: 0.000001)
+        XCTAssertEqual(nr.y, Quaternion.zero.y, accuracy: 0.000001)
+        XCTAssertEqual(nr.z, Quaternion.zero.z, accuracy: 0.000001)
+        XCTAssertEqual(nr.w, Quaternion.zero.w, accuracy: 0.000001)
+        XCTAssertEqual(nr.magnitude, 1)
     }
     
     func testTransposedArray() {

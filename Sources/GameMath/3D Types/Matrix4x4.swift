@@ -16,22 +16,22 @@ public struct Matrix4x4 {
         self.storage = storage
     }
 
-    @_transparent public var a: Float {get{storage[0][0]} set{storage[0][0] = newValue}}
-    @_transparent public var b: Float {get{storage[1][0]} set{storage[1][0] = newValue}}
-    @_transparent public var c: Float {get{storage[2][0]} set{storage[2][0] = newValue}}
-    @_transparent public var d: Float {get{storage[3][0]} set{storage[3][0] = newValue}}
-    @_transparent public var e: Float {get{storage[0][1]} set{storage[0][1] = newValue}}
-    @_transparent public var f: Float {get{storage[1][1]} set{storage[1][1] = newValue}}
-    @_transparent public var g: Float {get{storage[2][1]} set{storage[2][1] = newValue}}
-    @_transparent public var h: Float {get{storage[3][1]} set{storage[3][1] = newValue}}
-    @_transparent public var i: Float {get{storage[0][2]} set{storage[0][2] = newValue}}
-    @_transparent public var j: Float {get{storage[1][2]} set{storage[1][2] = newValue}}
-    @_transparent public var k: Float {get{storage[2][2]} set{storage[2][2] = newValue}}
-    @_transparent public var l: Float {get{storage[3][2]} set{storage[3][2] = newValue}}
-    @_transparent public var m: Float {get{storage[0][3]} set{storage[0][3] = newValue}}
-    @_transparent public var n: Float {get{storage[1][3]} set{storage[1][3] = newValue}}
-    @_transparent public var o: Float {get{storage[2][3]} set{storage[2][3] = newValue}}
-    @_transparent public var p: Float {get{storage[3][3]} set{storage[3][3] = newValue}}
+    @inline(__always) public var a: Float {get{storage[0][0]} set{storage[0][0] = newValue}}
+    @inline(__always) public var b: Float {get{storage[1][0]} set{storage[1][0] = newValue}}
+    @inline(__always) public var c: Float {get{storage[2][0]} set{storage[2][0] = newValue}}
+    @inline(__always) public var d: Float {get{storage[3][0]} set{storage[3][0] = newValue}}
+    @inline(__always) public var e: Float {get{storage[0][1]} set{storage[0][1] = newValue}}
+    @inline(__always) public var f: Float {get{storage[1][1]} set{storage[1][1] = newValue}}
+    @inline(__always) public var g: Float {get{storage[2][1]} set{storage[2][1] = newValue}}
+    @inline(__always) public var h: Float {get{storage[3][1]} set{storage[3][1] = newValue}}
+    @inline(__always) public var i: Float {get{storage[0][2]} set{storage[0][2] = newValue}}
+    @inline(__always) public var j: Float {get{storage[1][2]} set{storage[1][2] = newValue}}
+    @inline(__always) public var k: Float {get{storage[2][2]} set{storage[2][2] = newValue}}
+    @inline(__always) public var l: Float {get{storage[3][2]} set{storage[3][2] = newValue}}
+    @inline(__always) public var m: Float {get{storage[0][3]} set{storage[0][3] = newValue}}
+    @inline(__always) public var n: Float {get{storage[1][3]} set{storage[1][3] = newValue}}
+    @inline(__always) public var o: Float {get{storage[2][3]} set{storage[2][3] = newValue}}
+    @inline(__always) public var p: Float {get{storage[3][3]} set{storage[3][3] = newValue}}
 
     public init(_ a: Float, _ b: Float, _ c: Float, _ d: Float,
                 _ e: Float, _ f: Float, _ g: Float, _ h: Float,
@@ -63,7 +63,7 @@ public struct Matrix4x4 {
 #endif
 
 public extension Matrix4x4 {
-    @_transparent
+    @inline(__always)
     init(a: Float, b: Float, c: Float, d: Float,
          e: Float, f: Float, g: Float, h: Float,
          i: Float, j: Float, k: Float, l: Float,
@@ -71,7 +71,7 @@ public extension Matrix4x4 {
         self.init(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p)
     }
     
-    @_transparent
+    @inline(__always)
     init(repeating value: Float) {
         self.init(a: value, b: value, c: value, d: value,
                   e: value, f: value, g: value, h: value,
@@ -79,7 +79,7 @@ public extension Matrix4x4 {
                   m: value, n: value, o: value, p: value)
     }
     
-    @_transparent
+    @inline(__always)
     init(_ value: [Float]) {
         assert(value.count == 16, "Matrix4x4 must be initialized with exactly 16 elements.")
         self.init(a: value[0],  b: value[1],  c: value[2],  d: value[3],
@@ -90,13 +90,12 @@ public extension Matrix4x4 {
 }
 
 public extension Matrix4x4 {
-    @_transparent
-    static var identity: Self {Self(a: 1, b: 0, c: 0, d: 0,
-                                    e: 0, f: 1, g: 0, h: 0,
-                                    i: 0, j: 0, k: 1, l: 0,
-                                    m: 0, n: 0, o: 0, p: 1)}
+    static let identity = Self(a: 1, b: 0, c: 0, d: 0,
+                               e: 0, f: 1, g: 0, h: 0,
+                               i: 0, j: 0, k: 1, l: 0,
+                               m: 0, n: 0, o: 0, p: 1)
     
-    @inlinable
+    @inline(__always)
     mutating func becomeIdentity() {
         a = 1; b = 0; c = 0; d = 0
         e = 0; f = 1; g = 0; h = 0
@@ -226,7 +225,7 @@ public extension Matrix4x4 {
     //MARK: Subscript
 public extension Matrix4x4 {
     subscript (_ index: Array<Float>.Index) -> Float {
-        @_transparent
+        @inline(__always)
         get {
             switch index {
             case 0: return a
@@ -250,7 +249,7 @@ public extension Matrix4x4 {
             }
         }
         
-        @_transparent
+        @inline(__always)
         set(val) {
             switch index {
             case 0: a = val
@@ -277,7 +276,7 @@ public extension Matrix4x4 {
 }
 public extension Matrix4x4 {
     subscript (_ column: Array<Float>.Index) -> SIMD4<Float> {
-        @_transparent
+        @inline(__always)
         get {
             assert(column < 4, "Index \(column) out of range \(0 ..< 4) for type \(type(of: self))")
             #if GameMathUseSIMD
@@ -294,7 +293,7 @@ public extension Matrix4x4 {
             #endif
         }
         
-        @_transparent
+        @inline(__always)
         set {
             assert(column < 4, "Index \(column) out of range \(0 ..< 4) for type \(type(of: self))")
             #if GameMathUseSIMD
@@ -334,7 +333,7 @@ public extension Matrix4x4 {
 //MARK: - Transform
 
 public extension Matrix4x4 {
-    @inlinable
+    @inline(__always)
     var transform: Transform3 {
         return Transform3(position: position, rotation: rotation, scale: scale)
     }
@@ -342,7 +341,7 @@ public extension Matrix4x4 {
 
 //MARK: Translate
 public extension Matrix4x4 {
-    @_transparent
+    @inline(__always)
     init(position: Position3) {
         self.init(1, 0, 0, position.x,
                   0, 1, 0, position.y,
@@ -350,7 +349,7 @@ public extension Matrix4x4 {
                   0, 0, 0, 1)
     }
     
-    @_transparent
+    @inline(__always)
     var position: Position3 {
         get {
             return Position3(x: d, y: h, z: l)
@@ -365,7 +364,6 @@ public extension Matrix4x4 {
 
 //MARK: Rotate
 public extension Matrix4x4 {
-    @_transparent
     init(rotation quaternion: Quaternion) {
         let w: Float = quaternion.w
         let x: Float = quaternion.x
@@ -427,7 +425,7 @@ public extension Matrix4x4 {
         #endif
     }
     
-    @_transparent
+    @inline(__always)
     init(rotationWithForward forward: Direction3, up: Direction3 = .up, right: Direction3 = .right) {
         self.init(right.x,     right.y,    right.z,    0,
                   up.x,        up.y,       up.z,       0,
@@ -435,9 +433,8 @@ public extension Matrix4x4 {
                   0,           0,          0,          1)
     }
     
-    @_transparent
     var rotation: Quaternion {
-        get {
+        @inline(__always) get {
             return Quaternion(rotationMatrix: self.rotationMatrix)
         }
         set {
@@ -493,7 +490,7 @@ public extension Matrix4x4 {
         }
     }
     
-    @inlinable
+    @inline(__always)
     var rotationMatrix: Self {
         let scale = self.scale
         return Matrix4x4(a: a/scale.x, b: b/scale.y, c: c/scale.z, d: 0,
@@ -502,7 +499,7 @@ public extension Matrix4x4 {
                          m: 0,         n: 0,         o: 0,         p: 0)
     }
     
-    @_transparent
+    @inline(__always)
     func lookingAt(_ position: Position3) -> Self {
         let eye = self.position
         let zaxis = Direction3(eye - position).normalized// The "forward" vector.
@@ -518,7 +515,7 @@ public extension Matrix4x4 {
 
 //MARK: Scale
 public extension Matrix4x4 {
-    @_transparent
+    @inline(__always)
     init(scale size: Size3) {
         self.init(size.x,  0,      0,      0,
                   0,       size.y, 0,      0,
@@ -526,7 +523,7 @@ public extension Matrix4x4 {
                   0,       0,      0,      1)
     }
     
-    @inlinable
+    @inline(__always)
     var scale: Size3 {
         get {
             var w: Float = a * a
@@ -585,14 +582,14 @@ public extension Matrix4x4 {
 
 //MARK: - Graphics
 extension Matrix4x4 {
-    @_transparent
+    @inline(__always)
     public var simd: SIMD16<Float> {
         return SIMD16<Float>(a, b, c, d,
                          e, f, g, h,
                          i, j, k, l,
                          m, n, o, p)
     }
-    @_transparent
+    @inline(__always)
     public var transposedSIMD: SIMD16<Float>  {
         return SIMD16<Float>(a, e, i, m,
                          b, f, j, n,
@@ -602,7 +599,7 @@ extension Matrix4x4 {
 }
 
 extension Matrix4x4 {
-    @_transparent
+    @inline(__always)
     public func transposedArray() -> [Float] {
         return [a, e, i, m,
                 b, f, j, n,
@@ -610,7 +607,7 @@ extension Matrix4x4 {
                 d, h, l, p]
     }
     
-    @_transparent
+    @inline(__always)
     public func array() -> [Float] {
         return [a, b, c, d,
                 e, f, g, h,
@@ -618,7 +615,7 @@ extension Matrix4x4 {
                 m, n, o, p]
     }
 
-    @inlinable
+    @inline(__always)
     public init(transposedArray value: [Float]) {
         assert(value.count == 16, "Matrix4x4 must be initialized with exactly 16 elements.")
         self.init(a: value[0], b: value[4], c: value[8],  d: value[12],
@@ -627,14 +624,14 @@ extension Matrix4x4 {
                   m: value[3], n: value[7], o: value[11], p: value[15])
     }
     
-    @_transparent
+    @inline(__always)
     public func transposed() -> Self {
         return Self(self.transposedArray())
     }
 }
 
 extension Matrix4x4 {
-    @_transparent
+    @inline(__always)
     public var isFinite: Bool {
         for value in self.array() {
             guard value.isFinite else {return false}
@@ -649,12 +646,12 @@ extension Matrix4x4 {
 import simd
 
 public extension Matrix4x4 {
-    @_transparent
+    @inline(__always)
     static func *=(lhs: inout Self, rhs: Self) {
         lhs = lhs * rhs
     }
     
-    @_transparent
+    @inline(__always)
     static func *(lhs: Self, rhs: Self) -> Self {
         let r = simd_mul(simd_float4x4(lhs[0], lhs[1], lhs[2], lhs[3]),
                          simd_float4x4(rhs[0], rhs[1], rhs[2], rhs[3]))
@@ -664,12 +661,12 @@ public extension Matrix4x4 {
 }
 #elseif false //Unreasonably slow
 public extension Matrix4x4 {
-    @_transparent
+    @inline(__always)
     static func *=(lhs: inout Self, rhs: Self) {
         lhs = lhs * rhs
     }
     
-    @_transparent
+    @inline(__always)
     static func *(lhs: Self, rhs: Self) -> Self {
         let abcd: SIMD4<Float> = SIMD4(lhs.a, lhs.b, lhs.c, lhs.d)
         let efgh: SIMD4<Float> = SIMD4(lhs.e, lhs.f, lhs.g, lhs.h)
@@ -703,12 +700,12 @@ public extension Matrix4x4 {
 #if GameMathUseDispatch && canImport(Dispatch) && false
 import Dispatch
 public extension Matrix4x4 {
-    @_transparent
+    @inline(__always)
     static func *=(lhs: inout Self, rhs: Self) {
         lhs = lhs * rhs
     }
     
-    @_transparent
+    @inline(__always)
     static func *(lhs: Self, rhs: Self) -> Self {
         var out: Matrix4x4 = .identity
         DispatchQueue.concurrentPerform(iterations: 16) {
@@ -818,12 +815,12 @@ public extension Matrix4x4 {
 }
 #elseif true
 public extension Matrix4x4 {
-    @_transparent
+    @inline(__always)
     static func *=(lhs: inout Self, rhs: Self) {
         lhs = lhs * rhs
     }
     
-    @_transparent
+    @inline(__always)
     static func *(lhs: Self, rhs: Self) -> Self {
         var a: Float = lhs.a * rhs.a
         a += lhs.b * rhs.e

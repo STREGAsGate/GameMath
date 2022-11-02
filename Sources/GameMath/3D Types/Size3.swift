@@ -12,7 +12,7 @@ public struct Size3: Vector3 {
     public var y: Float
     public var z: Float
     
-    @_transparent
+    @inline(__always)
     public init(_ x: Float, _ y: Float, _ z: Float) {
         self.x = x
         self.y = y
@@ -25,7 +25,7 @@ public struct Size3: Vector3 {
     public var y: Float
     public var z: Float
     
-    @_transparent
+    @inline(__always)
     public init(_ x: Float, _ y: Float, _ z: Float) {
         self.x = x
         self.y = y
@@ -47,14 +47,13 @@ extension Size3: Hashable {}
 extension Size3: Codable {}
 
 public extension Size3 {
-    @_transparent
-    static var one: Self {
-        return Self(width: 1, height: 1, depth: 1)
-    }
+    static let one = Self(width: 1, height: 1, depth: 1)
+    static let zero = Self(0)
+    static let almostZero = Self(.ulpOfOne)
 }
 
 extension Size3 {
-    @inlinable
+    @inline(__always)
     public var width: Float {
         get{
             return x
@@ -63,7 +62,7 @@ extension Size3 {
             x = val
         }
     }
-    @inlinable
+    @inline(__always)
     public var height: Float {
         get{
             return y
@@ -72,7 +71,7 @@ extension Size3 {
             y = val
         }
     }
-    @inlinable
+    @inline(__always)
     public var depth: Float {
         get{
             return z

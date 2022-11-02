@@ -14,7 +14,7 @@ public struct Position2: Vector2 {
         self.storage = SIMD2(x: x, y: y)
     }
     
-    @inlinable
+    @inline(__always)
     public var x: Float {
         get {
             return storage.x
@@ -24,7 +24,7 @@ public struct Position2: Vector2 {
         }
     }
     
-    @inlinable
+    @inline(__always)
     public var y: Float {
         get {
             return storage.y
@@ -54,14 +54,11 @@ public extension Position2 {
         self.init(x: x, y: y)
     }
     
-    @inlinable
-    static var zero: Self {
-        return Self(x: 0, y: 0)
-    }
+    static let zero = Self(x: 0, y: 0)
 }
 
 public extension Position2 {
-    @inlinable
+    @inline(__always)
     func distance(from: Self) -> Float {
         let difference = self - from
         let distance = difference.dot(difference)
@@ -73,12 +70,12 @@ public extension Position2 {
 //Addition
 extension Position2 {
     //Self:Self
-    @inlinable
+    @inline(__always)
     public static func +(lhs: Self, rhs: Self) -> Self {
         return Self(lhs.x + rhs.x,
                     lhs.y + rhs.y)
     }
-    @inlinable
+    @inline(__always)
     public static func +=(lhs: inout Self, rhs: Self) {
         lhs = lhs + rhs
     }
@@ -87,12 +84,12 @@ extension Position2 {
 //Subtraction
 extension Position2 {
     //Self:Self
-    @inlinable
+    @inline(__always)
     public static func -(lhs: Self, rhs: Self) -> Self {
         return Self(lhs.x - rhs.x,
                     lhs.y - rhs.y)
     }
-    @inlinable
+    @inline(__always)
     public static func -=(lhs: inout Self, rhs: Self) {
         lhs = lhs - rhs
     }
@@ -101,12 +98,12 @@ extension Position2 {
 //Division
 extension Position2 {
     //Self:Self
-    @inlinable
+    @inline(__always)
     public static func /(lhs: Self, rhs: Self) -> Self {
         return Self(lhs.x / rhs.x,
                     lhs.y / rhs.y)
     }
-    @inlinable
+    @inline(__always)
     public static func /=(lhs: inout Self, rhs: Self) {
         lhs = lhs / rhs
     }
@@ -117,7 +114,7 @@ public extension Position2 {
     - parameter distance: The units away from `self` to create the new position.
     - parameter direction: The angle away from self to create the new position.
      */
-    @inlinable
+    @inline(__always)
     func moved(_ distance: Float, toward direction: Direction2) -> Self {
         return self + (direction * distance)
     }
@@ -126,14 +123,14 @@ public extension Position2 {
     - parameter distance: The units away to move.
     - parameter direction: The angle to move.
      */
-    @inlinable
+    @inline(__always)
     mutating func move(_ distance: Float, toward direction: Direction2) {
         self = moved(distance, toward: direction)
     }
 }
 
 public extension Position2 {
-    @inlinable
+    @inline(__always)
     mutating func clamp(within rect: Rect) {
         self.x = .maximum(self.x, rect.x)
         self.x = .minimum(self.x, rect.maxX)
@@ -141,7 +138,7 @@ public extension Position2 {
         self.y = .minimum(self.y, rect.maxY)
     }
     
-    @inlinable
+    @inline(__always)
     func clamped(within rect: Rect) -> Position2 {
         var copy = self
         copy.clamp(within: rect)
