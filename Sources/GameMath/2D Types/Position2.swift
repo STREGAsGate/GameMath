@@ -130,6 +130,30 @@ public extension Position2 {
 }
 
 public extension Position2 {
+    /** Creates a position by rotating self around an anchor point.
+    - parameter origin: The anchor to rotate around.
+    - parameter rotation: The direction and angle to rotate.
+     */
+    @inline(__always)
+    func rotated(around anchor: Self = .zero, by angle: Direction2) -> Self {
+        var p = self - anchor
+        let d = p.distance(from: .zero)
+        p = p.moved(d, toward: angle.normalized)
+        p += anchor
+        return p
+    }
+
+    /** Rotates `self` around an anchor position.
+     - parameter origin: The anchor to rotate around.
+     - parameter rotation: The direction and angle to rotate.
+     */
+    @inline(__always)
+    mutating func rotate(around anchor: Self = .zero, by angle: Direction2) {
+        self = rotated(around: anchor, by: angle)
+    }
+}
+
+public extension Position2 {
     @inline(__always)
     mutating func clamp(within rect: Rect) {
         self.x = .maximum(self.x, rect.x)

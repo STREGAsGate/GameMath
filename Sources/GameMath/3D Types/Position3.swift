@@ -84,5 +84,29 @@ public extension Position3 {
 }
 
 public extension Position3 {
+    /** Creates a position by rotating self around an anchor point.
+    - parameter origin: The anchor to rotate around.
+    - parameter rotation: The direction and angle to rotate.
+     */
+    @inline(__always)
+    func rotated(around anchor: Self = .zero, by rotation: Quaternion) -> Self {
+        var p = self - anchor
+        let d = p.distance(from: .zero)
+        p = p.moved(d, toward: rotation.normalized.forward)
+        p += anchor
+        return p
+    }
+
+    /** Rotates `self` around an anchor position.
+     - parameter origin: The anchor to rotate around.
+     - parameter rotation: The direction and angle to rotate.
+     */
+    @inline(__always)
+    mutating func rotate(around anchor: Self = .zero, by rotation: Quaternion) {
+        self = rotated(around: anchor, by: rotation)
+    }
+}
+
+public extension Position3 {
     static var zero = Self(0)
 }
