@@ -289,9 +289,10 @@ public extension Degrees {
     
     @inline(__always)
     mutating func interpolate(to: Self, _ method: InterpolationMethod) {
-        self.rawValue.interpolate(to: to.rawValue, method)
+        self = self.interpolated(to: to, method)
     }
     
+    @inline(__always)
     func interpolated(to: Self, _ method: InterpolationMethod) -> Self {
         if case .linear(_, shortest: true) = method {
             // Shortest distance
