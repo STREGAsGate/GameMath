@@ -36,8 +36,6 @@ public struct Transform3 {
     }
     
     private var _needsUpdate: Bool = true
-    private lazy var _roationMatrix: Matrix4x4 = .identity
-    private lazy var _scaleMatrix: Matrix4x4 = .identity
     private var _matrix: Matrix4x4 = .identity
 }
 
