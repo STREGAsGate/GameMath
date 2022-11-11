@@ -36,9 +36,9 @@ public struct Transform3 {
     }
     
     private var _needsUpdate: Bool = true
-    private lazy var _matrix: Matrix4x4 = .identity
     private lazy var _roationMatrix: Matrix4x4 = .identity
     private lazy var _scaleMatrix: Matrix4x4 = .identity
+    private var _matrix: Matrix4x4 = .identity
 }
 
 public extension Transform3 {
@@ -67,6 +67,9 @@ public extension Transform3 {
     ///Creates and returns a new matrix.
     @inline(__always)
     func createMatrix() -> Matrix4x4 {
+        if _needsUpdate == false {
+            return _matrix
+        }
         var matrix = Matrix4x4(position: self.position)
         matrix *= Matrix4x4(rotation: self.rotation)
         matrix *= Matrix4x4(scale: self.scale)
