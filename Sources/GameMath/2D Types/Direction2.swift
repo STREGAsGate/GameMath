@@ -66,7 +66,7 @@ public extension Direction2 {
         let conjugate = rotation.normalized.conjugate
         let w = rotation * self * conjugate
         let dir3 = w.direction
-        return Direction2(dir3.x, dir3.y)
+        return Direction2(dir3.x, dir3.y).normalized
     }
     
     @inline(__always)
