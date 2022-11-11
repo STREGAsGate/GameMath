@@ -90,11 +90,8 @@ public extension Position3 {
      */
     @inline(__always)
     func rotated(around anchor: Self = .zero, by rotation: Quaternion) -> Self {
-        var p = self - anchor
-        let d = p.distance(from: .zero)
-        p = p.moved(d, toward: rotation.normalized.forward)
-        p += anchor
-        return p
+        let d = self.distance(from: anchor)
+        return anchor.moved(d, toward: rotation.forward)
     }
 
     /** Rotates `self` around an anchor position.
