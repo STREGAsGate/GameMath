@@ -150,7 +150,9 @@ public extension Transform2 {
     }
     @inline(__always)
     static func +(lhs: Self, rhs: Self) -> Self {
-        return Self(position: lhs.position + rhs.position, rotation: lhs.rotation + rhs.rotation, scale: (lhs.scale + rhs.scale) / 2)
+        var lhsCopy = lhs
+        lhsCopy += rhs
+        return lhsCopy
     }
 }
 
