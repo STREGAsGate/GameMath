@@ -87,6 +87,12 @@ public extension Direction3 {
         let dn = -2 * self.dot(normal)
         return (normal * dn) + self
     }
+    
+    /// true if the difference in angles is less than 180°
+    @inline(__always)
+    func isFrontFacing(toward direction: Direction3) -> Bool {
+        return (self.dot(direction) <= 0) == false
+    }
 }
 
 public extension Direction3 {
