@@ -112,9 +112,7 @@ extension Transform2 {
     @inline(__always)
     public func interpolated(to destination: Self, _ method: InterpolationMethod) -> Self {
         var copy = self
-        copy.position.interpolate(to: destination.position, method)
-        copy.rotation.interpolate(to: destination.rotation, method)
-        copy.scale.interpolate(to: destination.scale, method)
+        copy.interpolate(to: destination, method)
         return copy
     }
     
