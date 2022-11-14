@@ -515,6 +515,12 @@ extension Degrees {
         return Self(degrees)
     }
     
+    /// Makes the angle equivalent to the current angle if it rolled over when exceeding 360, or rolled back to 360 when less then zero. The value is always within 0 ... 360
+    @inline(__always)
+    public mutating func normalize() {
+        self = self.normalized
+    }
+    
     /// Returns the shortest angle, that when added to `self.normalized` will result in `destination.normalized`
     public func shortestAngle(to destination: Self) -> Self {
         var src = self.rawValue
