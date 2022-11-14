@@ -146,11 +146,11 @@ public extension Transform2 {
     static func +=(lhs: inout Self, rhs: Self) {
         lhs.position += rhs.position
         lhs.rotation += rhs.rotation
-        lhs.scale += rhs.scale
+        lhs.scale = (lhs.scale + rhs.scale) / 2
     }
     @inline(__always)
     static func +(lhs: Self, rhs: Self) -> Self {
-        return Self(position: lhs.position + rhs.position, rotation: lhs.rotation + rhs.rotation, scale: lhs.scale + rhs.scale)
+        return Self(position: lhs.position + rhs.position, rotation: lhs.rotation + rhs.rotation, scale: (lhs.scale + rhs.scale) / 2)
     }
 }
 

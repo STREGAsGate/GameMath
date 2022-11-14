@@ -139,11 +139,13 @@ public extension Transform3 {
         lhs.position += rhs.position
         lhs.rotation = rhs.rotation * lhs.rotation
         lhs.rotation.normalize()
-        lhs.scale += rhs.scale
+        lhs.scale = (lhs.scale + rhs.scale) / 2
     }
     @inline(__always)
     static func +(lhs: Self, rhs: Self) -> Self {
-        return Self(position: lhs.position + rhs.position, rotation: (rhs.rotation * lhs.rotation).normalized, scale: lhs.scale + rhs.scale)
+        var lhsCopy = lhs
+        lhsCopy += rhs
+        return lhsCopy
     }
 }
 
