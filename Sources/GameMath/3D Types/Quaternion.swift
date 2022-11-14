@@ -48,9 +48,16 @@ extension Quaternion {
         }
     }
     
-    public init(_ radians: Radians, axis: Direction3) {
-        let sinHalfAngle: Float = sin(radians.rawValue / 2.0)
-        let cosHalfAngle: Float = cos(radians.rawValue / 2.0)
+    /**
+     Initialize as degrees around `axis`
+     - parameter degrees: The angle to rotate
+     - parameter axis: The direction to rotate around
+     */
+    public init(_ angle: any Angle, axis: Direction3) {
+        // Will always be radians (becuase degrees is explicitly below), but leave ambiguous so degrees can use a literal
+        let radians = angle.rawValueAsRadians
+        let sinHalfAngle: Float = sin(radians / 2.0)
+        let cosHalfAngle: Float = cos(radians / 2.0)
         
         x = axis.x * sinHalfAngle
         y = axis.y * sinHalfAngle
@@ -58,6 +65,12 @@ extension Quaternion {
         w = cosHalfAngle
     }
     
+    /**
+     Initialize as degrees around `axis`
+     - parameter degrees: The angle to rotate
+     - parameter axis: The direction to rotate around
+     - note: Allows initialization with `degrees` as a literial. Example: `Quaternion(180, axis: .up)`.
+     */
     @inline(__always)
     public init(_ degrees: Degrees, axis: Direction3) {
         self.init(Radians(degrees), axis: axis)
@@ -220,7 +233,7 @@ extension Quaternion {
         case .justYaw:
             self.init(direction.angleAroundY, axis: up)
             if isCamera {
-                self *= Quaternion(Degrees(180), axis: .up)
+                self *= Quaternion(180, axis: .up)
             }
         case .pitchAndYaw:
             self = Self(direction, up: up, right: right, constraint: .justYaw, isCamera: isCamera)
