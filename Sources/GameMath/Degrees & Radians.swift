@@ -207,57 +207,6 @@ public extension Angle {
     }
 }
 
-@inline(__always)
-public func min<T: Angle>(_ lhs: T, _ rhs: T) -> T {
-    return .minimum(lhs, rhs)
-}
-@inline(__always)
-public func min<T: Angle>(_ lhs: any Angle, _ rhs: any Angle) -> T {
-    return .minimum(lhs, rhs)
-}
-@inline(__always)
-public func min<T: Angle>(_ lhs: T, _ rhs: T.RawValue) -> T {
-    return .minimum(lhs, rhs)
-}
-@inline(__always)
-public func min<T: Angle>(_ lhs: T.RawValue, _ rhs: T) -> T {
-    return .minimum(lhs, rhs)
-}
-
-@inline(__always)
-public func max<T: Angle>(_ lhs: T, _ rhs: T) -> T {
-    return .maximum(lhs, rhs)
-}
-@inline(__always)
-public func max<T: Angle>(_ lhs: any Angle, _ rhs: any Angle) -> T {
-    return .maximum(lhs, rhs)
-}
-@inline(__always)
-public func max<T: Angle>(_ lhs: T, _ rhs: T.RawValue) -> T {
-    return .maximum(lhs, rhs)
-}
-@inline(__always)
-public func max<T: Angle>(_ lhs: T.RawValue, _ rhs: T) -> T {
-    return .maximum(lhs, rhs)
-}
-
-@inline(__always)
-public func abs<T: Angle>(_ value: T) -> T {
-    return T(rawValue: abs(value.rawValue))
-}
-@inline(__always)
-public func ceil<T: Angle>(_ value: T) -> T {
-    return T(rawValue: ceil(value.rawValue))
-}
-@inline(__always)
-public func floor<T: Angle>(_ value: T) -> T {
-    return T(rawValue: floor(value.rawValue))
-}
-@inline(__always)
-public func round<T: Angle>(_ value: T) -> T {
-    return T(rawValue: round(value.rawValue))
-}
-
 extension Angle {
     @inline(__always)
     public static func <(lhs: Self, rhs: Self) -> Bool {
