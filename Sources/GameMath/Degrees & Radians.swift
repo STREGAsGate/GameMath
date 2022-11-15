@@ -57,6 +57,10 @@ public extension Angle {
         return Self(rawValueAsRadians: lhs.rawValueAsRadians + rhs.rawValueAsRadians)
     }
     @inline(__always)
+    static func +=(_ lhs: inout Self, _ rhs: any Angle) {
+        lhs = lhs + rhs
+    }
+    @inline(__always)
     static func +(_ lhs: Self, _ rhs: RawValue) -> Self {
         return Self(rawValue: lhs.rawValue + rhs)
     }
@@ -73,6 +77,10 @@ public extension Angle {
     @inline(__always)
     static func -(_ lhs: Self, _ rhs: any Angle) -> Self {
         return Self(rawValueAsRadians: lhs.rawValueAsRadians - rhs.rawValueAsRadians)
+    }
+    @inline(__always)
+    static func -=(_ lhs: inout Self, _ rhs: any Angle) {
+        lhs = lhs - rhs
     }
     @inline(__always)
     static func -(_ lhs: Self, _ rhs: RawValue) -> Self {
@@ -205,6 +213,26 @@ public extension Angle {
     static func maximum(_ lhs: RawValue, _ rhs: Self) -> Self {
         return Self(.maximum(lhs, rhs.rawValue))
     }
+}
+
+@inline(__always)
+public func min<T: Angle>(_ lhs: T.RawValue, _ rhs: T) -> T {
+    return T(Swift.min(lhs, rhs.rawValue))
+}
+
+@inline(__always)
+public func min<T: Angle>(_ lhs: T, _ rhs: T.RawValue) -> T {
+    return T(Swift.min(lhs.rawValue, rhs))
+}
+
+@inline(__always)
+public func max<T: Angle>(_ lhs: T.RawValue, _ rhs: T) -> T {
+    return T(Swift.max(lhs, rhs.rawValue))
+}
+
+@inline(__always)
+public func max<T: Angle>(_ lhs: T, _ rhs: T.RawValue) -> T {
+    return T(Swift.max(lhs.rawValue, rhs))
 }
 
 extension Angle {
@@ -543,13 +571,14 @@ public extension Degrees {
 
 extension Degrees {
     /// Returns an angle equivalent to the current angle if it rolled over when exceeding 360, or rolled back to 360 when less then zero. The value is always within 0 ... 360
+    @inlinable
     public var normalized: Self {
         let scaler: RawValue = 1000000
-        let degrees = ((self * scaler).rawValue.truncatingRemainder(dividingBy: (360 * scaler))) / scaler
-        if self.rawValue < 0 {
-            return Self(degrees + 360)
+        let degrees = (self * scaler).truncatingRemainder(dividingBy: 360 * scaler) / scaler
+        if self < 0 {
+            return degrees + 360°
         }
-        return Self(degrees)
+        return degrees
     }
     
     /// Makes the angle equivalent to the current angle if it rolled over when exceeding 360, or rolled back to 360 when less then zero. The value is always within 0 ... 360
@@ -559,6 +588,7 @@ extension Degrees {
     }
     
     /// Returns the shortest angle, that when added to `self.normalized` will result in `destination.normalized`
+    @inlinable
     public func shortestAngle(to destination: Self) -> Self {
         var src = self.rawValue
         var dst = destination.rawValue

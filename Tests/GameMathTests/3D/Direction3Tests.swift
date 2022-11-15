@@ -70,23 +70,23 @@ final class Direction3Tests: XCTestCase {
         let src: Direction3 = .up
         let dst: Direction3 = .right
         let value = src.angle(to: dst).rawValue
-        let expected = Radians(Degrees(90)).rawValue
+        let expected = Radians(90°).rawValue
         XCTAssertEqual(value, expected, accuracy: 0.0025)
     }
     
     func testAngleAroundX() {
-        XCTAssertEqual(Direction3.right.angleAroundX, Radians(0))
-        XCTAssertEqual(Direction3.up.angleAroundX, Radians(Degrees(90)))
+        XCTAssertEqual(Direction3.right.angleAroundX, 0)
+        XCTAssertEqual(Direction3.up.angleAroundX, Radians(90°))
     }
     
     func testAngleAroundY() {
-        XCTAssertEqual(Direction3.up.angleAroundY, Radians(0))
-        XCTAssertEqual(Direction3.right.angleAroundY, Radians(Degrees(90)))
+        XCTAssertEqual(Direction3.up.angleAroundY, 0)
+        XCTAssertEqual(Direction3.right.angleAroundY, Radians(90°))
     }
     
     func testAngleAroundZ() {
-        XCTAssertEqual(Direction3.forward.angleAroundZ, Radians(0))
-        XCTAssertEqual(Direction3.up.angleAroundZ, Radians(Degrees(90)))
+        XCTAssertEqual(Direction3.forward.angleAroundZ, 0)
+        XCTAssertEqual(Direction3.up.angleAroundZ, Radians(90°))
     }
     
     func testRotated() {

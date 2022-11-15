@@ -8,8 +8,8 @@ final class RadiansTests: XCTestCase {
         XCTAssert(Radians(rawValue: 10).rawValue == 10)
     }
     func testInitDegrees() {
-        XCTAssertEqual(Radians(Degrees(10)).rawValue, 0.174533, accuracy: 0.0025)
-        XCTAssertEqual(Radians(Degrees(10)).rawValue, 0.174533, accuracy: 0.0025)
+        XCTAssertEqual(Radians(10°).rawValue, 0.174533, accuracy: 0.0025)
+        XCTAssertEqual(Radians(10°).rawValue, 0.174533, accuracy: 0.0025)
     }
     
     // Additions
@@ -189,177 +189,177 @@ final class DegreesTests: XCTestCase {
     
     // Additions
     func testDegreesPlusDegrees() {
-        let r1 = Degrees(1.0)
-        let r2 = Degrees(2.0)
-        XCTAssertEqual(r1 + r2, Degrees(3.0))
+        let r1 = 1.0°
+        let r2 = 2.0°
+        XCTAssertEqual(r1 + r2, 3°)
     }
     func testDegreesPlusRawValue() {
-        let r1 = Degrees(1.0)
-        XCTAssertEqual(r1 + 2.0, Degrees(3.0))
+        let r1 = 1°
+        XCTAssertEqual(r1 + 2.0, 3°)
     }
     func testRawValuePlusDegrees() {
-        let r1 = Degrees.RawValue(2) + Degrees(1.0)
+        let r1: Degrees.RawValue = 2 + 1°
         XCTAssertEqual(r1, 3.0)
     }
     
     /// Subtraction
     func testDegreesMinusDegrees() {
-        let r1 = Degrees(1.0)
-        let r2 = Degrees(2.0)
-        XCTAssertEqual(r1 - r2, Degrees(-1.0))
+        let r1 = 1°
+        let r2 = 2°
+        XCTAssertEqual(r1 - r2, -1°)
     }
     func testDegreesMinusRawValue() {
-        let r1 = Degrees(1.0)
-        XCTAssertEqual(r1 - 2.0, Degrees(-1.0))
+        let r1 = 1°
+        XCTAssertEqual(r1 - 2.0, -1°)
     }
     func testRawValueMinusDegrees() {
-        let r1 = Degrees.RawValue(2) - Degrees(1.0)
+        let r1: Degrees.RawValue = 2 - 1°
         XCTAssertEqual(r1, 1.0)
     }
     
     /// Multiplication
     func testDegreesMulDegrees() {
-        let r1 = Degrees(2.0)
-        let r2 = Degrees(2.0)
-        XCTAssertEqual(r1 * r2, Degrees(4.0))
+        let r1 = 2°
+        let r2 = 2°
+        XCTAssertEqual(r1 * r2, 4°)
     }
     func testDegreesMulRawValue() {
-        let r1 = Degrees(2.0)
-        XCTAssertEqual(r1 * 2.0, Degrees(4.0))
+        let r1 = 2°
+        XCTAssertEqual(r1 * 2.0, 4°)
     }
     func testRawValueMulDegrees() {
-        let r1 = Degrees.RawValue(2) * Degrees(2.0)
+        let r1: Degrees.RawValue = 2 * 2°
         XCTAssertEqual(r1, 4.0)
     }
     
     /// Division
     func testDegreesDivDegrees() {
-        let r1 = Degrees(2.0)
-        let r2 = Degrees(2.0)
-        XCTAssertEqual(r1 / r2, Degrees(1.0))
+        let r1 = 2°
+        let r2 = 2°
+        XCTAssertEqual(r1 / r2, 1°)
     }
     func testDegreesDivRawValue() {
-        let r1 = Degrees(2.0)
-        XCTAssertEqual(r1 / 2.0, Degrees(1.0))
+        let r1 = 2°
+        XCTAssertEqual(r1 / 2.0, 1°)
     }
     func testRawValueDivDegrees() {
-        let r1 = Degrees.RawValue(2) / Degrees(2.0)
+        let r1: Degrees.RawValue = 2 / 2°
         XCTAssertEqual(r1, 1.0)
     }
     
     // Min
     func testMinDegreesDegrees() {
-        let r1 = Degrees(1.0)
-        let r2 = Degrees(2.0)
+        let r1 = 1°
+        let r2 = 2°
         XCTAssertEqual(min(r1, r2), r1)
     }
     func testMinDegreesT() {
-        let r1 = Degrees(1.0)
+        let r1 = 1°
         let r2: Float = 2.0
         XCTAssertEqual(min(r1, r2), r1)
     }
     func testMinTDegrees() {
         let r1: Float = 2.0
-        let r2 = Degrees(1.0)
+        let r2 = 1°
         XCTAssertEqual(min(r1, r2), r2)
     }
     
     // Max
     func testMaxDegreesDegrees() {
-        let r1 = Degrees(2.0)
-        let r2 = Degrees(1.0)
+        let r1 = 2°
+        let r2 = 1°
         XCTAssertEqual(max(r1, r2), r1)
     }
     func testMaxDegreesT() {
-        let r1 = Degrees(2.0)
+        let r1 = 2°
         let r2: Float = 1.0
         XCTAssertEqual(max(r1, r2), r1)
     }
     func testMaxTDegrees() {
         let r1: Float = 1.0
-        let r2 = Degrees(2.0)
+        let r2 = 2°
         XCTAssertEqual(max(r1, r2), r2)
     }
     
     func testAbs() {
-        let r = Degrees(-1)
-        XCTAssertEqual(abs(r), Degrees(1))
+        let r = -1°
+        XCTAssertEqual(abs(r), 1°)
     }
     
     func testCeil() {
-        let r = Degrees(0.5)
-        XCTAssertEqual(ceil(r), Degrees(1))
+        let r = 0.5°
+        XCTAssertEqual(ceil(r), 1°)
     }
     func testFloor() {
-        let r = Degrees(0.5)
-        XCTAssertEqual(floor(r), Degrees(0))
+        let r = 0.5°
+        XCTAssertEqual(floor(r), 0°)
     }
     func testRound() {
-        XCTAssertEqual(round(Degrees(0.4)), Degrees(0))
-        XCTAssertEqual(round(Degrees(0.6)), Degrees(1))
+        XCTAssertEqual(round(0.4°), 0°)
+        XCTAssertEqual(round(0.6°), 1°)
     }
     
     // Compare
     
     func testDegreesLessThanDegrees() {
-        let r1 = Degrees(1.0)
-        let r2 = Degrees(2.0)
+        let r1 = 1°
+        let r2 = 2°
         XCTAssert(r1 < r2)
     }
     func testDegreesLessThanRawValue() {
-        let r1 = Degrees(1.0)
-        let r2 = Degrees.RawValue(2.0)
+        let r1 = 1°
+        let r2: Degrees.RawValue = 2
         XCTAssert(r1 < r2)
     }
     func testRawValueLessThanDegrees() {
-        let r1 = Degrees.RawValue(1.0)
-        let r2 = Degrees(2.0)
+        let r1: Degrees.RawValue = 1
+        let r2 = 2°
         XCTAssert(r1 < r2)
     }
     
     func testDegreesGreaterThanDegrees() {
-        let r1 = Degrees(1.0)
-        let r2 = Degrees(2.0)
+        let r1 = 1°
+        let r2 = 2°
         XCTAssert(r2 > r1)
     }
     func testDegreesGreaterThanRawValue() {
-        let r1 = Degrees(1.0)
-        let r2 = Degrees.RawValue(2.0)
+        let r1 = 1°
+        let r2: Degrees.RawValue = 2
         XCTAssert(r2 > r1)
     }
     func testRawValueGreaterThanDegrees() {
-        let r1 = Degrees.RawValue(1.0)
-        let r2 = Degrees(2.0)
+        let r1: Degrees.RawValue = 1
+        let r2 = 2°
         XCTAssert(r2 > r1)
     }
     
     // Equatable
     func testDegreesEqualDegrees() {
-        let r1 = Degrees(1.0)
-        let r2 = Degrees(1.0)
+        let r1 = 1°
+        let r2 = 1°
         XCTAssert(r2 == r1)
     }
     func testRawValueEqualDegrees() {
-        let r1 = Degrees.RawValue(1.0)
-        let r2 = Degrees(1.0)
+        let r1: Degrees.RawValue = 1
+        let r2 = 1°
         XCTAssert(r2 == r1)
     }
     func testDegreesEqualRawValue() {
-        let r1 = Degrees(1.0)
-        let r2 = Degrees.RawValue(1.0)
+        let r1 = 1°
+        let r2: Degrees.RawValue = 1
         XCTAssert(r2 == r1)
     }
     
     func testNormalized() {
-        XCTAssertEqual(Degrees(361).normalized, Degrees(1))
-        XCTAssertEqual(Degrees(-1).normalized, Degrees(359))
+        XCTAssertEqual(361°.normalized, 1°)
+        XCTAssertEqual((-1°).normalized, 359°)
     }
     
     func testShortestAngle() {
-        XCTAssertEqual(Degrees(0).shortestAngle(to: Degrees(1)), Degrees(1))
-        XCTAssertEqual(Degrees(0).shortestAngle(to: Degrees(0)), Degrees(0))
-        XCTAssertEqual(Degrees(0).shortestAngle(to: Degrees(-1)), Degrees(-1))
-        XCTAssertEqual(Degrees(-1).shortestAngle(to: Degrees(0)), Degrees(1))
-        XCTAssertEqual(Degrees(720).shortestAngle(to: Degrees(-720)), Degrees(0))
+        XCTAssertEqual(0°.shortestAngle(to: 1°), 1°)
+        XCTAssertEqual(0°.shortestAngle(to: 0°), 0°)
+        XCTAssertEqual(0°.shortestAngle(to: -1°), -1°)
+        XCTAssertEqual(-1°.shortestAngle(to: 0°), 1°)
+        XCTAssertEqual(720°.shortestAngle(to: -720°), 0°)
     }
 }

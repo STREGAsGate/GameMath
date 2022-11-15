@@ -47,13 +47,13 @@ final class Direction2Tests: XCTestCase {
         let src: Direction2 = .up
         let dst: Direction2 = .right
         let value = src.angle(to: dst).rawValue
-        let expected = Radians(Degrees(90)).rawValue
+        let expected = Radians(90°).rawValue
         XCTAssertEqual(value, expected, accuracy: 0.0025)
     }
     
     func testAngleAroundZ() {
         let direction: Direction2 = .right
-        XCTAssertEqual(direction.angleAroundZ, Radians(Degrees(90)))
+        XCTAssertEqual(direction.angleAroundZ, Radians(90°))
     }
     
     func testZero() {

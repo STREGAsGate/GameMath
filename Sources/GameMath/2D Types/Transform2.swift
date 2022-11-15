@@ -78,7 +78,7 @@ public struct Transform2 {
 #endif
 
 public extension Transform2 {
-    init(position: Position2 = .zero, rotation: Degrees = Degrees(0), scale: Size2 = .one) {
+    init(position: Position2 = .zero, rotation: Degrees = 0, scale: Size2 = .one) {
         self.position = position
         self.rotation = rotation
         self.scale = scale
@@ -103,9 +103,9 @@ extension Transform2: Hashable {
 }
 
 extension Transform2 {
-    public static let zero = Self(position: .zero, rotation: Degrees(0), scale: .zero)
+    public static let zero = Self(position: .zero, rotation: .zero, scale: .zero)
     
-    public static let `default` = Self(position: .zero, rotation: Degrees(0), scale: .one)
+    public static let `default` = Self(position: .zero, rotation: .zero, scale: .one)
 }
 
 extension Transform2 {
