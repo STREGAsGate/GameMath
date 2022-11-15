@@ -253,7 +253,28 @@ extension Angle {
     }
 }
 
+public extension Angle {
     @inline(__always)
+    static func random<T>(in range: Range<RawValue>, using generator: inout T) -> Self where T : RandomNumberGenerator {
+        return Self(RawValue.random(in: range, using: &generator))
+    }
+    
+    @inline(__always)
+    static func random(in range: Range<RawValue>) -> Self {
+        return Self(RawValue.random(in: range))
+    }
+
+    @inline(__always)
+    static func random<T>(in range: ClosedRange<RawValue>, using generator: inout T) -> Self where T : RandomNumberGenerator {
+        return Self(RawValue.random(in: range, using: &generator))
+    }
+
+    @inline(__always)
+    static func random(in range: ClosedRange<RawValue>) -> Self {
+        return Self(RawValue.random(in: range))
+    }
+}
+
 public extension Angle {
     @inline(__always)
     mutating func round(_ rule: FloatingPointRoundingRule) {
@@ -512,6 +533,11 @@ public extension Degrees {
     @inline(__always)
     func interpolated(to: Radians, _ method: InterpolationMethod) -> Self {
         return self.interpolated(to: Self(to), method)
+    }
+    
+    @inline(__always)
+    static func random() -> Self {
+        return .random(in: 0 ..< 360)
     }
 }
 
