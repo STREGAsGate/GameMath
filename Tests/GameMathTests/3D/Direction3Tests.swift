@@ -91,7 +91,7 @@ final class Direction3Tests: XCTestCase {
     
     func testRotated() {
         let src: Direction3 = .up
-        let qat = Quaternion(Degrees(90), axis: .right).normalized
+        let qat = Quaternion(90°, axis: .right).normalized
         let result = src.rotated(by: qat).normalized
         let expected = Direction3(0, 0, 1).normalized
         XCTAssertEqual(result.x, expected.x, accuracy: .ulpOfOne)

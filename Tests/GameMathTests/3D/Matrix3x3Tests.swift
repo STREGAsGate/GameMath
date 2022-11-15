@@ -93,7 +93,7 @@ final class Matrix3x3Tests: XCTestCase {
 
     func testRotation() {
         var matrix = Matrix3x3()
-        matrix.rotation = Quaternion(Degrees(720), axis: .right)
+        matrix.rotation = Quaternion(720°, axis: .right)
         let nr = matrix.rotation
         XCTAssertEqual(nr.x, Quaternion.zero.x, accuracy: 0.000001)
         XCTAssertEqual(nr.y, Quaternion.zero.y, accuracy: 0.000001)

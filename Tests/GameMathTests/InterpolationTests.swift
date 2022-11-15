@@ -63,8 +63,8 @@ final class InterpolationTests: XCTestCase {
     }
     
     func testQuaternionLinear() {
-        let start = Quaternion(Degrees(0), axis: .right).normalized
-        let end = Quaternion(Degrees(180), axis: .right).normalized
+        let start = Quaternion(0°, axis: .right).normalized
+        let end = Quaternion(180°, axis: .right).normalized
         
         do {// Start value
             let value = start.interpolated(to: end, .linear(0.0, shortest: false)).normalized
@@ -77,7 +77,7 @@ final class InterpolationTests: XCTestCase {
         
         do {// Halfway
             let value = start.interpolated(to: end, .linear(1/2, shortest: false)).normalized
-            let expected = Quaternion(Degrees(90), axis: .right).normalized
+            let expected = Quaternion(90°, axis: .right).normalized
             let angleAroundX = expected.forward.angleAroundX
             let angleAroundY = expected.forward.angleAroundY
             let angleAroundZ = expected.forward.angleAroundZ
@@ -99,8 +99,8 @@ final class InterpolationTests: XCTestCase {
     func testQuaternionShortest() {
         // This test is diffcult to perform accuraualy. To help, results are unitNormaized to bring them as close to the same format as possible before comparison. Because results are modified this a poor test, but good enough for regetion chcking.
         
-        let start = Quaternion(Degrees(45), axis: .right).normalized
-        let end = Quaternion(Degrees(-45), axis: .right).normalized
+        let start = Quaternion(45°, axis: .right).normalized
+        let end = Quaternion(-45°, axis: .right).normalized
         
         do {// Start value
             let value = start.interpolated(to: end, .linear(0.0, shortest: true)).normalized
@@ -113,7 +113,7 @@ final class InterpolationTests: XCTestCase {
         
         do {// Halfway
             let value = start.interpolated(to: end, .linear(1/2, shortest: true)).normalized
-            let expected = Quaternion(Degrees(0), axis: .right).normalized
+            let expected = Quaternion(0°, axis: .right).normalized
             let angleAroundX = expected.forward.angleAroundX
             let angleAroundY = expected.forward.angleAroundY
             let angleAroundZ = expected.forward.angleAroundZ

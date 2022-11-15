@@ -105,7 +105,7 @@ final class Matrix4x4Tests: XCTestCase {
     }
 
     func testQuaternion() {
-        let quat1 = Quaternion(Degrees(90), axis: .right)
+        let quat1 = Quaternion(90°, axis: .right)
         let quat2 = Matrix4x4(rotation: quat1).rotation
         let angle1 = quat1.forward.angle(to: .right).rawValue
         let angle2 = quat2.forward.angle(to: .right).rawValue
@@ -115,13 +115,13 @@ final class Matrix4x4Tests: XCTestCase {
     #if false
     func testMultiplicationPerformance() {
         let m1 = Transform3(position: Position3(128, 128, 128),
-                                   rotation: Quaternion(Degrees(128), axis: .up),
+                                   rotation: Quaternion(128°, axis: .up),
                                    scale: .one).createMatrix()
         let m2 = Transform3(position: Position3(0, 1, 2),
-                                   rotation: Quaternion(Degrees(90), axis: .up),
+                                   rotation: Quaternion(90°, axis: .up),
                                    scale: Size3(-100, -15, -1)).createMatrix()
         let m3 = Transform3(position: Position3(-128, -128, -128),
-                                   rotation: Quaternion(Degrees(-65), axis: .up),
+                                   rotation: Quaternion(-65°, axis: .up),
                                    scale: Size3(100, 15, 1)).createMatrix()
 
         func doMath() {
