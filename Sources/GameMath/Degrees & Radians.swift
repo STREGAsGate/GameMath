@@ -253,149 +253,150 @@ extension Angle {
     }
 }
 
-extension Angle {
     @inline(__always)
-    public mutating func round(_ rule: FloatingPointRoundingRule) {
+public extension Angle {
+    @inline(__always)
+    mutating func round(_ rule: FloatingPointRoundingRule) {
         rawValue.round(rule)
     }
     @inline(__always)
-    public init(sign: FloatingPointSign, exponent: RawValue.Exponent, significand: Self) {
+    init(sign: FloatingPointSign, exponent: RawValue.Exponent, significand: Self) {
         self.init(rawValue: RawValue(sign: sign, exponent: exponent, significand: significand.rawValue.significand))
     }
     @inline(__always)
-    public var exponent: RawValue.Exponent {
+    var exponent: RawValue.Exponent {
         return rawValue.exponent
     }
     @inline(__always)
-    public func distance(to other: Self) -> RawValue.Stride {
+    func distance(to other: Self) -> RawValue.Stride {
         return rawValue.distance(to: other.rawValue)
     }
     @inline(__always)
-    public func advanced(by n: RawValue.Stride) -> Self {
+    func advanced(by n: RawValue.Stride) -> Self {
         return Self(rawValue: rawValue.advanced(by: n))
     }
     @inline(__always)
-    public init(signOf: Self, magnitudeOf: Self) {
+    init(signOf: Self, magnitudeOf: Self) {
         self.init(RawValue(signOf: signOf.rawValue, magnitudeOf: magnitudeOf.rawValue))
     }
     @inline(__always)
-    public init(_ value: Int) {
+    init(_ value: Int) {
         self.init(RawValue(value))
     }
     @inline(__always)
-    public init<Source>(_ value: Source) where Source : BinaryInteger {
+    init<Source>(_ value: Source) where Source : BinaryInteger {
         self.init(RawValue(value))
     }
     @inline(__always)
-    public static var radix: Int {
+    static var radix: Int {
         return RawValue.radix
     }
     @inline(__always)
-    public static var nan: Self {
+    static var nan: Self {
         return Self(rawValue: .nan)
     }
     @inline(__always)
-    public static var signalingNaN: Self {
+    static var signalingNaN: Self {
         return Self(rawValue: .signalingNaN)
     }
     @inline(__always)
-    public static var infinity: Self {
+    static var infinity: Self {
         return Self(rawValue: .infinity)
     }
     @inline(__always)
-    public static var greatestFiniteMagnitude: Self {
+    static var greatestFiniteMagnitude: Self {
         return Self(rawValue: .greatestFiniteMagnitude)
     }
     @inline(__always)
-    public static var pi: Self {
+    static var pi: Self {
         return Self(rawValue: .pi)
     }
     @inline(__always)
-    public var ulp: Self {
+    var ulp: Self {
         return Self(rawValue: rawValue.ulp)
     }
     @inline(__always)
-    public static var leastNormalMagnitude: Self {
+    static var leastNormalMagnitude: Self {
         return Self(rawValue: .leastNormalMagnitude)
     }
     @inline(__always)
-    public static var leastNonzeroMagnitude: Self {
+    static var leastNonzeroMagnitude: Self {
         return Self(rawValue: .leastNonzeroMagnitude)
     }
     @inline(__always)
-    public var sign: FloatingPointSign {
+    var sign: FloatingPointSign {
         return rawValue.sign
     }
     @inline(__always)
-    public var significand: Self {
+    var significand: Self {
         return Self(rawValue: rawValue.significand)
     }
     @inline(__always)
-    public mutating func formRemainder(dividingBy other: Self) {
+    mutating func formRemainder(dividingBy other: Self) {
         rawValue.formRemainder(dividingBy: other.rawValue)
     }
     @inline(__always)
-    public mutating func formTruncatingRemainder(dividingBy other: Self) {
+    mutating func formTruncatingRemainder(dividingBy other: Self) {
         rawValue.formTruncatingRemainder(dividingBy: other.rawValue)
     }
     @inline(__always)
-    public mutating func formSquareRoot() {
+    mutating func formSquareRoot() {
         rawValue.formSquareRoot()
     }
     @inline(__always)
-    public mutating func addProduct(_ lhs: Self, _ rhs: Self) {
+    mutating func addProduct(_ lhs: Self, _ rhs: Self) {
         rawValue.addProduct(lhs.rawValue, rhs.rawValue)
     }
     @inline(__always)
-    public var nextUp: Self {
+    var nextUp: Self {
         return Self(rawValue: rawValue.nextUp)
     }
     @inline(__always)
-    public func isEqual(to other: Self) -> Bool {
+    func isEqual(to other: Self) -> Bool {
         return rawValue.isEqual(to: other.rawValue)
     }
     @inline(__always)
-    public func isLess(than other: Self) -> Bool {
+    func isLess(than other: Self) -> Bool {
         return rawValue.isLess(than: other.rawValue)
     }
     @inline(__always)
-    public func isLessThanOrEqualTo(_ other: Self) -> Bool {
+    func isLessThanOrEqualTo(_ other: Self) -> Bool {
         return rawValue.isLessThanOrEqualTo(other.rawValue)
     }
     @inline(__always)
-    public func isTotallyOrdered(belowOrEqualTo other: Self) -> Bool {
+    func isTotallyOrdered(belowOrEqualTo other: Self) -> Bool {
         return rawValue.isTotallyOrdered(belowOrEqualTo: other.rawValue)
     }
     @inline(__always)
-    public var isNormal: Bool {
+    var isNormal: Bool {
         return rawValue.isNormal
     }
     @inline(__always)
-    public var isZero: Bool {
+    var isZero: Bool {
         return rawValue.isZero
     }
     @inline(__always)
-    public var isSubnormal: Bool {
+    var isSubnormal: Bool {
         return rawValue.isSubnormal
     }
     @inline(__always)
-    public var isInfinite: Bool {
+    var isInfinite: Bool {
         return rawValue.isInfinite
     }
     @inline(__always)
-    public var isNaN: Bool {
+    var isNaN: Bool {
         return rawValue.isNaN
     }
     @inline(__always)
-    public var isSignalingNaN: Bool {
+    var isSignalingNaN: Bool {
         rawValue.isSignalingNaN
     }
     @inline(__always)
-    public var isCanonical: Bool {
+    var isCanonical: Bool {
         return rawValue.isCanonical
     }
     @inline(__always)
-    public var magnitude: Magnitude {
+    var magnitude: Magnitude {
         return Self(rawValue: rawValue.magnitude)
     }
 }
