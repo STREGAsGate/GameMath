@@ -6,6 +6,10 @@
  * http://stregasgate.com
  */
 
+#if GameMathUseSIMD && canImport(simd)
+import simd
+#endif
+
 public enum InterpolationMethod {
     /** Interpolates at a constant rate
      `factor` is progress of interpolation. 0 being the source and 1 being destination.
@@ -35,11 +39,15 @@ public extension Float {
 }
 
 internal extension Float {
-    @usableFromInline
+    @inline(__always)
     func lerped(to: Float, factor: Float) -> Float {
+        #if GameMathUseSIMD && canImport(simd)
+        return simd_mix(self, to, factor)
+        #else
         return self + (to - self) * factor
+        #endif
     }
-    @usableFromInline
+    @inline(__always)
     mutating func lerp(to: Float, factor: Float) {
         self = self.lerped(to: to, factor: factor)
     }

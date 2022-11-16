@@ -7,9 +7,8 @@
  */
 
 import Foundation
-#if GameMathUseSIMD
-import Dispatch
 
+#if GameMathUseSIMD
 public struct Matrix4x4 {
     @usableFromInline internal var storage: [SIMD4<Float>]
     @usableFromInline internal init(storage: [SIMD4<Float>]) {
@@ -642,9 +641,9 @@ extension Matrix4x4 {
 
 //MARK: - Operators
 #if GameMathUseSIMD
-#if canImport(simd) && true
+#if canImport(simd)
 import simd
-
+#endif
 public extension Matrix4x4 {
     @inline(__always)
     static func *=(lhs: inout Self, rhs: Self) {
@@ -653,167 +652,27 @@ public extension Matrix4x4 {
     
     @inline(__always)
     static func *(lhs: Self, rhs: Self) -> Self {
+        #if canImport(simd)
         let r = simd_mul(simd_float4x4(lhs[0], lhs[1], lhs[2], lhs[3]),
                          simd_float4x4(rhs[0], rhs[1], rhs[2], rhs[3]))
         
         return Self(storage: [r[0], r[1], r[2], r[3]])
-    }
-}
-#elseif false //Unreasonably slow
-public extension Matrix4x4 {
-    @inline(__always)
-    static func *=(lhs: inout Self, rhs: Self) {
-        lhs = lhs * rhs
-    }
-    
-    @inline(__always)
-    static func *(lhs: Self, rhs: Self) -> Self {
-        let abcd: SIMD4<Float> = SIMD4(lhs.a, lhs.b, lhs.c, lhs.d)
-        let efgh: SIMD4<Float> = SIMD4(lhs.e, lhs.f, lhs.g, lhs.h)
-        let ijkl: SIMD4<Float> = SIMD4(lhs.i, lhs.j, lhs.k, lhs.l)
-        let mnop: SIMD4<Float> = SIMD4(lhs.m, lhs.n, lhs.o, lhs.p)
-        let aeim: SIMD4<Float> = rhs[0]//SIMD4(rhs.a, rhs.e, rhs.i, rhs.m)
-        let bfjn: SIMD4<Float> = rhs[1]//SIMD4(rhs.b, rhs.f, rhs.j, rhs.n)
-        let cgko: SIMD4<Float> = rhs[2]//SIMD4(rhs.c, rhs.g, rhs.k, rhs.o)
-        let dhlp: SIMD4<Float> = rhs[3]//SIMD4(rhs.d, rhs.h, rhs.l, rhs.p)
-        
-        return Matrix4x4((abcd * aeim).sum(),
-                         (abcd * bfjn).sum(),
-                         (abcd * cgko).sum(),
-                         (abcd * dhlp).sum(),
-                         (efgh * aeim).sum(),
-                         (efgh * bfjn).sum(),
-                         (efgh * cgko).sum(),
-                         (efgh * dhlp).sum(),
-                         (ijkl * aeim).sum(),
-                         (ijkl * bfjn).sum(),
-                         (ijkl * cgko).sum(),
-                         (ijkl * dhlp).sum(),
-                         (mnop * aeim).sum(),
-                         (mnop * bfjn).sum(),
-                         (mnop * cgko).sum(),
-                         (mnop * dhlp).sum())
-    }
-}
-#endif
-#else
-#if GameMathUseDispatch && canImport(Dispatch) && false
-import Dispatch
-public extension Matrix4x4 {
-    @inline(__always)
-    static func *=(lhs: inout Self, rhs: Self) {
-        lhs = lhs * rhs
-    }
-    
-    @inline(__always)
-    static func *(lhs: Self, rhs: Self) -> Self {
-        var out: Matrix4x4 = .identity
-        DispatchQueue.concurrentPerform(iterations: 16) {
-            switch $0 {
-            case 0:
-                var a  = lhs.a * rhs.a
-                a += lhs.b * rhs.e
-                a += lhs.c * rhs.i
-                a += lhs.d * rhs.m
-                out.a = a
-            case 1:
-                var b  = lhs.a * rhs.b
-                b += lhs.b * rhs.f
-                b += lhs.c * rhs.j
-                b += lhs.d * rhs.n
-                out.b = b
-            case 2:
-                var c  = lhs.a * rhs.c
-                c += lhs.b * rhs.g
-                c += lhs.c * rhs.k
-                c += lhs.d * rhs.o
-                out.c = c
-            case 3:
-                var d  = lhs.a * rhs.d
-                d += lhs.b * rhs.h
-                d += lhs.c * rhs.l
-                d += lhs.d * rhs.p
-                out.d = d
-            case 4:
-                var e  = lhs.e * rhs.a
-                e += lhs.f * rhs.e
-                e += lhs.g * rhs.i
-                e += lhs.h * rhs.m
-                out.e = e
-            case 5:
-                var f  = lhs.e * rhs.b
-                f += lhs.f * rhs.f
-                f += lhs.g * rhs.j
-                f += lhs.h * rhs.n
-                out.f = f
-            case 6:
-                var g  = lhs.e * rhs.c
-                g += lhs.f * rhs.g
-                g += lhs.g * rhs.k
-                g += lhs.h * rhs.o
-                out.g = g
-            case 7:
-                var h  = lhs.e * rhs.d
-                h += lhs.f * rhs.h
-                h += lhs.g * rhs.l
-                h += lhs.h * rhs.p
-                out.h = h
-            case 8:
-                var i  = lhs.i * rhs.a
-                i += lhs.j * rhs.e
-                i += lhs.k * rhs.i
-                i += lhs.l * rhs.m
-                out.i = i
-            case 9:
-                var j  = lhs.i * rhs.b
-                j += lhs.j * rhs.f
-                j += lhs.k * rhs.j
-                j += lhs.l * rhs.n
-                out.j = j
-            case 10:
-                var k  = lhs.i * rhs.c
-                k += lhs.j * rhs.g
-                k += lhs.k * rhs.k
-                k += lhs.l * rhs.o
-                out.k = k
-            case 11:
-                var l  = lhs.i * rhs.d
-                l += lhs.j * rhs.h
-                l += lhs.k * rhs.l
-                l += lhs.l * rhs.p
-                out.l = l
-            case 12:
-                var m  = lhs.m * rhs.a
-                m += lhs.n * rhs.e
-                m += lhs.o * rhs.i
-                m += lhs.p * rhs.m
-                out.m = m
-            case 13:
-                var n  = lhs.m * rhs.b
-                n += lhs.n * rhs.f
-                n += lhs.o * rhs.j
-                n += lhs.p * rhs.n
-                out.n = n
-            case 14:
-                var o  = lhs.m * rhs.c
-                o += lhs.n * rhs.g
-                o += lhs.o * rhs.k
-                o += lhs.p * rhs.o
-                out.o = o
-            case 15:
-                var p  = lhs.m * rhs.d
-                p += lhs.n * rhs.h
-                p += lhs.o * rhs.l
-                p += lhs.p * rhs.p
-                out.p = p
-            default:
-                fatalError()
+        #else
+        let lhs = lhs.transposed()
+        var mtx: Matrix4x4 = .identity
+        for index1 in 0 ..< 4 {
+            let v1: SIMD4<Float> = lhs[index1]
+            for index2 in 0 ..< 4 {
+                let index = (4 * index1) + index2
+                let v2: SIMD4<Float> = rhs[index2]
+                mtx[index] = (v1 * v2).sum()
             }
         }
-        return out
+        return mtx
+        #endif
     }
 }
-#elseif true
+#else
 public extension Matrix4x4 {
     @inline(__always)
     static func *=(lhs: inout Self, rhs: Self) {
@@ -892,7 +751,6 @@ public extension Matrix4x4 {
         return Self(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p)
     }
 }
-#endif
 #endif
 
 extension Matrix4x4: Equatable {}

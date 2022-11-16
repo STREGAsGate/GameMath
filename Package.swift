@@ -12,15 +12,15 @@ var settings: [SwiftSetting]? {
     var array: [SwiftSetting] = []
     
     #if false
-    // A little bit faster on old hardware, but less accurate
+    // A little bit faster on old hardware, but less accurate.
+    // Theres no reason to use this on modern hardware.
     array.append(.define("GameMathUseFastInverseSquareRoot"))
     #endif
     
-    //Attemts to use SIMD have resulted in significantly slower code.
-    //These settings will be turned on in a future commit when using them is benefitical.
-    #if false
-    array.append(.define("GameMathUseSIMD"))
-//    array.append(.define("GameMathUseDispatch"))
+    //These settings are faster only with optimization.
+    #if true
+    array.append(.define("GameMathUseSIMD", .when(configuration: .release)))
+    array.append(.define("GameMathUseLoopVectorization", .when(configuration: .release)))
     #endif
     
     return array.isEmpty ? nil : array

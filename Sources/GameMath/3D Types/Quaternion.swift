@@ -7,10 +7,64 @@
  */
 
 import Foundation
+#if GameMathUseSIMD && canImport(simd)
+import simd
+#endif
 
 #if GameMathUseSIMD
-public struct Quaternion {
-    public var w, x, y, z: Float
+public struct Quaternion: SIMD {
+    public typealias Scalar = Float
+    public typealias MaskStorage = SIMD4<Float>.MaskStorage
+    public typealias ArrayLiteralElement = Scalar
+    
+    @usableFromInline
+    var _storage = Float.SIMD4Storage()
+    
+    @inline(__always)
+    public var scalarCount: Int {_storage.scalarCount}
+
+    public init(arrayLiteral elements: Self.ArrayLiteralElement...) {
+        for index in elements.indices {
+            _storage[index] = elements[index]
+        }
+    }
+    
+    public var w: Scalar {
+        @_transparent get {
+            return _storage[0]
+        }
+        @_transparent set {
+            _storage[0] = newValue
+        }
+    }
+    public var x: Scalar {
+        @_transparent get {
+            return _storage[1]
+        }
+        @_transparent set {
+            _storage[1] = newValue
+        }
+    }
+    public var y: Scalar {
+        @_transparent get {
+            return _storage[2]
+        }
+        @_transparent set {
+            _storage[2] = newValue
+        }
+    }
+    public var z: Scalar {
+        @_transparent get {
+            return _storage[3]
+        }
+        @_transparent set {
+            _storage[3] = newValue
+        }
+    }
+    
+    public init() {
+        
+    }
     
     public init(w: Float, x: Float, y: Float, z: Float) {
         self.w = w
@@ -31,6 +85,31 @@ public struct Quaternion {
     }
 }
 #endif
+
+public extension Quaternion {
+    subscript (_ index: Array<Float>.Index) -> Float {
+        @inline(__always) get {
+            switch index {
+            case 0: return w
+            case 1: return x
+            case 2: return y
+            case 3: return z
+            default:
+                fatalError("Index \(index) out of range \(0..<4) for type \(type(of: self))")
+            }
+        }
+        @inline(__always) set {
+            switch index {
+            case 0: w = newValue
+            case 1: x = newValue
+            case 2: y = newValue
+            case 3: z = newValue
+            default:
+                fatalError("Index \(index) out of range \(0..<4) for type \(type(of: self))")
+            }
+        }
+    }
+}
 
 extension Quaternion {
     public init(direction: Direction3, up: Direction3 = .up, right: Direction3 = .right) {
@@ -476,11 +555,40 @@ internal extension Quaternion {
     }
 }
 
+#if !GameMathUseSIMD
 public extension Quaternion {
     @inline(__always)
     static func *(lhs: Self, rhs: Float) -> Self {
         return Self(w: lhs.w * rhs, x: lhs.x * rhs, y: lhs.y * rhs, z: lhs.z * rhs)
     }
+    @inline(__always)
+    static func /(lhs: Self, rhs: Float) -> Self {
+        return Self(w: lhs.w / rhs, x: lhs.x / rhs, y: lhs.y / rhs, z: lhs.z / rhs)
+    }
+    @inline(__always)
+    static func /=(lhs: inout Self, rhs: Float) {
+        lhs = lhs / rhs
+    }
+    @inline(__always)
+    static func +=(lhs: inout Self, rhs: Self) {
+        lhs = lhs + rhs
+    }
+    @inline(__always)
+    static func +(lhs: Self, rhs: Self) -> Self {
+        return Self(w: lhs.w + rhs.w, x: lhs.x + rhs.x, y: lhs.y + rhs.y, z: lhs.z + rhs.z)
+    }
+    @inline(__always)
+    static func -=(lhs: inout Self, rhs: Self) {
+        lhs = lhs - rhs
+    }
+    @inline(__always)
+    static func -(lhs: Self, rhs: Self) -> Self {
+        return Self(w: lhs.w - rhs.w, x: lhs.x - rhs.x, y: lhs.y - rhs.y, z: lhs.z - rhs.z)
+    }
+}
+#endif
+
+public extension Quaternion {
     @inline(__always)
     static func *=(lhs: inout Self, rhs: Self) {
         lhs = lhs * rhs
@@ -506,29 +614,27 @@ public extension Quaternion {
         
         return Self(w: w, x: x, y: y, z: z)
     }
+    
     @inline(__always)
     static func *=<V: Vector2>(lhs: inout Self, rhs: V) {
-        lhs = (lhs * rhs)
+        lhs = lhs * rhs
     }
     @inline(__always)
     static func *<V: Vector2>(lhs: Self, rhs: V) -> Self {
         var w: Float = -lhs.x * rhs.x
         w -= lhs.y * rhs.y
-        w -= lhs.z * 0
         var x: Float =  lhs.w * rhs.x
-        x += lhs.y * 0
         x -= lhs.z * rhs.y
         var y: Float =  lhs.w * rhs.y
         y += lhs.z * rhs.x
-        y -= lhs.x * 0
-        var z: Float =  lhs.w * 0
-        z += lhs.x * rhs.y
+        var z: Float =  lhs.x * rhs.y
         z -= lhs.y * rhs.x
         return Self(w: w, x: x, y: y, z: z)
     }
+    
     @inline(__always)
     static func *=<V: Vector3>(lhs: inout Self, rhs: V) {
-        lhs = (lhs * rhs)
+        lhs = lhs * rhs
     }
     @inline(__always)
     static func *<V: Vector3>(lhs: Self, rhs: V) -> Self {
@@ -546,29 +652,20 @@ public extension Quaternion {
         z -= lhs.y * rhs.x
         return Self(w: w, x: x, y: y, z: z)
     }
-    @inline(__always)
-    static func /(lhs: Self, rhs: Float) -> Self {
-        return Self(w: lhs.w / rhs, x: lhs.x / rhs, y: lhs.y / rhs, z: lhs.z / rhs)
-    }
-    @inline(__always)
-    static func /=(lhs: inout Self, rhs: Float) {
-        lhs = lhs / rhs
-    }
-    @inline(__always)
-    static func +=(lhs: inout Self, rhs: Self) {
-        lhs = lhs + rhs
-    }
-    @inline(__always)
-    static func +(lhs: Self, rhs: Self) -> Self {
-        return Self(w: lhs.w + rhs.w, x: lhs.x + rhs.x, y: lhs.y + rhs.y, z: lhs.z + rhs.z)
-    }
-    @inline(__always)
-    static func -=(lhs: inout Self, rhs: Self) {
-        lhs = lhs - rhs
-    }
-    @inline(__always)
-    static func -(lhs: Self, rhs: Self) -> Self {
-        return Self(w: lhs.w - rhs.w, x: lhs.x - rhs.x, y: lhs.y - rhs.y, z: lhs.z - rhs.z)
+}
+
+//MARK: - SIMD
+public extension Quaternion {
+    var simd: SIMD4<Float> {
+        @inline(__always) get {
+            return SIMD4<Float>(w, x, y, z)
+        }
+        @inline(__always) set {
+            w = newValue[0]
+            x = newValue[1]
+            y = newValue[2]
+            z = newValue[3]
+        }
     }
 }
 

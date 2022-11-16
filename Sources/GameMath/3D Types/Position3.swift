@@ -8,10 +8,45 @@
 
 /// Represents a location in 3D space
 #if GameMathUseSIMD
-public struct Position3: Vector3 {
-    public var x: Float
-    public var y: Float
-    public var z: Float
+public struct Position3: Vector3, SIMD {
+    public typealias Scalar = Float
+    public typealias MaskStorage = SIMD3<Float>.MaskStorage
+    public typealias ArrayLiteralElement = Scalar
+    
+    @usableFromInline
+    var _storage = Float.SIMD4Storage()
+
+    public init(arrayLiteral elements: Self.ArrayLiteralElement...) {
+        for index in elements.indices {
+            _storage[index] = elements[index]
+        }
+    }
+    
+    public var x: Scalar {
+        @inline(__always) get {
+            return _storage[0]
+        }
+        @inline(__always) set {
+            _storage[0] = newValue
+        }
+    }
+    public var y: Scalar {
+        @inline(__always) get {
+            return _storage[1]
+        }
+        @inline(__always) set {
+            _storage[1] = newValue
+        }
+    }
+    public var z: Scalar {
+        @inline(__always) get {
+            return _storage[2]
+        }
+        @inline(__always) set {
+            _storage[2] = newValue
+        }
+    }
+    
     public init(x: Float, y: Float, z: Float) {
         self.x = x
         self.y = y
@@ -23,6 +58,7 @@ public struct Position3: Vector3 {
     public var x: Float
     public var y: Float
     public var z: Float
+    
     public init(x: Float, y: Float, z: Float) {
         self.x = x
         self.y = y
@@ -37,10 +73,6 @@ public extension Position3 {
         self.init(x: x, y: y, z: z)
     }
 }
-
-extension Position3: Equatable {}
-extension Position3: Hashable {}
-extension Position3: Codable {}
 
 public extension Position3 {
     /** The distance between `from` and `self`
@@ -104,6 +136,24 @@ public extension Position3 {
     }
 }
 
+#if !GameMathUseSIMD
 public extension Position3 {
     static var zero = Self(0)
 }
+#endif
+
+extension Position3: Hashable {}
+extension Position3: Encodable {
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode([x, y, z])
+    }
+}
+extension Position3: Decodable {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let values = try container.decode(Array<Float>.self)
+        self.init(values[0], values[1], values[2])
+    }
+}
+
