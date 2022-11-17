@@ -105,6 +105,36 @@ extension Vector3 {
     }
 }
 
+public extension Vector3 {
+    /**
+     Returns a new instance with `x` incremented by `value`.
+     - parameter value: The amount to add to `x`. To subtract use a negatie value.
+     - returns: A new Self with `x` incrmented by `value`.
+    */
+    @inline(__always)
+    func addingToX(_ value: Float) -> Self {
+        return Self(x + value, y, z)
+    }
+    /**
+     Returns a new instance with `y` incremented by `value`.
+     - parameter value: The amount to add to `y`. To subtract use a negatie value.
+     - returns: A new Self with `y` incrmented by `value`.
+    */
+    @inline(__always)
+    func addingToY(_ value: Float) -> Self {
+        return Self(x, y + value, z)
+    }
+    /**
+     Returns a new instance with `z` incremented by `value`.
+     - parameter value: The amount to add to `z`. To subtract use a negatie value.
+     - returns: A new Self with `z` incrmented by `value`.
+    */
+    @inline(__always)
+    func addingToZ(_ value: Float) -> Self {
+        return Self(x, y, z + value)
+    }
+}
+
 extension Vector3 {
     @inline(__always)
     public func dot<V: Vector3>(_ vector: V) -> Float {
