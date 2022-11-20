@@ -98,6 +98,37 @@ public extension Color {
     func valuesArray() -> [Float] {
         return [red, green, blue, alpha]
     }
+    
+    @inline(__always)
+    var eightBitRed: UInt8 {
+        return UInt8(clamping: Int(Float(UInt8.max) * red))
+    }
+    @inline(__always)
+    var eightBitGreen: UInt8 {
+        return UInt8(clamping: Int(Float(UInt8.max) * green))
+    }
+    @inline(__always)
+    var eightBitBlue: UInt8 {
+        return UInt8(clamping: Int(Float(UInt8.max) * blue))
+    }
+    @inline(__always)
+    var eightBitAlpha: UInt8 {
+        return UInt8(clamping: Int(Float(UInt8.max) * alpha))
+    }
+    
+    @inline(__always)
+    func eightBitValuesArray() -> [UInt8] {
+        return [eightBitRed, eightBitGreen, eightBitBlue, eightBitAlpha]
+    }
+    
+    @inline(__always)
+    var eightBitHexValue: UInt32 {
+        let r = UInt32(eightBitRed) << 24
+        let g = UInt32(eightBitGreen) << 16
+        let b = UInt32(eightBitBlue) << 8
+        let a = UInt32(eightBitAlpha) << 0
+        return r | g | b | a
+    }
 }
 
 public extension Color {
