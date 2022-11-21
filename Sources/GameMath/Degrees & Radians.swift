@@ -254,6 +254,14 @@ extension Angle {
     }
     
     @inline(__always)
+    public static func >(lhs: Self, rhs: Self) -> Bool {
+        return lhs.rawValue > rhs.rawValue
+    }
+    @inline(__always)
+    public static func >(lhs: Self, rhs: any Angle) -> Bool {
+        return lhs.rawValueAsRadians > rhs.rawValueAsRadians
+    }
+    @inline(__always)
     public static func >(lhs: Self, rhs: RawValue) -> Bool {
         return lhs.rawValue > rhs
     }
