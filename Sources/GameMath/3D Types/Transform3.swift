@@ -10,8 +10,7 @@ public struct Transform3 {
     public var position: Position3 {
         didSet {
             assert(position.isFinite)
-            guard _needsUpdate == false else {return}
-            if oldValue != position {
+            if _needsUpdate == false && oldValue != position {
                 _needsUpdate = true
             }
         }
@@ -19,8 +18,7 @@ public struct Transform3 {
     public var rotation: Quaternion {
         didSet {
             assert(rotation.isFinite)
-            guard _needsUpdate == false else {return}
-            if oldValue != rotation {
+            if _needsUpdate == false && oldValue != rotation {
                 _needsUpdate = true
             }
         }
@@ -28,8 +26,7 @@ public struct Transform3 {
     public var scale: Size3 {
         didSet {
             assert(scale.isFinite)
-            guard _needsUpdate == false else {return}
-            if oldValue != scale {
+            if _needsUpdate == false && oldValue != scale {
                 _needsUpdate = true
             }
         }
@@ -62,7 +59,7 @@ public extension Transform3 {
         return _matrix
     }
     
-    ///Creates and returns a new matrix.
+    ///Creates and returns a new matrix, or a cached matrix if the cache already exists.
     @inline(__always)
     func createMatrix() -> Matrix4x4 {
         if _needsUpdate == false {
