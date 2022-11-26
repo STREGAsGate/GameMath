@@ -506,51 +506,6 @@ internal extension Quaternion {
     }
     
     @inline(__always) @usableFromInline
-    func _slerped(to qb: Self, factor t: Float) -> Self {
-        let qa: Self = self
-        var qb: Self = qb
-        // Calculate angle between them.
-        var cosHalfTheta: Float = qa.w * qb.w
-        cosHalfTheta += qa.x * qb.x
-        cosHalfTheta += qa.y * qb.y
-        cosHalfTheta += qa.z * qb.z
-        if cosHalfTheta < 0 {
-            qb.w = -qb.w
-            qb.x = -qb.x
-            qb.y = -qb.y
-            cosHalfTheta = -cosHalfTheta
-        }
-        // if qa=qb or qa=-qb then theta = 0 and we can return qa
-        if abs(cosHalfTheta) >= 1 {
-            return qa
-        }
-        
-        // quaternion to return
-        var qm: Quaternion = Quaternion(w: 1, x: 0, y: 0, z: 0)
-        
-        // Calculate temporary values.
-        let halfTheta: Float = acos(cosHalfTheta)
-        let sinHalfTheta: Float = sqrt(1 - cosHalfTheta * cosHalfTheta)
-        // if theta = 180 degrees then result is not fully defined
-        // we could rotate around any axis normal to qa or qb
-        if abs(sinHalfTheta) < 0.001 { // fabs is floating point absolute
-            qm.w = (qa.w * 0.5 + qb.w * 0.5)
-            qm.x = (qa.x * 0.5 + qb.x * 0.5)
-            qm.y = (qa.y * 0.5 + qb.y * 0.5)
-            qm.z = (qa.z * 0.5 + qb.z * 0.5)
-            return qm
-        }
-        let ratioA: Float = sin((1 - t) * halfTheta) / sinHalfTheta
-        let ratioB: Float = sin(t * halfTheta) / sinHalfTheta
-        //calculate Quaternion.
-        qm.w = (qa.w * ratioA + qb.w * ratioB)
-        qm.x = (qa.x * ratioA + qb.x * ratioB)
-        qm.y = (qa.y * ratioA + qb.y * ratioB)
-        qm.z = (qa.z * ratioA + qb.z * ratioB)
-        return qm
-    }
-    
-    @inline(__always) @usableFromInline
     mutating func slerp(to qb: Self, factor: Float) {
         self = self.slerped(to: qb, factor: factor)
     }
