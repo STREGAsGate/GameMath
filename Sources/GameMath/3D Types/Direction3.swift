@@ -93,17 +93,17 @@ public extension Direction3  {
     }
     @inline(__always)
     var angleAroundX: Radians {
-        guard isFinite else {return Radians(0)}
+        assert(isFinite)
         return Radians(atan2(y, z))
     }
     @inline(__always)
     var angleAroundY: Radians {
-        guard isFinite else {return Radians(0)}
+        assert(isFinite)
         return Radians(atan2(x, z))
     }
     @inline(__always)
     var angleAroundZ: Radians {
-        guard isFinite else {return Radians(0)}
+        assert(isFinite)
         return Radians(atan2(y, x))
     }
 }
