@@ -293,6 +293,7 @@ extension Quaternion {
         case justPitch
     }
     
+    @inline(__always)
     public init(lookingAt target: Position3, from source: Position3, up: Direction3 = .up, right: Direction3 = .right, constraint: LookAtConstraint, isCamera: Bool = false) {
         self.init(Direction3(from: source, to: target), up: up, right: right, constraint: constraint, isCamera: isCamera)
     }
@@ -310,19 +311,23 @@ extension Quaternion {
             self.init(direction: direction, up: up, right: right)
         case .pitch:
             let magnitude = Direction2(x: direction.x, y: direction.z).magnitude
+            let value = atan2(direction.y, magnitude)
+            let angle: Radians
             if isCamera {
-                self.init(Radians(atan2(direction.y, magnitude)), axis: right)
+                angle = Radians(value)
             }else{
-                self.init(Radians(-atan2(direction.y, magnitude)), axis: right)
+                angle = Radians(-value)
             }
-            self.init(direction.angleAroundY, axis: up)
+            self.init(angle, axis: right)
         case .yaw:
+            var angle = direction.angleAroundY
             if isCamera {
-                self *= Quaternion(180, axis: .up)
+                angle += 180°
             }
+            self.init(angle, axis: up)
         case .pitchAndYaw:
-            self = Self(direction, up: up, right: right, constraint: .justYaw, isCamera: isCamera)
-                * Self(direction, up: up, right: right, constraint: .justPitch, isCamera: isCamera)
+            self = Self(direction, up: up, right: right, constraint: .yaw, isCamera: isCamera)
+                * Self(direction, up: up, right: right, constraint: .pitch, isCamera: isCamera)
         }
     }
 }
