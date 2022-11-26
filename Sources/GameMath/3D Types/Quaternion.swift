@@ -283,9 +283,14 @@ extension Quaternion {
 extension Quaternion {
     public enum LookAtConstraint {
         case none
-        case justYaw
-        case justPitch
+        case yaw
+        case pitch
         case pitchAndYaw
+        
+        @available(*, unavailable, renamed: "yaw")
+        case justYaw
+        @available(*, unavailable, renamed: "pitch")
+        case justPitch
     }
     
     public init(lookingAt target: Position3, from source: Position3, up: Direction3 = .up, right: Direction3 = .right, constraint: LookAtConstraint, isCamera: Bool = false) {
@@ -303,15 +308,15 @@ extension Quaternion {
         switch constraint {
         case .none:
             self.init(direction: direction, up: up, right: right)
-        case .justPitch:
+        case .pitch:
             let magnitude = Direction2(x: direction.x, y: direction.z).magnitude
             if isCamera {
                 self.init(Radians(atan2(direction.y, magnitude)), axis: right)
             }else{
                 self.init(Radians(-atan2(direction.y, magnitude)), axis: right)
             }
-        case .justYaw:
             self.init(direction.angleAroundY, axis: up)
+        case .yaw:
             if isCamera {
                 self *= Quaternion(180, axis: .up)
             }
