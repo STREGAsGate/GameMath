@@ -231,51 +231,132 @@ public extension Color {
     }
 }
 
+public extension Color {
+    /// Returns the lesser of the two given values.
+    ///
+    /// This method returns the minimum of two values, preserving order and
+    /// eliminating NaN when possible. For two values `x` and `y`, the result of
+    /// `minimum(x, y)` is `x` if `x <= y`, `y` if `y < x`, or whichever of `x`
+    /// or `y` is a number if the other is a quiet NaN. If both `x` and `y` are
+    /// NaN, or either `x` or `y` is a signaling NaN, the result is NaN.
+    ///
+    ///     Double.minimum(10.0, -25.0)
+    ///     // -25.0
+    ///     Double.minimum(10.0, .nan)
+    ///     // 10.0
+    ///     Double.minimum(.nan, -25.0)
+    ///     // -25.0
+    ///     Double.minimum(.nan, .nan)
+    ///     // nan
+    ///
+    /// The `minimum` method implements the `minNum` operation defined by the
+    /// [IEEE 754 specification][spec].
+    ///
+    /// [spec]: http://ieeexplore.ieee.org/servlet/opac?punumber=4610933
+    ///
+    /// - Parameters:
+    ///   - x: A floating-point value.
+    ///   - y: Another floating-point value.
+    /// - Returns: The minimum of `x` and `y`, or whichever is a number if the
+    ///   other is NaN.
+    static func minimum(_ lhs: Color, _ rhs: Color) -> Color {
+        return Color(.minimum(lhs.red, rhs.red), .minimum(lhs.green, rhs.green), .minimum(lhs.blue, rhs.blue), .minimum(lhs.alpha, rhs.alpha))
+    }
+    
+    /// Returns the greater of the two given values.
+    ///
+    /// This method returns the maximum of two values, preserving order and
+    /// eliminating NaN when possible. For two values `x` and `y`, the result of
+    /// `maximum(x, y)` is `x` if `x > y`, `y` if `x <= y`, or whichever of `x`
+    /// or `y` is a number if the other is a quiet NaN. If both `x` and `y` are
+    /// NaN, or either `x` or `y` is a signaling NaN, the result is NaN.
+    ///
+    ///     Double.maximum(10.0, -25.0)
+    ///     // 10.0
+    ///     Double.maximum(10.0, .nan)
+    ///     // 10.0
+    ///     Double.maximum(.nan, -25.0)
+    ///     // -25.0
+    ///     Double.maximum(.nan, .nan)
+    ///     // nan
+    ///
+    /// The `maximum` method implements the `maxNum` operation defined by the
+    /// [IEEE 754 specification][spec].
+    ///
+    /// [spec]: http://ieeexplore.ieee.org/servlet/opac?punumber=4610933
+    ///
+    /// - Parameters:
+    ///   - x: A floating-point value.
+    ///   - y: Another floating-point value.
+    /// - Returns: The greater of `x` and `y`, or whichever is a number if the
+    ///   other is NaN.
+    static func maximum(_ lhs: Color, _ rhs: Color) -> Color {
+        return Color(.maximum(lhs.red, rhs.red), .maximum(lhs.green, rhs.green), .maximum(lhs.blue, rhs.blue), .maximum(lhs.alpha, rhs.alpha))
+    }
+}
+
+/// Returns the lesser of two comparable values.
+///
+/// - Parameters:
+///   - x: A value to compare.
+///   - y: Another value to compare.
+/// - Returns: The lesser of `x` and `y`. If `x` is equal to `y`, returns `x`.
 public func min(_ lhs: Color, _ rhs: Color) -> Color {
     return Color(min(lhs.red, rhs.red), min(lhs.green, rhs.green), min(lhs.blue, rhs.blue), min(lhs.alpha, rhs.alpha))
 }
 
+/// Returns the greater of two comparable values.
+///
+/// - Parameters:
+///   - x: A value to compare.
+///   - y: Another value to compare.
+/// - Returns: The greater of `x` and `y`. If `x` is equal to `y`, returns `y`.
 public func max(_ lhs: Color, _ rhs: Color) -> Color {
     return Color(max(lhs.red, rhs.red), max(lhs.green, rhs.green), max(lhs.blue, rhs.blue), max(lhs.alpha, rhs.alpha))
 }
 
-//UGColor
+extension Color: _ExpressibleByColorLiteral {
+    @inline(__always)
+    public init(_colorLiteralRed red: Float, green: Float, blue: Float, alpha: Float) {
+        self.init(red, green, blue, alpha)
+    }
+}
+
 public extension Color {
-    static let clear = Color(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.0)
+    static let clear: Color         = #colorLiteral(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.0)
     
-    static let white = Color(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-    static let lightGray = Color(red: 0.75, green: 0.75, blue: 0.75, alpha: 1)
-    static let gray = Color(red: 0.5, green: 0.5, blue: 0.5, alpha: 1.0)
-    static let darkGray = Color(red: 0.25, green: 0.25, blue: 0.25, alpha: 1.0)
-    static let black = Color(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
+    static let white: Color         = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+    static let lightGray: Color     = #colorLiteral(red: 0.75, green: 0.75, blue: 0.75, alpha: 1)
+    static let gray: Color          = #colorLiteral(red: 0.5, green: 0.5, blue: 0.5, alpha: 1.0)
+    static let darkGray: Color      = #colorLiteral(red: 0.25, green: 0.25, blue: 0.25, alpha: 1.0)
+    static let black: Color         = #colorLiteral(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
     
-    static let lightRed = Color(red: 1.0, green: 0.25, blue: 0.25, alpha: 1.0)
-    static let lightGreen = Color(red: 0.25, green: 1.0, blue: 0.25, alpha: 1.0)
-    static let lightBlue = Color(red: 0.25, green: 0.25, blue: 1.0, alpha: 1.0)
+    static let lightRed: Color      = #colorLiteral(red: 1.0, green: 0.25, blue: 0.25, alpha: 1.0)
+    static let lightGreen: Color    = #colorLiteral(red: 0.25, green: 1.0, blue: 0.25, alpha: 1.0)
+    static let lightBlue: Color     = #colorLiteral(red: 0.25, green: 0.25, blue: 1.0, alpha: 1.0)
 
-    static let red = Color(red: 1.0, green: 0.0, blue: 0.0, alpha: 1.0)
-    static let green = Color(red: 0.0, green: 1.0, blue: 0.0, alpha: 1.0)
-    static let blue = Color(red: 0.0, green: 0.0, blue: 1.0, alpha: 1.0)
+    static let red: Color           = #colorLiteral(red: 1.0, green: 0.0, blue: 0.0, alpha: 1.0)
+    static let green: Color         = #colorLiteral(red: 0.0, green: 1.0, blue: 0.0, alpha: 1.0)
+    static let blue: Color          = #colorLiteral(red: 0.0, green: 0.0, blue: 1.0, alpha: 1.0)
     
-    static let darRed = Color(red: 0.25, green: 0.05, blue: 0.05, alpha: 1.0)
-    static let darkGreen = Color(red: 0.05, green: 0.25, blue: 0.05, alpha: 1.0)
-    static let darkBlue = Color(red: 0.05, green: 0.05, blue: 0.25, alpha: 1.0)
+    static let darRed: Color        = #colorLiteral(red: 0.25, green: 0.05, blue: 0.05, alpha: 1.0)
+    static let darkGreen: Color     = #colorLiteral(red: 0.05, green: 0.25, blue: 0.05, alpha: 1.0)
+    static let darkBlue: Color      = #colorLiteral(red: 0.05, green: 0.05, blue: 0.25, alpha: 1.0)
+    
+    static let cyan: Color          = #colorLiteral(red: 0.0, green: 1.0, blue: 1.0, alpha: 1.0)
+    static let magenta: Color       = #colorLiteral(red: 1.0, green: 0.0, blue: 1.0, alpha: 1.0)
+    static let yellow: Color        = #colorLiteral(red: 1.0, green: 1.0, blue: 0.0, alpha: 1.0)
+    static let orange: Color        = #colorLiteral(red: 1.0, green: 0.64453125, blue: 0.0, alpha: 1.0)
+    static let purple: Color        = #colorLiteral(red: 0.5, green: 0.0, blue: 0.5, alpha: 1.0)
 
+    //TODO: Move these to UniversalGraphics
+    static let vertexColors = Color(red: -1001, green: -2002, blue: -3003, alpha: -4004)
     static let defaultDiffuseMapColor = Color(red: 0.5, green: 0.5, blue: 0.5, alpha: 1)
-
     static let defaultNormalMapColor = Color(red: 0.5, green: 0.5, blue: 1.0, alpha: 1.0)
     static let defaultRoughnessMapColor = Color(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-    static let vertexColors = Color(red: -1001, green: -2002, blue: -3003, alpha: -4004)
-    
     static let defaultPointLightColor = Color(red: 1.0, green: 1.0, blue: 0.9, alpha: 1.0)
     static let defaultSpotLightColor = Color(red: 1.0, green: 1.0, blue: 0.8, alpha: 1.0)
     static let defaultDirectionalLightColor = Color(red: 0.7, green: 0.7, blue: 1.0, alpha: 1.0)
-
-    static let cyan = Color(red: 0.0, green: 1.0, blue: 1.0, alpha: 1.0)
-    static let magenta = Color(red: 1.0, green: 0.0, blue: 1.0, alpha: 1.0)
-    static let yellow = Color(red: 1.0, green: 1.0, blue: 0.0, alpha: 1.0)
-    static let orange = Color(red: 1.0, green: 0.64453125, blue: 0.0, alpha: 1.0)
-    static let purple = Color(red: 0.5, green: 0.0, blue: 0.5, alpha: 1.0)
 }
 
 public extension Color {
@@ -298,4 +379,17 @@ public extension Color {
 
 extension Color: Equatable {}
 extension Color: Hashable {}
-extension Color: Codable {}
+
+extension Color: Encodable {
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode([red, green, blue, alpha])
+    }
+}
+extension Color: Decodable {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let values = try container.decode(Array<Float>.self)
+        self.init(values[0], values[1], values[2], values[3])
+    }
+}
