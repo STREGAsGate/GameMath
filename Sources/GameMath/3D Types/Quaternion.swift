@@ -112,8 +112,9 @@ public extension Quaternion {
 }
 
 extension Quaternion {
+    @inline(__always)
     public init(direction: Direction3, up: Direction3 = .up, right: Direction3 = .right) {
-        self = Matrix3x3(direction: direction).rotation
+        self = Matrix3x3(direction: direction, up: up, right: right).rotation
     }
     
     public init(between v1: Direction3, and v2: Direction3) {
