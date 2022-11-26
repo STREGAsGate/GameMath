@@ -112,6 +112,7 @@ extension Transform3 {
         self.scale.interpolate(to: to.scale, method)
     }
     
+    //TODO: Remove this. Position is the only value that is clear. Scale and rotation are confusing.
     @inline(__always)
     public func difference(removing: Self) -> Self {
         var transform: Self = .default
@@ -128,6 +129,7 @@ extension Transform3 {
     }
 }
 
+//TODO: Remove operators. Position is the only value that is clear. Scale and rotation are confusing.
 public extension Transform3 {
     @inline(__always)
     static func +=(lhs: inout Self, rhs: Self) {
