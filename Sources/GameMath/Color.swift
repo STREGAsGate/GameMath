@@ -339,7 +339,7 @@ public extension Color {
     static let green: Color         = #colorLiteral(red: 0.0, green: 1.0, blue: 0.0, alpha: 1.0)
     static let blue: Color          = #colorLiteral(red: 0.0, green: 0.0, blue: 1.0, alpha: 1.0)
     
-    static let darRed: Color        = #colorLiteral(red: 0.25, green: 0.05, blue: 0.05, alpha: 1.0)
+    static let darkRed: Color       = #colorLiteral(red: 0.25, green: 0.05, blue: 0.05, alpha: 1.0)
     static let darkGreen: Color     = #colorLiteral(red: 0.05, green: 0.25, blue: 0.05, alpha: 1.0)
     static let darkBlue: Color      = #colorLiteral(red: 0.05, green: 0.05, blue: 0.25, alpha: 1.0)
     
