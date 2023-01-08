@@ -294,7 +294,7 @@ extension Quaternion {
     }
     
     @inline(__always)
-    public init(lookingAt target: Position3, from source: Position3, up: Direction3 = .up, right: Direction3 = .right, constraint: LookAtConstraint, isCamera: Bool = false) {
+    public init(lookingAt target: Position3, from source: Position3, up: Direction3 = .up, right: Direction3 = .right, constraint: LookAtConstraint, isCamera: Bool) {
         self.init(Direction3(from: source, to: target), up: up, right: right, constraint: constraint, isCamera: isCamera)
     }
     
@@ -305,7 +305,7 @@ extension Quaternion {
      - Parameter right: The relative right axis. Defualt value is  `Direction3.right`.
      - Parameter constraint: Limits the rotation to an Euler angle. Use this to look in directions without a roll.
      */
-    public init(_ direction: Direction3, up: Direction3 = .up, right: Direction3 = .right, constraint: LookAtConstraint, isCamera: Bool = false) {
+    public init(_ direction: Direction3, up: Direction3 = .up, right: Direction3 = .right, constraint: LookAtConstraint, isCamera: Bool) {
         switch constraint {
         case .none:
             self.init(direction: direction, up: up, right: right)
