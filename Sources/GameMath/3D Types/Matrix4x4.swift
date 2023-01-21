@@ -577,6 +577,22 @@ public extension Matrix4x4 {
                   0,           0,          2 / depth,  -(far + near) / depth,
                   0,           0,          0,          1)
     }
+    
+    enum OrthoMatrixCenter {
+        case center
+        case topLeft
+    }
+    @inlinable
+    init(orthographicWithSize size: Size2, center: OrthoMatrixCenter, near: Float, far: Float) {
+        switch center {
+        case .center:
+            let width = size.width / 2
+            let height = size.height / 2
+            self.init(orthographicWithTop: -height, left: -width, bottom: height, right: width, near: near, far: far)
+        case .topLeft:
+            self.init(orthographicWithTop: 0, left: 0, bottom: size.height, right: size.width, near: near, far: far)
+        }
+    }
 }
 
 //MARK: - Graphics
