@@ -87,6 +87,11 @@ public extension Matrix4x4 {
                   i: value[8],  j: value[9],  k: value[10], l: value[11],
                   m: value[12], n: value[13], o: value[14], p: value[15])
     }
+    
+    @_transparent
+    init(position: Position3, rotation: Quaternion, scale: Size3) {
+        self = Self(position: position) * Self(rotation: rotation) * Self(scale: scale)
+    }
 }
 
 public extension Matrix4x4 {

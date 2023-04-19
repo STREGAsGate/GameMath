@@ -69,10 +69,7 @@ public extension Transform3 {
         if _needsUpdate == false {
             return _matrix
         }
-        var matrix = Matrix4x4(position: self.position)
-        matrix *= Matrix4x4(rotation: self.rotation)
-        matrix *= Matrix4x4(scale: self.scale)
-        return matrix
+        return Matrix4x4(position: self.position, rotation: self.rotation, scale: self.scale)
     }
 }
 
