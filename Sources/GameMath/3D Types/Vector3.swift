@@ -37,10 +37,10 @@ public protocol Vector3: Equatable {
 
 #if GameMathUseSIMD
 public extension Vector3 {
-    @inline(__always)
+    @_transparent
     var scalarCount: Int {return 3}
     
-    @inline(__always)
+    @_transparent
     init(_ simd: SIMD3<Float>) {
         self.init(simd[0], simd[1], simd[2])
     }
@@ -48,8 +48,9 @@ public extension Vector3 {
 #endif
  
 public extension Vector3 {
+    @inlinable
     subscript (_ index: Array<Float>.Index) -> Float {
-        @inline(__always) get {
+        @_transparent get {
             switch index {
             case 0: return x
             case 1: return y
@@ -58,7 +59,7 @@ public extension Vector3 {
                 fatalError("Index \(index) out of range \(0..<3) for type \(type(of: self))")
             }
         }
-        @inline(__always) set {
+        @_transparent set {
             switch index {
             case 0: x = newValue
             case 1: y = newValue
@@ -71,11 +72,12 @@ public extension Vector3 {
 }
 
 extension Vector3 {
-    @inline(__always)
+    @_transparent
     public init(_ value: Float) {
         self.init(value, value, value)
     }
     
+    @inlinable
     public init(_ values: [Float]) {
         assert(values.isEmpty || values.count == 3, "values must be empty or have 3 elements. Use init(_:) to fill with a single value.")
         if values.isEmpty {
@@ -88,18 +90,18 @@ extension Vector3 {
 
 //Mark: Integer Casting
 extension Vector3 {
-    @inline(__always)
+    @_transparent
     public init<V: Vector3>(_ value: V) {
         self = Self(value.x, value.y, value.z)
     }
-    @inline(__always)
+    @_transparent
     public init() {
         self.init(0, 0, 0)
     }
 }
 
 extension Vector3 {
-    @inline(__always)
+    @_transparent
     public var isFinite: Bool {
         return x.isFinite && y.isFinite && z.isFinite
     }
@@ -111,7 +113,7 @@ public extension Vector3 {
      - parameter value: The amount to add to `x`. To subtract use a negatie value.
      - returns: A new Self with `x` incrmented by `value`.
     */
-    @inline(__always)
+    @_transparent
     func addingToX(_ value: Float) -> Self {
         return Self(x + value, y, z)
     }
@@ -120,7 +122,7 @@ public extension Vector3 {
      - parameter value: The amount to add to `y`. To subtract use a negatie value.
      - returns: A new Self with `y` incrmented by `value`.
     */
-    @inline(__always)
+    @_transparent
     func addingToY(_ value: Float) -> Self {
         return Self(x, y + value, z)
     }
@@ -129,14 +131,14 @@ public extension Vector3 {
      - parameter value: The amount to add to `z`. To subtract use a negatie value.
      - returns: A new Self with `z` incrmented by `value`.
     */
-    @inline(__always)
+    @_transparent
     func addingToZ(_ value: Float) -> Self {
         return Self(x, y, z + value)
     }
 }
 
 extension Vector3 {
-    @inline(__always)
+    @_transparent
     public func dot<V: Vector3>(_ vector: V) -> Float {
         #if GameMathUseSIMD && canImport(simd)
         return simd_dot(self.simd, vector.simd)
@@ -145,7 +147,7 @@ extension Vector3 {
         #endif
     }
     
-    @inline(__always)
+    @_transparent
     public func cross<V: Vector3>(_ vector: V) -> Self {
         #if GameMathUseSIMD && canImport(simd)
         return Self(simd_cross(self.simd, vector.simd))
@@ -159,7 +161,7 @@ extension Vector3 {
 }
 
 extension Vector3 {
-    @inline(__always)
+    @_transparent
     public var length: Float {
         #if GameMathUseSIMD
         return self.sum()
@@ -168,7 +170,7 @@ extension Vector3 {
         #endif
     }
     
-    @inline(__always)
+    @_transparent
     public var squaredLength: Float {
         #if GameMathUseSIMD && canImport(simd)
         return simd_length_squared(self.simd)
@@ -177,20 +179,20 @@ extension Vector3 {
         #endif
     }
     
-    @inline(__always)
+    @_transparent
     public var magnitude: Float {
         return squaredLength.squareRoot()
     }
 
     #if !GameMathUseFastInverseSquareRoot
-    @inline(__always)
+    @_transparent
     public var normalized: Self {
         var copy = self
         copy.normalize()
         return copy
     }
     
-    @inline(__always)
+    @_transparent
     public mutating func normalize() {
         if self != Self.zero {
             #if GameMathUseSIMD && canImport(simd)
@@ -204,7 +206,7 @@ extension Vector3 {
     }
     #endif
     
-    @inline(__always)
+    @_transparent
     public func squareRoot() -> Self {
         #if GameMathUseSIMD && canImport(Accelerate)
         if #available(macOS 10.15, macCatalyst 13, iOS 13, tvOS 13, watchOS 13, *) {
@@ -224,7 +226,7 @@ extension Vector3 {
 }
 
 extension Vector3 {
-    @inline(__always)
+    @_transparent
     public func interpolated<V: Vector3>(to: V, _ method: InterpolationMethod) -> Self {
         var copy = self
         copy.x.interpolate(to: to.x, method)
@@ -232,7 +234,7 @@ extension Vector3 {
         copy.z.interpolate(to: to.z, method)
         return copy
     }
-    @inline(__always)
+    @_transparent
     public mutating func interpolate<V: Vector3>(to: V, _ method: InterpolationMethod) {
         self.x.interpolate(to: to.x, method)
         self.y.interpolate(to: to.y, method)
@@ -241,7 +243,7 @@ extension Vector3 {
 }
 
 public extension Vector3 {
-    @inline(__always)
+    @_transparent
     var max: Float {
         #if GameMathUseSIMD
         return self.max()
@@ -250,7 +252,7 @@ public extension Vector3 {
         #endif
         
     }
-    @inline(__always)
+    @_transparent
     var min: Float {
         #if GameMathUseSIMD
         return self.min()
@@ -262,11 +264,12 @@ public extension Vector3 {
 
 //MARK: - SIMD
 public extension Vector3 {
+    @inlinable
     var simd: SIMD3<Float> {
-        @inline(__always) get {
+        @_transparent get {
             return SIMD3<Float>(x, y, z)
         }
-        @inline(__always) set {
+        @_transparent set {
             x = newValue[0]
             y = newValue[1]
             z = newValue[2]
@@ -275,32 +278,32 @@ public extension Vector3 {
 }
 
 //MARK: - Operations
-@inline(__always)
+@_transparent
 public func ceil<V: Vector3>(_ v: V) -> V {
     return V.init(ceil(v.x), ceil(v.y), ceil(v.z))
 }
 
-@inline(__always)
+@_transparent
 public func floor<V: Vector3>(_ v: V) -> V {
     return V.init(floor(v.x), floor(v.y), floor(v.z))
 }
 
-@inline(__always)
+@_transparent
 public func round<V: Vector3>(_ v: V) -> V {
     return V.init(round(v.x), round(v.y), round(v.z))
 }
 
-@inline(__always)
+@_transparent
 public func abs<V: Vector3>(_ v: V) -> V {
     return V.init(abs(v.x), abs(v.y), abs(v.z))
 }
 
-@inline(__always)
+@_transparent
 public func min<V: Vector3>(_ lhs: V, _ rhs: V) -> V {
     return V.init(min(lhs.x, rhs.x), min(lhs.y, rhs.y), min(lhs.z, rhs.z))
 }
 
-@inline(__always)
+@_transparent
 public func max<V: Vector3>(_ lhs: V, _ rhs: V) -> V {
     return V.init(max(lhs.x, rhs.x), max(lhs.y, rhs.y), max(lhs.z, rhs.z))
 }
@@ -310,13 +313,13 @@ public func max<V: Vector3>(_ lhs: V, _ rhs: V) -> V {
 //MARK: Operators (Self)
 extension Vector3 {
     //Multiplication
-    @inline(__always)
+    @_transparent
     public static func *(lhs: Self, rhs: Self) -> Self {
         var lhs = lhs
         lhs *= rhs
         return lhs
     }
-    @inline(__always)
+    @_transparent
     public static func *=(lhs: inout Self, rhs: Self) {
         #if GameMathUseLoopVectorization
         for index in 0 ..< 3 {
@@ -330,13 +333,13 @@ extension Vector3 {
     }
     
     //Addition
-    @inline(__always)
+    @_transparent
     public static func +(lhs: Self, rhs: Self) -> Self {
         var lhs = lhs
         lhs += rhs
         return lhs
     }
-    @inline(__always)
+    @_transparent
     public static func +=(lhs: inout Self, rhs: Self) {
         #if GameMathUseLoopVectorization
         for index in 0 ..< 3 {
@@ -350,13 +353,13 @@ extension Vector3 {
     }
     
     //Subtraction
-    @inline(__always)
+    @_transparent
     public static func -(lhs: Self, rhs: Self) -> Self {
         var lhs = lhs
         lhs -= rhs
         return lhs
     }
-    @inline(__always)
+    @_transparent
     public static func -=(lhs: inout Self, rhs: Self) {
         #if GameMathUseLoopVectorization
         for index in 0 ..< 3 {
@@ -371,13 +374,13 @@ extension Vector3 {
 }
 extension Vector3 {
     //Division
-    @inline(__always)
+    @_transparent
     public static func /(lhs: Self, rhs: Self) -> Self {
         var lhs = lhs
         lhs /= rhs
         return lhs
     }
-    @inline(__always)
+    @_transparent
     public static func /=(lhs: inout Self, rhs: Self) {
         #if GameMathUseLoopVectorization
         for index in 0 ..< 3 {
@@ -394,13 +397,13 @@ extension Vector3 {
 //MARK: Operators (Integers and Floats)
 extension Vector3 {
     //Multiplication Without Casting
-    @inline(__always)
+    @_transparent
     public static func *(lhs: Self, rhs: Float) -> Self {
         var lhs = lhs
         lhs *= rhs
         return lhs
     }
-    @inline(__always)
+    @_transparent
     public static func *=(lhs: inout Self, rhs: Float) {
         #if GameMathUseLoopVectorization
         for index in 0 ..< 3 {
@@ -414,13 +417,13 @@ extension Vector3 {
     }
     
     //Addition Without Casting
-    @inline(__always)
+    @_transparent
     public static func +(lhs: Self, rhs: Float) -> Self {
         var lhs = lhs
         lhs += rhs
         return lhs
     }
-    @inline(__always)
+    @_transparent
     public static func +=(lhs: inout Self, rhs: Float) {
         #if GameMathUseLoopVectorization
         for index in 0 ..< 3 {
@@ -434,13 +437,13 @@ extension Vector3 {
     }
     
     //Subtraction Without Casting
-    @inline(__always)
+    @_transparent
     public static func -(lhs: Self, rhs: Float) -> Self {
         var lhs = lhs
         lhs -= rhs
         return lhs
     }
-    @inline(__always)
+    @_transparent
     public static func -=(lhs: inout Self, rhs: Float) {
         #if GameMathUseLoopVectorization
         for index in 0 ..< 3 {
@@ -456,13 +459,13 @@ extension Vector3 {
 
 extension Vector3 {
     //Division Without Casting
-    @inline(__always)
+    @_transparent
     public static func /(lhs: Self, rhs: Float) -> Self {
         var lhs = lhs
         lhs /= rhs
         return lhs
     }
-    @inline(__always)
+    @_transparent
     public static func /=(lhs: inout Self, rhs: Float) {
         #if GameMathUseLoopVectorization
         for index in 0 ..< 3 {
@@ -477,12 +480,12 @@ extension Vector3 {
 }
 
 extension Vector3 {
-    @inline(__always)
+    @_transparent
     public static prefix func -(rhs: Self) -> Self {
         return Self(-rhs.x, -rhs.y, -rhs.z)
     }
 
-    @inline(__always)
+    @_transparent
     public static prefix func +(rhs: Self) -> Self {
         return Self(+rhs.x, +rhs.y, +rhs.z)
     }
@@ -491,13 +494,13 @@ extension Vector3 {
 
 extension Vector3 {
     //Multiplication
-    @inline(__always)
+    @_transparent
     public static func *<V: Vector3>(lhs: Self, rhs: V) -> Self {
         var lhs = lhs
         lhs *= rhs
         return lhs
     }
-    @inline(__always)
+    @_transparent
     public static func *=<V: Vector3>(lhs: inout Self, rhs: V) {
         #if GameMathUseSIMD
         lhs.simd *= rhs.simd
@@ -513,13 +516,13 @@ extension Vector3 {
     }
     
     //Addition
-    @inline(__always)
+    @_transparent
     public static func +<V: Vector3>(lhs: Self, rhs: V) -> Self {
         var lhs = lhs
         lhs += rhs
         return lhs
     }
-    @inline(__always)
+    @_transparent
     public static func +=<V: Vector3>(lhs: inout Self, rhs: V) {
         #if GameMathUseSIMD
         lhs.simd += rhs.simd
@@ -535,13 +538,13 @@ extension Vector3 {
     }
     
     //Subtraction
-    @inline(__always)
+    @_transparent
     public static func -<V: Vector3>(lhs: Self, rhs: V) -> Self {
         var lhs = lhs
         lhs -= rhs
         return lhs
     }
-    @inline(__always)
+    @_transparent
     public static func -=<V: Vector3>(lhs: inout Self, rhs: V) {
         #if GameMathUseSIMD
         lhs.simd -= rhs.simd
@@ -559,13 +562,13 @@ extension Vector3 {
 
 extension Vector3 {
     //Division
-    @inline(__always)
+    @_transparent
     public static func /<V: Vector3>(lhs: Self, rhs: V) -> Self {
         var lhs = lhs
         lhs /= rhs
         return lhs
     }
-    @inline(__always)
+    @_transparent
     public static func /=<V: Vector3>(lhs: inout Self, rhs: V) {
         #if GameMathUseSIMD
         lhs.simd /= rhs.simd
@@ -583,7 +586,7 @@ extension Vector3 {
 
 //MARK: Matrix4
 public extension Vector3 {
-    @inline(__always)
+    @_transparent
     static func *(lhs: Self, rhs: Matrix4x4) -> Self {
         var x: Float = lhs.x * rhs.a
         x += lhs.y * rhs.b
@@ -603,7 +606,7 @@ public extension Vector3 {
         return Self(x, y, z)
     }
     
-    @inline(__always)
+    @_transparent
     static func *(lhs: Matrix4x4, rhs: Self) -> Self {
         var x: Float = rhs.x * lhs.a
         x += rhs.y * lhs.e
@@ -623,7 +626,7 @@ public extension Vector3 {
         return Self(x, y, z)
     }
     
-    @inline(__always)
+    @_transparent
     static func *(lhs: Self, rhs: Matrix3x3) -> Self {
         var vector: Self = .zero
         
@@ -636,13 +639,14 @@ public extension Vector3 {
     }
 }
 
-extension Vector3 where Self: Encodable {
+extension Vector3 where Self: Codable {
+    @inlinable
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         try container.encode([x, y, z])
     }
-}
-extension Vector3 where Self: Decodable {
+
+    @inlinable
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         let values = try container.decode(Array<Float>.self)
@@ -651,6 +655,6 @@ extension Vector3 where Self: Decodable {
 }
 
 extension Vector3 {
-    @inline(__always)
+    @_transparent
     public func valuesArray() -> [Float] {return [x, y, z]}
 }

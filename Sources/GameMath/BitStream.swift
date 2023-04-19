@@ -7,15 +7,16 @@
  */
 
 public struct BitStream {
-    private let bytes: Any
-    private var byteOffset: Int {offset / 8}
-    private var bitOffset: Int {offset % 8}
-    private var offset: Int = 0
+    @usableFromInline let bytes: Any
+    @usableFromInline var byteOffset: Int {offset / 8}
+    @usableFromInline var bitOffset: Int {offset % 8}
+    @usableFromInline var offset: Int = 0
     
     /**
      Create a new BitStream
      - parameter bytes: The data to read bits from.
      */
+    @inlinable
     public init(_ bytes: Any) {
         self.bytes = bytes
     }
@@ -25,6 +26,8 @@ public struct BitStream {
      - parameter index: The index of the desired bit
      - returns: A Bool representing the bit. true for 1, false for 0.
      */
+    @inlinable
+    @inline(__always)
     public subscript (index: Int) -> Bool {
         var pointer = bytes
         return withUnsafeBytes(of: &pointer) { bytes in
@@ -38,6 +41,7 @@ public struct BitStream {
      - parameter numBits: The number of bits to read
      - returns: A FixedWidthInteger containing the value of the requestsed bits
      */
+    @_transparent
     public mutating func readBits<T: FixedWidthInteger>(_ numBits: Int) -> T {
         guard numBits > 0 else {return 0}
         
@@ -61,6 +65,7 @@ public struct BitStream {
      Move the current read postion.
      - parameter numBits: The number of bits to move the read position.
      */
+    @_transparent
     public mutating func seekBits(_ numBits: Int) {
         offset += numBits
     }

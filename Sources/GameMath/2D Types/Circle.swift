@@ -10,6 +10,7 @@ public struct Circle {
     public var center: Position2
     public var radius: Float
 
+    @inlinable
     public init(center: Position2, radius: Float) {
         self.center = center
         self.radius = radius

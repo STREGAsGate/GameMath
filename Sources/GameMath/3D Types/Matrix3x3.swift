@@ -12,6 +12,7 @@ public struct Matrix3x3 {
     public var e, f, g: Float
     public var i, j, k: Float
 
+    @inlinable
     public init(_ a: Float, _ b: Float, _ c: Float,
                 _ e: Float, _ f: Float, _ g: Float,
                 _ i: Float, _ j: Float, _ k: Float) {
@@ -26,6 +27,7 @@ public struct Matrix3x3 {
     public var e, f, g: Float
     public var i, j, k: Float
 
+    @inlinable
     public init(_ a: Float, _ b: Float, _ c: Float,
                 _ e: Float, _ f: Float, _ g: Float,
                 _ i: Float, _ j: Float, _ k: Float) {
@@ -37,19 +39,21 @@ public struct Matrix3x3 {
 #endif
  
 public extension Matrix3x3 {
-    @inline(__always)
+    @_transparent
     init(a: Float, b: Float, c: Float,
                 e: Float, f: Float, g: Float,
                 i: Float, j: Float, k: Float) {
         self.init(a, b, c, e, f, g, i, j, k)
     }
     
+    @inlinable
     init(_ matrix4: Matrix4x4) {
         self.a = matrix4.a; self.b = matrix4.b; self.c = matrix4.c;
         self.e = matrix4.e; self.f = matrix4.f; self.g = matrix4.g;
         self.i = matrix4.i; self.j = matrix4.j; self.k = matrix4.k;
     }
     
+    @inlinable
     init() {
         self.a = 0; self.b = 0; self.c = 0;
         self.e = 0; self.f = 0; self.g = 0;
@@ -57,8 +61,9 @@ public extension Matrix3x3 {
     }
     
     //MARK: Subscript
+    @inlinable
     subscript (_ index: Array<Float>.Index) -> Float {
-        get{
+        @_transparent get {
             switch index {
             case 0: return a
             case 1: return b
@@ -74,7 +79,7 @@ public extension Matrix3x3 {
             }
         }
         
-        set(val) {
+        @_transparent set(val) {
             switch index {
             case 0: a = val
             case 1: b = val
@@ -91,8 +96,9 @@ public extension Matrix3x3 {
         }
     }
     
+    @inlinable
     subscript (_ column: Array<Float>.Index) -> Array<Float> {
-        get {
+        @_transparent get {
             switch column {
             case 0: return [a, e, i]
             case 1: return [b, f, j]
@@ -101,7 +107,7 @@ public extension Matrix3x3 {
                 fatalError("Column \(column) out of range \(0 ..< 3) for type \(type(of: self))")
             }
         }
-        set {
+        @_transparent set {
             switch column {
             case 0:
                 a = newValue[0]
@@ -121,8 +127,9 @@ public extension Matrix3x3 {
         }
     }
 
+    @inlinable
     subscript <V: Vector3>(_ index: Array<Float>.Index) -> V {
-        get {
+        @_transparent get {
             switch index {
             case 0: return V(a, b, c)
             case 1: return V(e, f, g)
@@ -131,7 +138,7 @@ public extension Matrix3x3 {
                 fatalError("Index \(index) out of range \(0 ..< 3) for type \(type(of: self))")
             }
         }
-        set {
+        @_transparent set {
             switch index {
             case 0:
                 a = newValue.x
@@ -153,6 +160,7 @@ public extension Matrix3x3 {
 }
 
 public extension Matrix3x3 {
+    @inlinable
     init(direction: Direction3, up: Direction3 = .up, right: Direction3 = .right) {
         var xaxis: Direction3
         if direction == up {
@@ -182,6 +190,7 @@ public extension Matrix3x3 {
         k = direction.z
     }
     
+    @inlinable
     var rotation: Quaternion {
         get {
             return Quaternion(rotationMatrix: self)
@@ -241,13 +250,13 @@ public extension Matrix3x3 {
 }
 
 public extension Matrix3x3 {
-    @inline(__always)
+    @_transparent
     func transposedArray() -> [Float] {
         return [a, e, i,
                 b, f, j,
                 c, g, k]
     }
-    @inline(__always)
+    @_transparent
     func array() -> [Float] {
         return [a, b, c,
                 e, f, g,
@@ -258,6 +267,7 @@ public extension Matrix3x3 {
 extension Matrix3x3: Equatable {}
 extension Matrix3x3: Hashable {}
 extension Matrix3x3: Codable {
+    @inlinable
     public func encode(to encoder: Encoder) throws {
         var container = encoder.unkeyedContainer()
         try container.encode(a)
@@ -271,6 +281,7 @@ extension Matrix3x3: Codable {
         try container.encode(k)
     }
     
+    @inlinable
     public init(from decoder: Decoder) throws {
         var container = try decoder.unkeyedContainer()
         self.a = try container.decode(Float.self)

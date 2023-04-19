@@ -15,12 +15,14 @@ public struct Size3: Vector3, SIMD {
     @usableFromInline
     var _storage = Float.SIMD4Storage()
 
+    @inlinable
     public init(arrayLiteral elements: Self.ArrayLiteralElement...) {
         for index in elements.indices {
             _storage[index] = elements[index]
         }
     }
     
+    @inlinable
     public var x: Scalar {
         @_transparent get {
             return _storage[0]
@@ -29,6 +31,7 @@ public struct Size3: Vector3, SIMD {
             _storage[0] = newValue
         }
     }
+    @inlinable
     public var y: Scalar {
         @_transparent get {
             return _storage[1]
@@ -37,6 +40,7 @@ public struct Size3: Vector3, SIMD {
             _storage[1] = newValue
         }
     }
+    @inlinable
     public var z: Scalar {
         @_transparent get {
             return _storage[2]
@@ -46,6 +50,7 @@ public struct Size3: Vector3, SIMD {
         }
     }
     
+    @inlinable
     public init(x: Scalar, y: Scalar, z: Scalar) {
         self.x = x
         self.y = y
@@ -58,6 +63,7 @@ public struct Size3: Vector3 {
     public var y: Float
     public var z: Float
     
+    @inlinable
     public init(x: Float, y: Float, z: Float) {
         self.x = x
         self.y = y
@@ -67,12 +73,12 @@ public struct Size3: Vector3 {
 #endif
 
 public extension Size3 {
-    @inline(__always)
+    @_transparent
     init(_ x: Float, _ y: Float, _ z: Float) {
         self.init(x: x, y: y, z: z)
     }
     
-    @inline(__always)
+    @_transparent
     init(width x: Float, height y: Float, depth z: Float) {
         self.init(x: x, y: y, z: z)
     }
@@ -87,6 +93,7 @@ public extension Size3 {
 }
 
 extension Size3 {
+    @inlinable
     public var width: Float {
         @_transparent get {
             return x
@@ -96,6 +103,7 @@ extension Size3 {
         }
     }
 
+    @inlinable
     public var height: Float {
         @_transparent get {
             return y
@@ -105,6 +113,7 @@ extension Size3 {
         }
     }
 
+    @inlinable
     public var depth: Float {
         @_transparent get {
             return z
@@ -116,13 +125,14 @@ extension Size3 {
 }
 
 extension Size3: Hashable {}
-extension Size3: Encodable {
+extension Size3: Codable {
+    @inlinable
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         try container.encode([x, y, z])
     }
-}
-extension Size3: Decodable {
+
+    @inlinable
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         let values = try container.decode(Array<Float>.self)

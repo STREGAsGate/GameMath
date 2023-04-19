@@ -11,6 +11,7 @@ public struct Size2: Vector2 {
     public var width: Float
     public var height: Float
     
+    @inlinable
     public init(width: Float, height: Float) {
         self.width = width
         self.height = height
@@ -21,6 +22,7 @@ public struct Size2: Vector2 {
     public var width: Float
     public var height: Float
     
+    @inlinable
     public init(width: Float, height: Float) {
         self.width = width
         self.height = height
@@ -34,7 +36,7 @@ extension Size2: Codable {}
 
 //MARK: Vector2
 extension Size2 {
-    @inline(__always)
+    @_transparent
     public var x: Float {
         get {
             return width
@@ -44,7 +46,7 @@ extension Size2 {
         }
     }
     
-    @inline(__always)
+    @_transparent
     public var y: Float {
         get {
             return height
@@ -54,6 +56,7 @@ extension Size2 {
         }
     }
     
+    @inlinable
     public init(_ x: Float, _ y: Float) {
         self.width = x
         self.height = y
@@ -67,18 +70,18 @@ public extension Size2 {
 }
 
 public extension Size2 {
-    @inline(__always)
+    @_transparent
     var aspectRatio: Float {
         return width / height
     }
 }
 
 public extension Size2 {
-    @inline(__always)
+    @_transparent
     static func *(lhs: Size2, rhs: Float) -> Self {
         return Size2(width: lhs.width * rhs, height: lhs.height * rhs)
     }
-    @inline(__always)
+    @_transparent
     static func *=(lhs: inout Self, rhs: Float) {
         lhs = lhs * rhs
     }
@@ -88,41 +91,41 @@ public extension Size2 {
 //Addition
 public extension Size2 {
     //Self:Self
-    @inline(__always)
+    @_transparent
     static func +(lhs: Self, rhs: Self) -> Self {
         return Self(lhs.x + rhs.x,
                     lhs.y + rhs.y)
     }
-    @inline(__always)
+    @_transparent
     static func +=(lhs: inout Self, rhs: Self) {
-        lhs =  lhs + rhs
+        lhs = lhs + rhs
     }
 }
 
 //Subtraction
 public extension Size2 {
     //Self:Self
-    @inline(__always)
+    @_transparent
     static func -(lhs: Self, rhs: Self) -> Self {
         return Self(lhs.x - rhs.x,
                     lhs.y - rhs.y)
     }
-    @inline(__always)
+    @_transparent
     static func -=(lhs: inout Self, rhs: Self) {
-        lhs =  lhs - rhs
+        lhs = lhs - rhs
     }
 }
 
 //Division(FloatingPoint)
 public extension Size2 {
     //Self:Self
-    @inline(__always)
+    @_transparent
     static func /(lhs: Self, rhs: Self) -> Self {
         return Self(lhs.x / rhs.x,
                     lhs.y / rhs.y)
     }
-    @inline(__always)
+    @_transparent
     static func /=(lhs: inout Self, rhs: Self) {
-        lhs =  lhs / rhs
+        lhs = lhs / rhs
     }
 }

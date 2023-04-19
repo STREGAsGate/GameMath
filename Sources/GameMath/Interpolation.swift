@@ -20,7 +20,7 @@ public enum InterpolationMethod {
 
 public extension Float {
     /// Interpolates toward `to` by using `method `
-    @inline(__always)
+    @_transparent
     func interpolated(to: Float, _ method: InterpolationMethod) -> Float {
         switch method {
         case let .linear(factor, _):
@@ -29,7 +29,7 @@ public extension Float {
     }
     
     /// Interpolates toward `to` by using `method `
-    @inline(__always)
+    @_transparent
     mutating func interpolate(to: Float, _ method: InterpolationMethod) {
         switch method {
         case let .linear(factor, _):
@@ -39,7 +39,8 @@ public extension Float {
 }
 
 internal extension Float {
-    @inline(__always)
+    @_transparent
+    @usableFromInline
     func lerped(to: Float, factor: Float) -> Float {
         #if GameMathUseSIMD && canImport(simd)
         return simd_mix(self, to, factor)
@@ -47,7 +48,8 @@ internal extension Float {
         return self + (to - self) * factor
         #endif
     }
-    @inline(__always)
+    @_transparent
+    @usableFromInline
     mutating func lerp(to: Float, factor: Float) {
         self = self.lerped(to: to, factor: factor)
     }

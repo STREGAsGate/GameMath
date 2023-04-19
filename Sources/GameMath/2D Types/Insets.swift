@@ -12,6 +12,7 @@ public struct Insets {
     public var bottom: Float
     public var trailing: Float
     
+    @inlinable
     public init(_ value: Float) {
         self.top = value
         self.leading = value
@@ -19,6 +20,7 @@ public struct Insets {
         self.trailing = value
     }
     
+    @inlinable
     public init(top: Float, leading: Float, bottom: Float, trailing: Float) {
         self.top = top
         self.leading = leading
@@ -36,22 +38,22 @@ public extension Insets {
 }
 
 public extension Insets {
-    @inline(__always)
+    @_transparent
     static func *(lhs: Self, rhs: Float) -> Self {
         return Insets(top: lhs.top * rhs, leading: lhs.leading * rhs, bottom: lhs.bottom * rhs, trailing: lhs.trailing * rhs)
     }
-    @inline(__always)
+    @_transparent
     static func *=(lhs: inout Self, rhs: Float) {
         lhs = lhs * rhs
     }
 }
 
 public extension Insets {
-    @inline(__always)
+    @_transparent
     static func /(lhs: Self, rhs: Float) -> Self {
         return Insets(top: lhs.top / rhs, leading: lhs.leading / rhs, bottom: lhs.bottom / rhs, trailing: lhs.trailing / rhs)
     }
-    @inline(__always)
+    @_transparent
     static func /=(lhs: inout Self, rhs: Float) {
         lhs = lhs / rhs
     }

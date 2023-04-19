@@ -29,6 +29,7 @@ public enum CardinalDirection: String, Codable {
 
 extension Degrees {
     /// Creates degrees from a compass direction. This value is considered an angle around the up vector in 3d.
+    @inlinable
     public init(_ cardinalDirection: CardinalDirection) {
         switch cardinalDirection {
         case .unknown:
@@ -69,6 +70,7 @@ extension Degrees {
     }
     
     /// The compass value closest to the current angle
+    @inlinable
     public var cardinalDirection: CardinalDirection {
         switch self.normalized.rawValue {
         case 0.0 ... 11.25:

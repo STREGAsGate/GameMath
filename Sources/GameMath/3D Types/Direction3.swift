@@ -17,12 +17,14 @@ public struct Direction3: Vector3, SIMD {
     @usableFromInline
     var _storage = Float.SIMD4Storage()
 
+    @inlinable
     public init(arrayLiteral elements: Self.ArrayLiteralElement...) {
         for index in elements.indices {
             _storage[index] = elements[index]
         }
     }
     
+    @inlinable
     public var x: Scalar {
         @_transparent get {
             return _storage[0]
@@ -31,6 +33,7 @@ public struct Direction3: Vector3, SIMD {
             _storage[0] = newValue
         }
     }
+    @inlinable
     public var y: Scalar {
         @_transparent get {
             return _storage[1]
@@ -39,6 +42,7 @@ public struct Direction3: Vector3, SIMD {
             _storage[1] = newValue
         }
     }
+    @inlinable
     public var z: Scalar {
         @_transparent get {
             return _storage[2]
@@ -48,6 +52,7 @@ public struct Direction3: Vector3, SIMD {
         }
     }
     
+    @inlinable
     public init(x: Float, y: Float, z: Float) {
         self.x = x
         self.y = y
@@ -60,6 +65,7 @@ public struct Direction3: Vector3 {
     public var y: Float
     public var z: Float
     
+    @inlinable
     public init(x: Float, y: Float, z: Float) {
         self.x = x
         self.y = y
@@ -70,20 +76,21 @@ public struct Direction3: Vector3 {
 #endif
 
 public extension Direction3 {
-    @inline(__always)
+    @_transparent
     init(_ x: Float, _ y: Float, _ z: Float) {
         self.init(x: x, y: y, z: z)
     }
 }
 
 public extension Direction3  {
+    @_transparent
     init(from position1: Position3, to position2: Position3) {
         self = Self(position2 - position1).normalized
     }
 }
 
 public extension Direction3  {
-    @inline(__always)
+    @_transparent
     func angle(to rhs: Self) -> Radians {
         let v0 = self.normalized
         let v1 = rhs.normalized
@@ -91,17 +98,17 @@ public extension Direction3  {
         let dot = v0.dot(v1)
         return Radians(acos(dot / (v0.magnitude * v1.magnitude)))
     }
-    @inline(__always)
+    @_transparent
     var angleAroundX: Radians {
         assert(isFinite)
         return Radians(atan2(y, z))
     }
-    @inline(__always)
+    @_transparent
     var angleAroundY: Radians {
         assert(isFinite)
         return Radians(atan2(x, z))
     }
-    @inline(__always)
+    @_transparent
     var angleAroundZ: Radians {
         assert(isFinite)
         return Radians(atan2(y, x))
@@ -109,14 +116,14 @@ public extension Direction3  {
 }
 
 public extension Direction3 {
-    @inline(__always)
+    @_transparent
     func rotated(by rotation: Quaternion) -> Self {
         let conjugate = rotation.normalized.conjugate
         let w = rotation * self * conjugate
         return w.direction
     }
     
-    @inline(__always)
+    @_transparent
     func orthogonal() -> Self {
         let x = abs(self.x)
         let y = abs(self.y)
@@ -126,7 +133,7 @@ public extension Direction3 {
         return self.cross(other)
     }
     
-    @inline(__always)
+    @_transparent
     func reflected(off normal: Self) -> Self {
         let normal = normal.normalized
         let dn = -2 * self.dot(normal)
@@ -134,7 +141,7 @@ public extension Direction3 {
     }
     
     /// true if the difference in angles is less than 180°
-    @inline(__always)
+    @_transparent
     func isFrontFacing(toward direction: Direction3) -> Bool {
         return (self.dot(direction) <= 0) == false
     }
@@ -156,13 +163,14 @@ public extension Direction3 {
 #endif
 
 extension Direction3: Hashable {}
-extension Direction3: Encodable {
+extension Direction3: Codable {
+    @inlinable
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         try container.encode([x, y, z])
     }
-}
-extension Direction3: Decodable {
+
+    @inlinable
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         let values = try container.decode(Array<Float>.self)

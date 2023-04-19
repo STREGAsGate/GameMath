@@ -12,6 +12,7 @@ public struct Direction2: Vector2 {
     public var x: Float
     public var y: Float
     
+    @inlinable
     public init(_ x: Float, _ y: Float) {
         self.x = x
         self.y = y
@@ -19,22 +20,26 @@ public struct Direction2: Vector2 {
 }
 
 public extension Direction2 {
+    @inlinable
     init(x: Float, y: Float) {
         self.init(x, y)
     }
 }
 
 public extension Direction2 {
+    @inlinable
     init(from position1: Position2, to position2: Position2) {
         let d = Direction2(position2 - position1)
         self = d.normalized
     }
     
+    @inlinable
     init(_ radians: Radians) {
         self.x = cos(radians.rawValue)
         self.y = sin(radians.rawValue)
     }
     
+    @inlinable
     init(_ degrees: Degrees) {
         self.init(Radians(degrees))
     }
@@ -45,7 +50,7 @@ extension Direction2: Hashable {}
 extension Direction2: Codable {}
 
 public extension Direction2 {
-    @inline(__always)
+    @_transparent
     func angle(to rhs: Self) -> Radians {
         let v0 = self.normalized
         let v1 = rhs.normalized
@@ -54,14 +59,14 @@ public extension Direction2 {
         return Radians(acos(dot))
     }
     
-    @inline(__always)
+    @_transparent
     var angleAroundZ: Radians {
         return Radians(atan2(x, -y))
     }
 }
 
 public extension Direction2 {
-    @inline(__always)
+    @_transparent
     func rotated(by rotation: Quaternion) -> Self {
         let conjugate = rotation.normalized.conjugate
         let w = rotation * self * conjugate
@@ -69,7 +74,7 @@ public extension Direction2 {
         return Direction2(dir3.x, dir3.y).normalized
     }
     
-    @inline(__always)
+    @_transparent
     func reflected(off normal: Self) -> Self {
         let normal: Self = normal.normalized
         let dn: Float = -2 * self.dot(normal)

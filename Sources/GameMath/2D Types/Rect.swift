@@ -13,6 +13,7 @@ public struct Rect {
     public var position: Position2
     public var size: Size2
     
+    @inlinable
     public init(position: Position2 = .zero, size: Size2) {
         self.position = position
         self.size = size
@@ -23,6 +24,7 @@ public struct Rect {
     public var position: Position2
     public var size: Size2
     
+    @inlinable
     public init(position: Position2 = .zero, size: Size2) {
         self.position = position
         self.size = size
@@ -31,9 +33,12 @@ public struct Rect {
 #endif
 
 public extension Rect {
+    @inlinable
     init(x: Float, y: Float, width: Float, height: Float) {
         self.init(position: Position2(x: x, y: y), size: Size2(width: width, height: height))
     }
+    
+    @inlinable
     init(_ x: Float, _ y: Float, _ width: Float, _ height: Float) {
         self.init(position: Position2(x: x, y: y), size: Size2(width: width, height: height))
     }
@@ -44,10 +49,12 @@ extension Rect: Hashable {}
 extension Rect: Codable {}
 
 public extension Rect {
+    @_transparent
     var area: Float {
         return size.width * size.height
     }
     // The left side of the rect
+    @_transparent
     var x: Float {
         get {
             return position.x
@@ -57,6 +64,7 @@ public extension Rect {
         }
     }
     // The top of the rect
+    @_transparent
     var y: Float {
         get {
             return position.y
@@ -65,6 +73,7 @@ public extension Rect {
             position.y = y
         }
     }
+    @_transparent
     var width: Float {
         get {
             return size.width
@@ -73,6 +82,7 @@ public extension Rect {
             size.width = width
         }
     }
+    @_transparent
     var height: Float {
         get {
             return size.height
@@ -83,18 +93,21 @@ public extension Rect {
     }
     
     // The right side of the rect
+    @_transparent
     var maxX: Float {
         return x + width
     }
     // The bottom of the rect
+    @_transparent
     var maxY: Float {
         return y + height
     }
 }
 
 extension Rect {
+    @_transparent
     public var center: Position2 {
-        get{
+        get {
             return Position2(x: x + width / 2, y: y + height / 2)
         }
         set(point) {
@@ -104,6 +117,7 @@ extension Rect {
     }
 
     //TODO: Move this to GamePhysics in AxisAlignedBoundingBox2
+    @inlinable
     public func nearest(outsidePositionFrom circle: Circle) -> Position2 {
         var position = circle.center
         
@@ -126,6 +140,7 @@ extension Rect {
 
 extension Rect {
     //TODO: Move this to GamePhysics in AxisAlignedBoundingBox2
+    @inlinable
     public func intersects(_ rect: Rect) -> Bool {
         var part1: Bool {
             let lhs = abs(x - rect.x) * 2
@@ -143,6 +158,7 @@ extension Rect {
 
 extension Rect {
     //TODO: Move this to GamePhysics in AxisAlignedBoundingBox2
+    @inlinable
     public func contains(_ position: Position2) -> Bool {
         if position.x < x || position.x > maxX {
             return false
@@ -154,6 +170,7 @@ extension Rect {
     }
 
     //TODO: Move this to GamePhysics in AxisAlignedBoundingBox2
+    @inlinable
     public func intersects(_ circle: Circle) -> Bool {
         let topLeft = Position2(x: circle.center.x - circle.radius, y: circle.center.y - circle.radius)
         if contains(topLeft) {
@@ -180,20 +197,20 @@ extension Rect {
 }
 
 public extension Rect {
-    @inline(__always)
+    @_transparent
     var isFinite: Bool {
         return position.isFinite && size.isFinite
     }
 }
 
 public extension Rect {
-    @inline(__always)
+    @_transparent
     func interpolated(to: Self, _ method: InterpolationMethod) -> Self {
         var copy = self
         copy.interpolate(to: to, method)
         return copy
     }
-    @inline(__always)
+    @_transparent
     mutating func interpolate(to: Self, _ method: InterpolationMethod) {
         self.position.interpolate(to: to.position, method)
         self.size.interpolate(to: to.size, method)
@@ -201,7 +218,7 @@ public extension Rect {
 }
 
 public extension Rect {
-    @inline(__always)
+    @_transparent
     func inset(by insets: Insets) -> Rect {
         var copy = self
         copy.x += insets.leading
@@ -217,20 +234,20 @@ extension Rect {
 }
 
 extension Rect {
-    @inline(__always)
+    @_transparent
     public static func *=(lhs: inout Self, rhs: Float) {
         lhs = lhs * rhs
     }
-    @inline(__always)
+    @_transparent
     public static func *(lhs: Self, rhs: Float) -> Self {
         return Rect(position: lhs.position * rhs, size: lhs.size * rhs)
     }
     
-    @inline(__always)
+    @_transparent
     public static func /=(lhs: inout Self, rhs: Float) {
         lhs = lhs / rhs
     }
-    @inline(__always)
+    @_transparent
     public static func /(lhs: Self, rhs: Float) -> Self {
         return Rect(position: lhs.position / rhs, size: lhs.size / rhs)
     }

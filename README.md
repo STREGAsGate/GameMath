@@ -51,14 +51,6 @@ Check out my [YouTube channel](https://www.youtube.com/STREGAsGate) for video de
 [![Strega's Gate: Shifter](https://i.ytimg.com/vi/NhO0EPCIciU/hqdefault.jpg?sqp=-oaymwEiCKgBEF5IWvKriqkDFQgBFQAAAAAYASUAAMhCPQCAokN4AQ==&rs=AOn4CLB-DJuYCPzkHrGUuc1NgsFuSm21kA)](https://www.youtube.com/STREGAsGate)
 
 # ToDo
-- **Unit Tests**  
-    A test suite is currently being implemented to ensure correctness of the API's before effort is put into making them faster.
-
-- **Performance Testing**  
-    GameMath is currently un-optimized. Once unit tests have full code coverage a performance test suite will be set up that runs tests for common real world use cases, such as matrix multiplication. 
-    
-    At this stage perfromance can be played with, and compiler hints like `@inlinable` will also be added to enhance optimized builds.
-
 - **2D**  
     GameMath has not been used to create a 2D game and may be missing some necessary functionality. 
 

@@ -10,7 +10,7 @@
 import Foundation
 
 public extension Float {
-    @inline(__always)
+    @_transparent
     func fastInverseSquareRoot() -> Self {
         var x = self
         let xhalf = 0.5 * x
@@ -23,7 +23,7 @@ public extension Float {
 }
 
 extension Vector2 {
-    @inline(__always)
+    @_transparent
     public var normalized: Self  {
         let x = pow(x, 2)
         let y = pow(y, 2)
@@ -31,7 +31,7 @@ extension Vector2 {
         return self * squaredMagnitude.fastInverseSquareRoot()
     }
     
-    @inline(__always)
+    @_transparent
     public mutating func normalize() {
         let x = pow(x, 2)
         let y = pow(y, 2)
@@ -41,7 +41,7 @@ extension Vector2 {
 }
 
 extension Vector3 {
-    @inline(__always)
+    @_transparent
     public var normalized: Self  {
         let x = pow(x, 2)
         let y = pow(y, 2)
@@ -50,7 +50,7 @@ extension Vector3 {
         return self * squaredMagnitude.fastInverseSquareRoot()
     }
     
-    @inline(__always)
+    @_transparent
     public mutating func normalize() {
         let x = pow(x, 2)
         let y = pow(y, 2)

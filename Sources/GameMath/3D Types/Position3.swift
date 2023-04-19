@@ -16,37 +16,42 @@ public struct Position3: Vector3, SIMD {
     @usableFromInline
     var _storage = Float.SIMD4Storage()
 
+    @inlinable
     public init(arrayLiteral elements: Self.ArrayLiteralElement...) {
         for index in elements.indices {
             _storage[index] = elements[index]
         }
     }
     
+    @inlinable
     public var x: Scalar {
-        @inline(__always) get {
+        @_transparent get {
             return _storage[0]
         }
-        @inline(__always) set {
+        @_transparent set {
             _storage[0] = newValue
         }
     }
+    @inlinable
     public var y: Scalar {
-        @inline(__always) get {
+        @_transparent get {
             return _storage[1]
         }
-        @inline(__always) set {
+        @_transparent set {
             _storage[1] = newValue
         }
     }
+    @inlinable
     public var z: Scalar {
-        @inline(__always) get {
+        @_transparent get {
             return _storage[2]
         }
-        @inline(__always) set {
+        @_transparent set {
             _storage[2] = newValue
         }
     }
     
+    @inlinable
     public init(x: Float, y: Float, z: Float) {
         self.x = x
         self.y = y
@@ -59,6 +64,7 @@ public struct Position3: Vector3 {
     public var y: Float
     public var z: Float
     
+    @inlinable
     public init(x: Float, y: Float, z: Float) {
         self.x = x
         self.y = y
@@ -68,7 +74,7 @@ public struct Position3: Vector3 {
 #endif
 
 public extension Position3 {
-    @inline(__always)
+    @_transparent
     init(_ x: Float, _ y: Float, _ z: Float) {
         self.init(x: x, y: y, z: z)
     }
@@ -78,7 +84,7 @@ public extension Position3 {
     /** The distance between `from` and `self`
     - parameter from: A value representing the source positon.
      */
-    @inline(__always)
+    @_transparent
     func distance(from: Self) -> Float {
         let difference = self - from
         let distance = difference.dot(difference)
@@ -89,7 +95,7 @@ public extension Position3 {
     - parameter rhs: A value representing the destination positon.
     - parameter threshold: The maximum distance that is considered "near".
      */
-    @inline(__always)
+    @_transparent
     func isNear(_ rhs: Self, threshold: Float) -> Bool {
         return self.distance(from: rhs) < threshold
     }
@@ -100,7 +106,7 @@ public extension Position3 {
     - parameter distance: The units away from `self` to create the new position.
     - parameter direction: The angle away from self to create the new position.
      */
-    @inline(__always)
+    @_transparent
     func moved(_ distance: Float, toward direction: Direction3) -> Self {
         return self + (direction.normalized * distance)
     }
@@ -109,7 +115,7 @@ public extension Position3 {
     - parameter distance: The units away to move.
     - parameter direction: The angle to move.
      */
-    @inline(__always)
+    @_transparent
     mutating func move(_ distance: Float, toward direction: Direction3) {
         self = moved(distance, toward: direction)
     }
@@ -120,7 +126,7 @@ public extension Position3 {
     - parameter origin: The anchor to rotate around.
     - parameter rotation: The direction and angle to rotate.
      */
-    @inline(__always)
+    @_transparent
     func rotated(around anchor: Self = .zero, by rotation: Quaternion) -> Self {
         let d = self.distance(from: anchor)
         return anchor.moved(d, toward: rotation.forward)
@@ -130,7 +136,7 @@ public extension Position3 {
      - parameter origin: The anchor to rotate around.
      - parameter rotation: The direction and angle to rotate.
      */
-    @inline(__always)
+    @_transparent
     mutating func rotate(around anchor: Self = .zero, by rotation: Quaternion) {
         self = rotated(around: anchor, by: rotation)
     }
@@ -143,13 +149,14 @@ public extension Position3 {
 #endif
 
 extension Position3: Hashable {}
-extension Position3: Encodable {
+extension Position3: Codable {
+    @inlinable
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         try container.encode([x, y, z])
     }
-}
-extension Position3: Decodable {
+
+    @inlinable
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         let values = try container.decode(Array<Float>.self)

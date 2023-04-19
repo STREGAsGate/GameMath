@@ -18,6 +18,7 @@ public struct Color {
     public var blue: Float
     public var alpha: Float
     
+    @inlinable
     public init(red: Float, green: Float, blue: Float, alpha: Float = 1) {
         self.red = red
         self.green = green
@@ -25,16 +26,17 @@ public struct Color {
         self.alpha = alpha
     }
 
-    @inline(__always)
+    @_transparent
     public init(_ red: Float, _ green: Float, _ blue: Float, _ alpha: Float = 1) {
         self.init(red: red, green: green, blue: blue, alpha: alpha)
     }
 
-    @inline(__always)
+    @_transparent
     public init(_ array: [Float]) {
         self.init(array[0], array[1], array[2], array.count > 3 ? array[3] : 1)
     }
     
+    @inlinable
     public init(eightBitRed red: UInt8, green: UInt8, blue: UInt8, alpha: UInt8 = .max) {
         let m: Float = 1.0 / Float(UInt8.max)
         self.red = m * Float(red)
@@ -43,6 +45,7 @@ public struct Color {
         self.alpha = m * Float(alpha)
     }
     
+    @inlinable
     public init(eightBitValues array: [UInt8]) {
         let m: Float = 1.0 / Float(UInt8.max)
         self.red = m * Float(array[0])
@@ -55,6 +58,7 @@ public struct Color {
         }
     }
     
+    @_transparent
     public init(hexValue: UInt32) {
         self.init(eightBitRed: UInt8((hexValue >> 16) & 0xFF),
                   green: UInt8((hexValue >> 8) & 0xFF),
@@ -62,6 +66,7 @@ public struct Color {
     }
     
     #if canImport(Foundation)
+    @inlinable
     public init?(hexValue: String) {
         let hexString = hexValue.replacingOccurrences(of: "0x", with: "").replacingOccurrences(of: "#", with: "")
         guard hexValue.count >= 6 && hexValue.count <= 8 else {return nil}
@@ -77,51 +82,51 @@ public struct Color {
     }
     #endif
 
-    @inline(__always)
+    @_transparent
     public init(white: Float, alpha: Float = 1) {
         self.init(red: white, green: white, blue: white, alpha: alpha)
     }
 
-    @inline(__always)
+    @_transparent
     public func withAlpha(_ alpha: Float) -> Color {
         return Self(self.red, self.green, self.blue, alpha)
     }
 }
 
 public extension Color {
-    @inline(__always)
+    @_transparent
     var simd: SIMD4<Float> {
         return SIMD4<Float>(red, green, blue, alpha)
     }
 
-    @inline(__always)
+    @_transparent
     func valuesArray() -> [Float] {
         return [red, green, blue, alpha]
     }
     
-    @inline(__always)
+    @_transparent
     var eightBitRed: UInt8 {
         return UInt8(clamping: Int(Float(UInt8.max) * red))
     }
-    @inline(__always)
+    @_transparent
     var eightBitGreen: UInt8 {
         return UInt8(clamping: Int(Float(UInt8.max) * green))
     }
-    @inline(__always)
+    @_transparent
     var eightBitBlue: UInt8 {
         return UInt8(clamping: Int(Float(UInt8.max) * blue))
     }
-    @inline(__always)
+    @_transparent
     var eightBitAlpha: UInt8 {
         return UInt8(clamping: Int(Float(UInt8.max) * alpha))
     }
     
-    @inline(__always)
+    @_transparent
     func eightBitValuesArray() -> [UInt8] {
         return [eightBitRed, eightBitGreen, eightBitBlue, eightBitAlpha]
     }
     
-    @inline(__always)
+    @_transparent
     var eightBitHexValue: UInt32 {
         let r = UInt32(eightBitRed) << 24
         let g = UInt32(eightBitGreen) << 16
@@ -132,11 +137,11 @@ public extension Color {
 }
 
 public extension Color {
-    @inline(__always)
+    @_transparent
     static func +(lhs: Color, rhs: Color) -> Color {
         return Color(lhs.red + rhs.red, lhs.green + rhs.green, lhs.blue + rhs.blue, lhs.alpha + rhs.alpha)
     }
-    @inline(__always)
+    @_transparent
     static func +=(lhs: inout Color, rhs: Color) {
         lhs.red += rhs.red
         lhs.green += rhs.green
@@ -144,11 +149,11 @@ public extension Color {
         lhs.alpha += rhs.alpha
     }
     
-    @inline(__always)
+    @_transparent
     static func -(lhs: Color, rhs: Color) -> Color {
         return Color(lhs.red - rhs.red, lhs.green - rhs.green, lhs.blue - rhs.blue, lhs.alpha - rhs.alpha)
     }
-    @inline(__always)
+    @_transparent
     static func -=(lhs: inout Color, rhs: Color) {
         lhs.red -= rhs.red
         lhs.green -= rhs.green
@@ -156,11 +161,11 @@ public extension Color {
         lhs.alpha -= rhs.alpha
     }
     
-    @inline(__always)
+    @_transparent
     static func *(lhs: Color, rhs: Color) -> Color {
         return Color(lhs.red * rhs.red, lhs.green * rhs.green, lhs.blue * rhs.blue, lhs.alpha * rhs.alpha)
     }
-    @inline(__always)
+    @_transparent
     static func *=(lhs: inout Color, rhs: Color) {
         lhs.red *= rhs.red
         lhs.green *= rhs.green
@@ -168,11 +173,11 @@ public extension Color {
         lhs.alpha *= rhs.alpha
     }
     
-    @inline(__always)
+    @_transparent
     static func /(lhs: Color, rhs: Color) -> Color {
         return Color(lhs.red / rhs.red, lhs.green / rhs.green, lhs.blue / rhs.blue, lhs.alpha / rhs.alpha)
     }
-    @inline(__always)
+    @_transparent
     static func /=(lhs: inout Color, rhs: Color) {
         lhs.red /= rhs.red
         lhs.green /= rhs.green
@@ -182,11 +187,11 @@ public extension Color {
 }
 
 public extension Color {
-    @inline(__always)
+    @_transparent
     static func +(lhs: Color, rhs: Float) -> Color {
         return Color(lhs.red + rhs, lhs.green + rhs, lhs.blue + rhs, lhs.alpha + rhs)
     }
-    @inline(__always)
+    @_transparent
     static func +=(lhs: inout Color, rhs: Float) {
         lhs.red += rhs
         lhs.green += rhs
@@ -194,11 +199,11 @@ public extension Color {
         lhs.alpha += rhs
     }
 
-    @inline(__always)
+    @_transparent
     static func -(lhs: Color, rhs: Float) -> Color {
         return Color(lhs.red - rhs, lhs.green - rhs, lhs.blue - rhs, lhs.alpha - rhs)
     }
-    @inline(__always)
+    @_transparent
     static func -=(lhs: inout Color, rhs: Float) {
         lhs.red -= rhs
         lhs.green -= rhs
@@ -206,11 +211,11 @@ public extension Color {
         lhs.alpha -= rhs
     }
 
-    @inline(__always)
+    @_transparent
     static func *(lhs: Color, rhs: Float) -> Color {
         return Color(lhs.red * rhs, lhs.green * rhs, lhs.blue * rhs, lhs.alpha * rhs)
     }
-    @inline(__always)
+    @_transparent
     static func *=(lhs: inout Color, rhs: Float) {
         lhs.red *= rhs
         lhs.green *= rhs
@@ -218,11 +223,11 @@ public extension Color {
         lhs.alpha *= rhs
     }
     
-    @inline(__always)
+    @_transparent
     static func /(lhs: Color, rhs: Float) -> Color {
         return Color(lhs.red / rhs, lhs.green / rhs, lhs.blue / rhs, lhs.alpha / rhs)
     }
-    @inline(__always)
+    @_transparent
     static func /=(lhs: inout Color, rhs: Float) {
         lhs.red /= rhs
         lhs.green /= rhs
@@ -259,6 +264,7 @@ public extension Color {
     ///   - y: Another floating-point value.
     /// - Returns: The minimum of `x` and `y`, or whichever is a number if the
     ///   other is NaN.
+    @_transparent
     static func minimum(_ lhs: Color, _ rhs: Color) -> Color {
         return Color(.minimum(lhs.red, rhs.red), .minimum(lhs.green, rhs.green), .minimum(lhs.blue, rhs.blue), .minimum(lhs.alpha, rhs.alpha))
     }
@@ -290,6 +296,7 @@ public extension Color {
     ///   - y: Another floating-point value.
     /// - Returns: The greater of `x` and `y`, or whichever is a number if the
     ///   other is NaN.
+    @_transparent
     static func maximum(_ lhs: Color, _ rhs: Color) -> Color {
         return Color(.maximum(lhs.red, rhs.red), .maximum(lhs.green, rhs.green), .maximum(lhs.blue, rhs.blue), .maximum(lhs.alpha, rhs.alpha))
     }
@@ -301,6 +308,7 @@ public extension Color {
 ///   - x: A value to compare.
 ///   - y: Another value to compare.
 /// - Returns: The lesser of `x` and `y`. If `x` is equal to `y`, returns `x`.
+@_transparent
 public func min(_ lhs: Color, _ rhs: Color) -> Color {
     return Color(min(lhs.red, rhs.red), min(lhs.green, rhs.green), min(lhs.blue, rhs.blue), min(lhs.alpha, rhs.alpha))
 }
@@ -311,12 +319,13 @@ public func min(_ lhs: Color, _ rhs: Color) -> Color {
 ///   - x: A value to compare.
 ///   - y: Another value to compare.
 /// - Returns: The greater of `x` and `y`. If `x` is equal to `y`, returns `y`.
+@_transparent
 public func max(_ lhs: Color, _ rhs: Color) -> Color {
     return Color(max(lhs.red, rhs.red), max(lhs.green, rhs.green), max(lhs.blue, rhs.blue), max(lhs.alpha, rhs.alpha))
 }
 
 extension Color: _ExpressibleByColorLiteral {
-    @inline(__always)
+    @_transparent
     public init(_colorLiteralRed red: Float, green: Float, blue: Float, alpha: Float) {
         self.init(red, green, blue, alpha)
     }
@@ -360,7 +369,7 @@ public extension Color {
 }
 
 public extension Color {
-    @inline(__always)
+    @_transparent
     mutating func interpolate(to: Self, _ method: InterpolationMethod) {
         self.red.interpolate(to: to.red, method)
         self.green.interpolate(to: to.green, method)
@@ -368,7 +377,7 @@ public extension Color {
         self.alpha.interpolate(to: to.alpha, method)
     }
     
-    @inline(__always)
+    @_transparent
     func interpolated(to: Self, _ method: InterpolationMethod) -> Self {
         return Self(self.red.interpolated(to: to.red, method),
                     self.green.interpolated(to: to.green, method),
@@ -380,13 +389,14 @@ public extension Color {
 extension Color: Equatable {}
 extension Color: Hashable {}
 
-extension Color: Encodable {
+extension Color: Codable {
+    @inlinable
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         try container.encode([red, green, blue, alpha])
     }
-}
-extension Color: Decodable {
+
+    @inlinable
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         let values = try container.decode(Array<Float>.self)
