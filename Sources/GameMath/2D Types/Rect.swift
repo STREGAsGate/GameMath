@@ -117,6 +117,7 @@ extension Rect {
     }
 
     //TODO: Move this to GamePhysics in AxisAlignedBoundingBox2
+    @available(*, deprecated, message: "This will be removed in a future update.")
     @inlinable
     public func nearest(outsidePositionFrom circle: Circle) -> Position2 {
         var position = circle.center
@@ -140,6 +141,7 @@ extension Rect {
 
 extension Rect {
     //TODO: Move this to GamePhysics in AxisAlignedBoundingBox2
+    @available(*, deprecated, message: "This will be removed in a future update.")
     @inlinable
     public func intersects(_ rect: Rect) -> Bool {
         var part1: Bool {
@@ -158,6 +160,7 @@ extension Rect {
 
 extension Rect {
     //TODO: Move this to GamePhysics in AxisAlignedBoundingBox2
+    @available(*, deprecated, message: "This will be removed in a future update.")
     @inlinable
     public func contains(_ position: Position2) -> Bool {
         if position.x < x || position.x > maxX {
@@ -170,6 +173,7 @@ extension Rect {
     }
 
     //TODO: Move this to GamePhysics in AxisAlignedBoundingBox2
+    @available(*, deprecated, message: "This will be removed in a future update.")
     @inlinable
     public func intersects(_ circle: Circle) -> Bool {
         let topLeft = Position2(x: circle.center.x - circle.radius, y: circle.center.y - circle.radius)

@@ -115,6 +115,7 @@ extension Transform3 {
     }
     
     //TODO: Remove this. Position is the only value that is clear. Scale and rotation are confusing.
+    @available(*, deprecated, message: "This will be removed in a future update.")
     @_transparent
     public func difference(removing: Self) -> Self {
         var transform: Self = .default
@@ -133,6 +134,7 @@ extension Transform3 {
 
 //TODO: Remove operators. Position is the only value that is clear. Scale and rotation are confusing.
 public extension Transform3 {
+    @available(*, deprecated, message: "This will be removed in a future update.")
     @_transparent
     static func +=(lhs: inout Self, rhs: Self) {
         lhs.position += rhs.position
@@ -140,6 +142,7 @@ public extension Transform3 {
         lhs.rotation.normalize()
         lhs.scale = (lhs.scale + rhs.scale) / 2
     }
+    @available(*, deprecated, message: "This will be removed in a future update.")
     @_transparent
     static func +(lhs: Self, rhs: Self) -> Self {
         var lhsCopy = lhs
