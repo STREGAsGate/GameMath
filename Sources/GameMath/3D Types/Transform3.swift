@@ -35,7 +35,7 @@ public struct Transform3 {
     @usableFromInline
     var _needsUpdate: Bool = true
     @usableFromInline
-    var _matrix: Matrix4x4 = .identity
+    var _matrix: Matrix4x4! = nil
 }
 
 public extension Transform3 {
