@@ -17,7 +17,7 @@ var settings: [SwiftSetting]? {
     array.append(.define("GameMathUseFastInverseSquareRoot"))
     #endif
     
-    //These settings are faster only with optimization.
+    // These settings are faster only with optimization.
     #if true
     array.append(.define("GameMathUseSIMD", .when(configuration: .release)))
     array.append(.define("GameMathUseLoopVectorization", .when(configuration: .release)))
@@ -33,7 +33,14 @@ let package = Package(
     ],
     targets: [
         .target(name: "GameMath", swiftSettings: settings),
-        .testTarget(name: "GameMathTests", dependencies: ["GameMath"]),
+        .testTarget(name: "GameMathTests",
+                    dependencies: ["GameMath"]),
+        .testTarget(name: "GameMathSIMDTests",
+                    dependencies: ["GameMath"],
+                    swiftSettings: [
+                        .define("GameMathUseSIMD"),
+                        .define("GameMathUseLoopVectorization")
+                    ]),
     ],
     swiftLanguageVersions: [.v5]
 )

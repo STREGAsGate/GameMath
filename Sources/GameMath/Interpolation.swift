@@ -38,8 +38,7 @@ public extension Float {
 }
 
 internal extension Float {
-    @_transparent
-    @usableFromInline
+    @usableFromInline @_transparent
     func lerped(to: Float, factor: Float) -> Float {
         #if GameMathUseSIMD && canImport(simd)
         return simd_mix(self, to, factor)
@@ -47,8 +46,8 @@ internal extension Float {
         return self + (to - self) * factor
         #endif
     }
-    @_transparent
-    @usableFromInline
+    
+    @usableFromInline @_transparent
     mutating func lerp(to: Float, factor: Float) {
         self = self.lerped(to: to, factor: factor)
     }

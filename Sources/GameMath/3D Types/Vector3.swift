@@ -15,7 +15,7 @@ import Accelerate
 #endif
 
 #if GameMathUseSIMD
-public protocol Vector3: SIMD, Equatable where Scalar == Float, MaskStorage == SIMD3<Float>.MaskStorage, ArrayLiteralElement == Scalar {
+public protocol Vector3: SIMD, Equatable, ExpressibleByFloatLiteral where FloatLiteralType == Float, Scalar == Float, MaskStorage == SIMD3<Float>.MaskStorage, ArrayLiteralElement == Scalar {
     var x: Scalar {get set}
     var y: Scalar {get set}
     var z: Scalar {get set}
@@ -24,7 +24,7 @@ public protocol Vector3: SIMD, Equatable where Scalar == Float, MaskStorage == S
     static var zero: Self {get}
 }
 #else
-public protocol Vector3: Equatable {
+public protocol Vector3: Equatable, ExpressibleByFloatLiteral where FloatLiteralType == Float {
     var x: Float {get set}
     var y: Float {get set}
     var z: Float {get set}
@@ -33,6 +33,12 @@ public protocol Vector3: Equatable {
     static var zero: Self {get}
 }
 #endif
+
+public extension Vector3 {
+    init(floatLiteral value: FloatLiteralType) {
+        self.init(value)
+    }
+}
 
 #if GameMathUseSIMD
 public extension Vector3 {
@@ -307,19 +313,17 @@ public func max<V: Vector3>(_ lhs: V, _ rhs: V) -> V {
     return V.init(max(lhs.x, rhs.x), max(lhs.y, rhs.y), max(lhs.z, rhs.z))
 }
 
-
-#if !GameMathUseSIMD
-//MARK: Operators (Self)
+//MARK: - Self Operators
 extension Vector3 {
-    //Multiplication
-    @_transparent
-    public static func *(lhs: Self, rhs: Self) -> Self {
+    // Multiplication
+    @_transparent @_disfavoredOverload
+    public static func *(lhs: Self, rhs: some Vector3) -> Self {
         var lhs = lhs
         lhs *= rhs
         return lhs
     }
-    @_transparent
-    public static func *=(lhs: inout Self, rhs: Self) {
+    @_transparent @_disfavoredOverload
+    public static func *=(lhs: inout Self, rhs: some Vector3) {
         #if GameMathUseLoopVectorization
         for index in 0 ..< 3 {
             lhs[index] *= rhs[index]
@@ -331,15 +335,15 @@ extension Vector3 {
         #endif
     }
     
-    //Addition
-    @_transparent
-    public static func +(lhs: Self, rhs: Self) -> Self {
+    // Addition
+    @_transparent @_disfavoredOverload
+    public static func +(lhs: Self, rhs: some Vector3) -> Self {
         var lhs = lhs
         lhs += rhs
         return lhs
     }
-    @_transparent
-    public static func +=(lhs: inout Self, rhs: Self) {
+    @_transparent @_disfavoredOverload
+    public static func +=(lhs: inout Self, rhs: some Vector3) {
         #if GameMathUseLoopVectorization
         for index in 0 ..< 3 {
             lhs[index] += rhs[index]
@@ -351,15 +355,15 @@ extension Vector3 {
         #endif
     }
     
-    //Subtraction
-    @_transparent
-    public static func -(lhs: Self, rhs: Self) -> Self {
+    // Subtraction
+    @_transparent @_disfavoredOverload
+    public static func -(lhs: Self, rhs: some Vector3) -> Self {
         var lhs = lhs
         lhs -= rhs
         return lhs
     }
-    @_transparent
-    public static func -=(lhs: inout Self, rhs: Self) {
+    @_transparent @_disfavoredOverload
+    public static func -=(lhs: inout Self, rhs: some Vector3) {
         #if GameMathUseLoopVectorization
         for index in 0 ..< 3 {
             lhs[index] -= rhs[index]
@@ -372,15 +376,15 @@ extension Vector3 {
     }
 }
 extension Vector3 {
-    //Division
-    @_transparent
-    public static func /(lhs: Self, rhs: Self) -> Self {
+    // Division
+    @_transparent @_disfavoredOverload
+    public static func /(lhs: Self, rhs: some Vector3) -> Self {
         var lhs = lhs
         lhs /= rhs
         return lhs
     }
-    @_transparent
-    public static func /=(lhs: inout Self, rhs: Self) {
+    @_transparent @_disfavoredOverload
+    public static func /=(lhs: inout Self, rhs: some Vector3) {
         #if GameMathUseLoopVectorization
         for index in 0 ..< 3 {
             lhs[index] /= rhs[index]
@@ -393,9 +397,9 @@ extension Vector3 {
     }
 }
 
-//MARK: Operators (Integers and Floats)
+//MARK: - Float Operators
 extension Vector3 {
-    //Multiplication Without Casting
+    // Multiplication
     @_transparent
     public static func *(lhs: Self, rhs: Float) -> Self {
         var lhs = lhs
@@ -415,7 +419,7 @@ extension Vector3 {
         #endif
     }
     
-    //Addition Without Casting
+    // Addition
     @_transparent
     public static func +(lhs: Self, rhs: Float) -> Self {
         var lhs = lhs
@@ -435,14 +439,14 @@ extension Vector3 {
         #endif
     }
     
-    //Subtraction Without Casting
-    @_transparent
+    // Subtraction
+    @_transparent @_disfavoredOverload
     public static func -(lhs: Self, rhs: Float) -> Self {
         var lhs = lhs
         lhs -= rhs
         return lhs
     }
-    @_transparent
+    @_transparent @_disfavoredOverload
     public static func -=(lhs: inout Self, rhs: Float) {
         #if GameMathUseLoopVectorization
         for index in 0 ..< 3 {
@@ -457,14 +461,14 @@ extension Vector3 {
 }
 
 extension Vector3 {
-    //Division Without Casting
-    @_transparent
+    // Division
+    @_transparent @_disfavoredOverload
     public static func /(lhs: Self, rhs: Float) -> Self {
         var lhs = lhs
         lhs /= rhs
         return lhs
     }
-    @_transparent
+    @_transparent @_disfavoredOverload
     public static func /=(lhs: inout Self, rhs: Float) {
         #if GameMathUseLoopVectorization
         for index in 0 ..< 3 {
@@ -479,113 +483,20 @@ extension Vector3 {
 }
 
 extension Vector3 {
-    @_transparent
+    @_transparent @_disfavoredOverload
     public static prefix func -(rhs: Self) -> Self {
         return Self(-rhs.x, -rhs.y, -rhs.z)
     }
 
-    @_transparent
+    @_transparent @_disfavoredOverload
     public static prefix func +(rhs: Self) -> Self {
         return Self(+rhs.x, +rhs.y, +rhs.z)
-    }
-}
-#endif
-
-extension Vector3 {
-    //Multiplication
-    @_transparent
-    public static func *<V: Vector3>(lhs: Self, rhs: V) -> Self {
-        var lhs = lhs
-        lhs *= rhs
-        return lhs
-    }
-    @_transparent
-    public static func *=<V: Vector3>(lhs: inout Self, rhs: V) {
-        #if GameMathUseSIMD
-        lhs.simd *= rhs.simd
-        #elseif GameMathUseLoopVectorization
-        for index in 0 ..< 3 {
-            lhs[index] *= rhs[index]
-        }
-        #else
-        lhs.x *= rhs.x
-        lhs.y *= rhs.y
-        lhs.z *= rhs.z
-        #endif
-    }
-    
-    //Addition
-    @_transparent
-    public static func +<V: Vector3>(lhs: Self, rhs: V) -> Self {
-        var lhs = lhs
-        lhs += rhs
-        return lhs
-    }
-    @_transparent
-    public static func +=<V: Vector3>(lhs: inout Self, rhs: V) {
-        #if GameMathUseSIMD
-        lhs.simd += rhs.simd
-        #elseif GameMathUseLoopVectorization
-        for index in 0 ..< 3 {
-            lhs[index] += rhs[index]
-        }
-        #else
-        lhs.x += rhs.x
-        lhs.y += rhs.y
-        lhs.z += rhs.z
-        #endif
-    }
-    
-    //Subtraction
-    @_transparent
-    public static func -<V: Vector3>(lhs: Self, rhs: V) -> Self {
-        var lhs = lhs
-        lhs -= rhs
-        return lhs
-    }
-    @_transparent
-    public static func -=<V: Vector3>(lhs: inout Self, rhs: V) {
-        #if GameMathUseSIMD
-        lhs.simd -= rhs.simd
-        #elseif GameMathUseLoopVectorization
-        for index in 0 ..< 3 {
-            lhs[index] -= rhs[index]
-        }
-        #else
-        lhs.x -= rhs.x
-        lhs.y -= rhs.y
-        lhs.z -= rhs.z
-        #endif
-    }
-}
-
-extension Vector3 {
-    //Division
-    @_transparent
-    public static func /<V: Vector3>(lhs: Self, rhs: V) -> Self {
-        var lhs = lhs
-        lhs /= rhs
-        return lhs
-    }
-    @_transparent
-    public static func /=<V: Vector3>(lhs: inout Self, rhs: V) {
-        #if GameMathUseSIMD
-        lhs.simd /= rhs.simd
-        #elseif GameMathUseLoopVectorization
-        for index in 0 ..< 3 {
-            lhs[index] /= rhs[index]
-        }
-        #else
-        lhs.x /= rhs.x
-        lhs.y /= rhs.y
-        lhs.z /= rhs.z
-        #endif
     }
 }
 
 //MARK: Matrix4
 public extension Vector3 {
-    @_transparent
+    @_transparent @_disfavoredOverload
     static func *(lhs: Self, rhs: Matrix4x4) -> Self {
         var x: Float = lhs.x * rhs.a
         x += lhs.y * rhs.b
@@ -605,7 +516,7 @@ public extension Vector3 {
         return Self(x, y, z)
     }
     
-    @_transparent
+    @_transparent @_disfavoredOverload
     static func *(lhs: Matrix4x4, rhs: Self) -> Self {
         var x: Float = rhs.x * lhs.a
         x += rhs.y * lhs.e
@@ -625,7 +536,7 @@ public extension Vector3 {
         return Self(x, y, z)
     }
     
-    @_transparent
+    @_transparent @_disfavoredOverload
     static func *(lhs: Self, rhs: Matrix3x3) -> Self {
         var vector: Self = .zero
         

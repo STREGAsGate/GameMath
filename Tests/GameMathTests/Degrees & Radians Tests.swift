@@ -178,6 +178,7 @@ final class RadiansTests: XCTestCase {
 
 final class DegreesTests: XCTestCase {
     
+
     func testInitRawValue() {
         XCTAssert(Degrees(10).rawValue == 10)
         XCTAssert(Degrees(rawValue: 10).rawValue == 10)

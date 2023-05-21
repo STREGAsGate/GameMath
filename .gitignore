@@ -11,6 +11,7 @@ Package.resolved
 #Xcode
 *.xcuserdatad
 *.xcworkspace
+*.xcscheme
 
 #Visual Studio
 .vs

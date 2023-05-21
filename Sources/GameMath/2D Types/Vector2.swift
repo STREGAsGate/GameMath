@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol Vector2 {
+public protocol Vector2: ExpressibleByFloatLiteral where FloatLiteralType == Float {
     var x: Float {get set}
     var y: Float {get set}
     init(_ x: Float, _ y: Float)
@@ -17,6 +17,11 @@ extension Vector2 {
     @_transparent
     public init(_ value: Float) {
         self.init(value, value)
+    }
+    
+    @_transparent
+    public init(floatLiteral float: Float) {
+        self.init(float)
     }
     
     @inlinable
@@ -197,50 +202,50 @@ public func max<V: Vector2>(_ lhs: V, _ rhs: V) -> V {
 //MARK: Operators (Self)
 extension Vector2 {
     //Multiplication
-    @_transparent
-    public static func *(lhs: Self, rhs: Self) -> Self {
+    @_transparent @_disfavoredOverload
+    public static func *(lhs: Self, rhs: some Vector2) -> Self {
         return Self(lhs.x * rhs.x,
                     lhs.y * rhs.y)
     }
-    @_transparent
-    public static func *=(lhs: inout Self, rhs: Self) {
+    @_transparent @_disfavoredOverload
+    public static func *=(lhs: inout Self, rhs: some Vector2) {
         lhs.x *= rhs.x
         lhs.y *= rhs.y
     }
     
     //Addition
-    @_transparent
-    public static func +(lhs: Self, rhs: Self) -> Self {
+    @_transparent @_disfavoredOverload
+    public static func +(lhs: Self, rhs: some Vector2) -> Self {
         return Self(lhs.x + rhs.x,
                     lhs.y + rhs.y)
     }
-    @_transparent
-    public static func +=(lhs: inout Self, rhs: Self) {
+    @_transparent @_disfavoredOverload
+    public static func +=(lhs: inout Self, rhs: some Vector2) {
         lhs.x += rhs.x
         lhs.y += rhs.y
     }
     
     //Subtraction
-    @_transparent
-    public static func -(lhs: Self, rhs: Self) -> Self {
+    @_transparent @_disfavoredOverload
+    public static func -(lhs: Self, rhs: some Vector2) -> Self {
         return Self(lhs.x - rhs.x,
                     lhs.y - rhs.y)
     }
-    @_transparent
-    public static func -=(lhs: inout Self, rhs: Self) {
+    @_transparent @_disfavoredOverload
+    public static func -=(lhs: inout Self, rhs: some Vector2) {
         lhs.x -= rhs.x
         lhs.y -= rhs.y
     }
 }
 extension Vector2 {
     //Division
-    @_transparent
-    public static func /(lhs: Self, rhs: Self) -> Self {
+    @_transparent @_disfavoredOverload
+    public static func /(lhs: Self, rhs: some Vector2) -> Self {
         return Self(lhs.x / rhs.x,
                     lhs.y / rhs.y)
     }
-    @_transparent
-    public static func /=(lhs: inout Self, rhs: Self) {
+    @_transparent @_disfavoredOverload
+    public static func /=(lhs: inout Self, rhs: some Vector2) {
         lhs.x /= rhs.x
         lhs.y /= rhs.y
     }
@@ -319,58 +324,6 @@ extension Vector2 {
     public static func /=(lhs: Float, rhs: inout Self) {
         rhs.x = lhs / rhs.x
         rhs.y = lhs / rhs.y
-    }
-}
-
-extension Vector2 {
-    //Multiplication
-    @_transparent
-    public static func *<V: Vector2>(lhs: Self, rhs: V) -> Self {
-        return Self(lhs.x * rhs.x,
-                    lhs.y * rhs.y)
-    }
-    @_transparent
-    public static func *=<V: Vector2>(lhs: inout Self, rhs: V) {
-        lhs.x *= rhs.x
-        lhs.y *= rhs.y
-    }
-    
-    //Addition
-    @_transparent
-    public static func +<V: Vector2>(lhs: Self, rhs: V) -> Self {
-        return Self(lhs.x + rhs.x,
-                    lhs.y + rhs.y)
-    }
-    @_transparent
-    public static func +=<V: Vector2>(lhs: inout Self, rhs: V) {
-        lhs.x += rhs.x
-        lhs.y += rhs.y
-    }
-    
-    //Subtraction
-    @_transparent
-    public static func -<V: Vector2>(lhs: Self, rhs: V) -> Self {
-        return Self(lhs.x - rhs.x,
-                    lhs.y - rhs.y)
-    }
-    @_transparent
-    public static func -=<V: Vector2>(lhs: inout Self, rhs: V) {
-        lhs.x -= rhs.x
-        lhs.y -= rhs.y
-    }
-}
-
-extension Vector2 {
-    //Division
-    @_transparent
-    public static func /<V: Vector2>(lhs: Self, rhs: V) -> Self{
-        return Self(lhs.x / rhs.x,
-                    lhs.y / rhs.y)
-    }
-    @_transparent
-    public static func /=<V: Vector2>(lhs: inout Self, rhs: V) {
-        lhs.x /= rhs.x
-        lhs.y /= rhs.y
     }
 }
 
